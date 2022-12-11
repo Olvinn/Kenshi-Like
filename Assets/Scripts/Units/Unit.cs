@@ -49,10 +49,12 @@ namespace Units
 
         public void Attack(Unit target, Action afterAttack)
         {
+            View.RotateOn(target.View);
             View.DoAttackAnimation(() =>
             {
                 target.GetDamage(Damage);
                 afterAttack?.Invoke();
+                View.RotateOn(null);
             });
         }
 

@@ -17,11 +17,33 @@ namespace Units
         [SerializeField] private Color color;
         
         private MeshRenderer _renderer;
+        private UnitView _target;
 
         private void Awake()
         {
             _renderer = GetComponent<MeshRenderer>();
             _renderer.material.color = color;
+        }
+
+        private void Update()
+        { 
+            if (!agent.enabled)
+                return;
+            
+            if (!agent.pathPending && agent.remainingDistance < 1f)
+            {
+                if (MovementStatus == MovementStatus.Moving)
+                {
+                    MovementStatus = MovementStatus.Aimless;
+                    Debug.Log("Destination reached");
+                    OnReachDestination?.Invoke();
+                }
+            }
+
+            if (_target != null)
+            {
+                transform.LookAt(_target.transform.position);
+            }
         }
 
         public void Die()
@@ -79,20 +101,9 @@ namespace Units
             StartCoroutine(Damage());
         }
 
-        private void Update()
-        { 
-            if (!agent.enabled)
-                return;
-            
-            if (!agent.pathPending && agent.remainingDistance < 1f)
-            {
-                if (MovementStatus == MovementStatus.Moving)
-                {
-                    MovementStatus = MovementStatus.Aimless;
-                    Debug.Log("Destination reached");
-                    OnReachDestination?.Invoke();
-                }
-            }
+        public void RotateOn(UnitView target)
+        {
+            _target = target;
         }
 
         IEnumerator Wait(Action callback)
