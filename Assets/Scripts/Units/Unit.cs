@@ -31,6 +31,7 @@ namespace Units
         public void InjectView(UnitView view)
         {
             View = view;
+            view.SetMaxSpeed(_stats.Speed);
         }
 
         public void Die()
@@ -40,6 +41,7 @@ namespace Units
 
         public void GetDamage(float dmg)
         {
+            View.GetDamage();
             _currentHP -= dmg;
             if (_currentHP <= 0)
                 Die();

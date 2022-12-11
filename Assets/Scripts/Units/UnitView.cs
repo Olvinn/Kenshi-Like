@@ -26,6 +26,8 @@ namespace Units
 
         public void Die()
         {
+            StopAllCoroutines();
+            _renderer.material.color = Color.black;
             agent.enabled = false;
             animator.SetTrigger("Die");
         }
@@ -67,6 +69,16 @@ namespace Units
             StartCoroutine(Wait(callback));
         }
 
+        public void SetMaxSpeed(float speed)
+        {
+            agent.speed = speed;
+        }
+
+        public void GetDamage()
+        {
+            StartCoroutine(Damage());
+        }
+
         private void Update()
         { 
             if (!agent.enabled)
@@ -87,6 +99,17 @@ namespace Units
         {
             yield return new WaitForSeconds(1);
             callback?.Invoke();
+        }
+
+        IEnumerator Damage()
+        {
+            _renderer.material.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+            _renderer.material.color = color;
+            yield return new WaitForSeconds(0.2f);
+            _renderer.material.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+            _renderer.material.color = color;
         }
     }
 

@@ -39,7 +39,6 @@ namespace Player
             {
                 unit.View.Select();
                 _selected.Add(unit);
-                unit.View.SetProvoked();
             }
         }
 
@@ -49,7 +48,6 @@ namespace Player
             {
                 unit.View.Deselect();
                 _selected.Remove(unit);
-                unit.View.SetIdle();
             }
         }
 
@@ -70,7 +68,7 @@ namespace Player
             if (Physics.Raycast(ray, out hit))
             {
                 var view = hit.collider.GetComponent<UnitView>();
-                if (view != null && _enemies.ContainsKey(view))
+                if (view != null && _enemies.ContainsKey(view) && !_enemies[view].IsDead)
                 {
                     foreach (var unit in _selected)
                     {
@@ -106,7 +104,7 @@ namespace Player
             if (Physics.Raycast(ray, out hit))
             {
                 var view = hit.collider.GetComponent<UnitView>();
-                if (view != null && _enemies.ContainsKey(view))
+                if (view != null && _enemies.ContainsKey(view) && !_enemies[view].IsDead)
                 {
                     foreach (var unit in _selected)
                     {
@@ -120,7 +118,8 @@ namespace Player
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        unit.MoveTo(hit.point);
+                        unit.AddCommand(new MovementCommand(unit, hit.point));
+                        unit.ExecuteCommands();
                     }
                 }
             }

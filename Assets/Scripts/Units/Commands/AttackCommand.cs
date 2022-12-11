@@ -18,6 +18,7 @@ namespace Units.Commands
         {
             Debug.Log($"Executing attack command to target {_target}");
             base.Execute();
+            _attacker.View.SetProvoked();
             _movCommand = new MovementCommand(_attacker, _target.Position);
             _movCommand.OnDone += Attack;
             _movCommand.Execute();
@@ -29,6 +30,7 @@ namespace Units.Commands
             
             if (_target.IsDead)
             {
+                _attacker.View.SetIdle();
                 Done();
                 return;
             }
