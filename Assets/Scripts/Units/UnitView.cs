@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,6 +12,7 @@ namespace Units
         
         [SerializeField] private NavMeshAgent agent;
         [SerializeField] private Animator animator;
+        [SerializeField] private GameObject selection;
 
         [SerializeField] private Color color;
         
@@ -23,6 +23,7 @@ namespace Units
         {
             _renderer = GetComponent<MeshRenderer>();
             _renderer.material.color = color;
+            selection.SetActive(false);
         }
 
         private void Update()
@@ -62,12 +63,12 @@ namespace Units
 
         public void Select()
         {
-            _renderer.material.color = Color.green;
+            selection.SetActive(true);
         }
 
         public void Deselect()
         {
-            _renderer.material.color = color;
+            selection.SetActive(false);
         }
 
         public void SetProvoked()

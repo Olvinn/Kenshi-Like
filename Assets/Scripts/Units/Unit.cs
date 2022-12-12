@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Units.Commands;
 using UnityEngine;
+using Damages;
 
 namespace Units
 {
@@ -10,8 +11,6 @@ namespace Units
         public bool IsDead => _currentHP <= 0;
         public Vector3 Position => View.transform.position;
         public UnitView View { get; private set; }
-
-        public float Damage => _stats.Damage;
 
         private UnitStats _stats;
         private Queue<Command> _commands;
@@ -39,21 +38,27 @@ namespace Units
             View.Die();
         }
 
-        public void GetDamage(float dmg)
+        public void GetDamage(Damage dmg)
         {
             View.GetDamage();
-            _currentHP -= dmg;
+            _currentHP -= dmg.damage;
             if (_currentHP <= 0)
                 Die();
+
+            if (_commands.Count == 0)
+            {
+                AddCommand(new AttackCommand(this, dmg.source));
+                ExecuteCommands();
+            }
         }
 
-        public void Attack(Unit target, Action afterAttack)
+        public void Attack(Unit target, Action onCompleteAttack)
         {
             View.RotateOn(target.View);
             View.DoAttackAnimation(() =>
             {
-                target.GetDamage(Damage);
-                afterAttack?.Invoke();
+                target.GetDamage(new Damage() { source = this, damage = _stats.Damage });
+                onCompleteAttack?.Invoke();
                 View.RotateOn(null);
             });
         }
@@ -80,8 +85,11 @@ namespace Units
         private void ContinueCommands()
         {
             if (_currentCommand != null)
+            {
                 _currentCommand.Dispose();
-            
+                _currentCommand = null;
+            }
+
             if (_commands.Count == 0)
             {
                 _isExecutingCommands = false;
