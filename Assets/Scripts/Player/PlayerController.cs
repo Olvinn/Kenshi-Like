@@ -11,7 +11,7 @@ namespace Player
         private Dictionary<UnitView, Unit> _allControlledUnits, _enemies;
         private List<Unit> _selected;
 
-        private void Awake()
+        private void Start()
         {
             _allControlledUnits = new Dictionary<UnitView, Unit>();
             _enemies = new Dictionary<UnitView, Unit>();
