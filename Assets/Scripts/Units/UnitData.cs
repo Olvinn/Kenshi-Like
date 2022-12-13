@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Units
 {
-    public struct UnitStats
+    public struct UnitData
     {
         public float HP;
         public float Speed;

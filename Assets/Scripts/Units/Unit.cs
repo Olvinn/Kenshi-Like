@@ -12,25 +12,25 @@ namespace Units
         public Vector3 Position => View.transform.position;
         public UnitView View { get; private set; }
 
-        private UnitStats _stats;
+        private UnitData _data;
         private Queue<Command> _commands;
         private Command _currentCommand;
         private bool _isExecutingCommands = false;
 
         private float _currentHP;
 
-        public Unit(UnitStats stats)
+        public Unit(UnitData data)
         {
-            _stats = stats;
+            _data = data;
             _commands = new Queue<Command>();
 
-            _currentHP = _stats.HP;
+            _currentHP = _data.HP;
         }
         
         public void InjectView(UnitView view)
         {
             View = view;
-            view.SetMaxSpeed(_stats.Speed);
+            view.SetMaxSpeed(_data.Speed);
         }
 
         public void Die()
@@ -40,7 +40,7 @@ namespace Units
 
         public void GetDamage(Damage dmg)
         {
-            View.GetDamage();
+            View.PerformGetDamageAnimation();
             _currentHP -= dmg.damage;
             if (_currentHP <= 0)
                 Die();
@@ -55,12 +55,20 @@ namespace Units
         public void Attack(Unit target, Action onCompleteAttack)
         {
             View.RotateOn(target.View);
-            View.DoAttackAnimation(() =>
+            View.PerformAttackAnimation((unit) =>
             {
-                target.GetDamage(new Damage() { source = this, damage = _stats.Damage });
-                onCompleteAttack?.Invoke();
-                View.RotateOn(null);
+                unit.Model.GetDamage(new Damage() { source = this, damage = _data.Damage });
             });
+            View.OnCompleteHit = () =>
+            {
+                onCompleteAttack?.Invoke();
+                View.OnCompleteHit = null;
+            };
+            View.OnCompleteGetDamage= () =>
+            {
+                onCompleteAttack?.Invoke();
+                View.OnCompleteHit = null;
+            };
         }
 
         public void MoveTo(Vector3 destination)
@@ -82,6 +90,20 @@ namespace Units
             ContinueCommands();
         }
 
+        public void ClearCommands()
+        {
+            if (_currentCommand == null)
+                return;
+            
+            _currentCommand.OnDone -= ExecuteCommands;
+            foreach (var command in _commands)
+                command.Dispose();
+            _commands.Clear();
+            _currentCommand.Dispose();
+            _currentCommand = null;
+            _isExecutingCommands = false;
+        }
+
         private void ContinueCommands()
         {
             if (_currentCommand != null)
@@ -99,20 +121,6 @@ namespace Units
             _currentCommand = _commands.Dequeue();
             _currentCommand.OnDone += ContinueCommands;
             _currentCommand.Execute();
-        }
-
-        public void ClearCommands()
-        {
-            if (_currentCommand == null)
-                return;
-            
-            _currentCommand.OnDone -= ExecuteCommands;
-            foreach (var command in _commands)
-                command.Dispose();
-            _commands.Clear();
-            _currentCommand.Dispose();
-            _currentCommand = null;
-            _isExecutingCommands = false;
         }
     }
 }

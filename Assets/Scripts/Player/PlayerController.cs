@@ -56,7 +56,7 @@ namespace Player
             foreach (var unit in _selected)
             {
                 unit.View.Deselect();
-                unit.View.SetIdle();
+                unit.View.PerformIdleAnimation();
             }
 
             _selected.Clear();

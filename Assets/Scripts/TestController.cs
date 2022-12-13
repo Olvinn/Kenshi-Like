@@ -9,29 +9,32 @@ public class TestController : MonoBehaviour
     
     void Start()
     {
-        UnitStats stats = new UnitStats()
+        UnitData data = new UnitData()
         {
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
             AttackRate = Random.Range(1f, 2f)
         };
-        var unit1 = new Unit(stats);
+        var unit1 = new Unit(data);
         unit1.InjectView(unitView1);
+        unitView1.InjectModel(unit1);
         
-        stats = new UnitStats()
+        data = new UnitData()
         {
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
             AttackRate = Random.Range(1f, 2f)
         };
-        var unit2 = new Unit(stats);
+        var unit2 = new Unit(data);
         unit2.InjectView(unitView2);
+        unitView2.InjectModel(unit2);
 
-        stats = new UnitStats()
+        data = new UnitData()
         {
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
             AttackRate = Random.Range(1f, 2f)
         };
-        var unit3 = new Unit(stats);
+        var unit3 = new Unit(data);
         unit3.InjectView(unitView3);
+        unitView3.InjectModel(unit3);
         
         player.AddControlledUnit(unit1);
         player.AddControlledUnit(unit2);

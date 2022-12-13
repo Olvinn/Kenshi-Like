@@ -1,5 +1,5 @@
 using System;
-using System.Collections;
+using Units.Weapons;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,23 +7,29 @@ namespace Units
 {
     public class UnitView : MonoBehaviour
     {
-        public event Action OnReachDestination;
+        public Action OnReachDestination, OnCompleteHit, OnCompleteGetDamage;
+        public Unit Model { get; private set; }
+
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
+        [field:SerializeField] public FightStatus FightStatus { get; private set; }
         
         [SerializeField] private NavMeshAgent agent;
         [SerializeField] private Animator animator;
         [SerializeField] private GameObject selection;
+        [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
+        [SerializeField] private WeaponTriggerDetector weaponTrigger;
+        [SerializeField] private MeshRenderer meshRenderer;
 
         [SerializeField] private Color color;
-        
-        private MeshRenderer _renderer;
         private UnitView _target;
+        private Action<UnitView> _onHitUnit;
 
         private void Awake()
         {
-            _renderer = GetComponent<MeshRenderer>();
-            _renderer.material.color = color;
+            meshRenderer.material.color = color;
             selection.SetActive(false);
+            animationEventCatcher.OnHitComplete += HitComplete;
+            animationEventCatcher.OnGetDamageComplete += GetDamageComplete;
         }
 
         private void Update()
@@ -36,7 +42,6 @@ namespace Units
                 if (MovementStatus == MovementStatus.Moving)
                 {
                     MovementStatus = MovementStatus.Aimless;
-                    Debug.Log("Destination reached");
                     OnReachDestination?.Invoke();
                 }
             }
@@ -47,81 +52,137 @@ namespace Units
             }
         }
 
+        public void InjectModel(Unit model)
+        {
+            Model = model;
+        }
+
+        /// <summary>
+        /// Turns off most UnitView logic and plays dying animation
+        /// </summary>
         public void Die()
         {
             StopAllCoroutines();
-            _renderer.material.color = Color.black;
+            meshRenderer.material.color = Color.black;
             agent.enabled = false;
             animator.SetTrigger("Die");
         }
 
+        /// <summary>
+        /// Set destination for move to
+        /// </summary>
+        /// <param name="destination"></param>
         public void MoveTo(Vector3 destination)
         {
             agent.SetDestination(destination);
             MovementStatus = MovementStatus.Moving;
         }
 
+        /// <summary>
+        /// Select unit
+        /// </summary>
         public void Select()
         {
             selection.SetActive(true);
         }
 
+        /// <summary>
+        /// Deselect unit
+        /// </summary>
         public void Deselect()
         {
             selection.SetActive(false);
         }
 
-        public void SetProvoked()
+        /// <summary>
+        /// Play fight-ready animation
+        /// </summary>
+        public void PerformFightReadyAnimation()
         {
             animator.SetBool("Provoked", true);
         }
 
-        public void SetIdle()
+        /// <summary>
+        /// Play Idle animation
+        /// </summary>
+        public void PerformIdleAnimation()
         {
             animator.SetBool("Provoked", false);
         }
 
+        /// <summary>
+        /// Checking can this unit attack target due their Views
+        /// </summary>
+        /// <param name="target">Target which want to attack</param>
+        /// <returns></returns>
         public bool CanAttack(UnitView target)
         {
             return Vector3.Distance(target.transform.position, transform.position) < 2f;
         }
 
-        public void DoAttackAnimation(Action callback)
+        /// <summary>
+        /// Play animation to hit enemy. If hit will successful, the callback will called.
+        /// Callback can be called multiple times with different UnitViews
+        /// </summary>
+        /// <param name="callback"></param>
+        public void PerformAttackAnimation(Action<UnitView> callback)
         {
+            FightStatus = FightStatus.Attacking;
             animator.Play("Attack");
-            StartCoroutine(Wait(callback));
+
+            _onHitUnit = callback;
+            weaponTrigger.OnTriggerWithUnit = (unit) => CheckAttackedUnit(unit, callback);
         }
 
+        /// <summary>
+        /// Set unit max speed
+        /// </summary>
+        /// <param name="speed"></param>
         public void SetMaxSpeed(float speed)
         {
             agent.speed = speed;
         }
 
-        public void GetDamage()
+        /// <summary>
+        /// Play animation represents taking damage. It will interrupt any other animation
+        /// </summary>
+        public void PerformGetDamageAnimation()
         {
-            StartCoroutine(Damage());
+            if (FightStatus == FightStatus.Attacking)
+                HitComplete();
+            FightStatus = FightStatus.GettingDamage;
+            animator.SetTrigger("GetDamage");
         }
 
+        /// <summary>
+        /// Rotate UnitView on target
+        /// </summary>
+        /// <param name="target"></param>
         public void RotateOn(UnitView target)
         {
             _target = target;
         }
 
-        IEnumerator Wait(Action callback)
+        private void CheckAttackedUnit(UnitView target, Action<UnitView> callback)
         {
-            yield return new WaitForSeconds(1);
-            callback?.Invoke();
+            if (target == this)
+                return;
+            callback?.Invoke(target);
         }
 
-        IEnumerator Damage()
+        private void HitComplete()
         {
-            _renderer.material.color = Color.white;
-            yield return new WaitForSeconds(0.1f);
-            _renderer.material.color = color;
-            yield return new WaitForSeconds(0.2f);
-            _renderer.material.color = Color.white;
-            yield return new WaitForSeconds(0.1f);
-            _renderer.material.color = color;
+            if (_onHitUnit != null)
+                weaponTrigger.OnTriggerWithUnit = null;
+            _onHitUnit = null;
+            FightStatus = FightStatus.Idle;
+            OnCompleteHit?.Invoke();
+        }
+
+        private void GetDamageComplete()
+        {
+            FightStatus = FightStatus.Idle;
+            OnCompleteGetDamage?.Invoke();
         }
     }
 
@@ -129,5 +190,13 @@ namespace Units
     {
         Aimless,
         Moving,
+    }
+
+    public enum FightStatus
+    {
+        Idle,
+        Attacking,
+        GettingDamage,
+        Parrying
     }
 }
