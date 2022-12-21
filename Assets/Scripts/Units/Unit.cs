@@ -37,6 +37,9 @@ namespace Units
 
         public void Update()
         {
+            if (IsDead)
+                return;
+            
             if (_currentCommand != null)
                 _currentCommand.Update();
         }
@@ -44,10 +47,16 @@ namespace Units
         public void Die()
         {
             View.Die();
+            if (_currentCommand != null)
+                _currentCommand.Dispose();
+            _currentCommand = null;
         }
 
         public void GetDamage(Damage dmg)
         {
+            if (IsDead)
+                return;
+                
             if (dmg.source == this || dmg.source.Team == Team)
                 return;
             
@@ -58,13 +67,16 @@ namespace Units
 
             if (_commands.Count == 0)
             {
-                // AddCommand(new AttackCommand(this, dmg.source));
-                // ExecuteCommands();
+                AddCommand(new AttackCommand(this, dmg.source));
+                ExecuteCommands();
             }
         }
 
         public void Attack(Unit target)
         {
+            if (IsDead)
+                return;
+            
             View.RotateOn(target.View);
             View.PerformAttackAnimation((units) =>
             {
@@ -77,21 +89,29 @@ namespace Units
         
         public void MoveTo(Transform destination)
         {
+            if (IsDead)
+                return;
             View.MoveTo(destination);
         }
 
         public void MoveTo(Vector3 destination)
         {
+            if (IsDead)
+                return;
             View.MoveTo(destination);
         }
 
         public void AddCommand(Command command)
         {
+            if (IsDead)
+                return;
             _commands.Enqueue(command);
         }
 
         public void ExecuteCommands()
         {
+            if (IsDead)
+                return;
             if (_isExecutingCommands)
                 return;
             
