@@ -11,7 +11,6 @@ namespace Units.Commands
         {
             _unit = unit;
             _pos = pos;
-            Type = CommandType.Movement;
         }
 
         public override void Execute()

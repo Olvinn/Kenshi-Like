@@ -1,13 +1,17 @@
 using System;
+using System.Collections.Generic;
+using Damages;
 using Units.Weapons;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace Units
 {
     public class UnitView : MonoBehaviour
     {
-        public Action OnReachDestination, OnCompleteHit, OnCompleteGetDamage;
+        public Action OnReachDestination, OnCompleteGetDamage, OnCompleteAttack;
         public Unit Model { get; private set; }
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
@@ -17,25 +21,33 @@ namespace Units
         [SerializeField] private Animator animator;
         [SerializeField] private GameObject selection;
         [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
-        [SerializeField] private WeaponTriggerDetector weaponTrigger;
+        [SerializeField] private UnitAttack attack;
         [SerializeField] private MeshRenderer meshRenderer;
 
         [SerializeField] private Color color;
         private UnitView _target;
-        private Action<UnitView> _onHitUnit;
+        private Transform _destinationTransform;
+        private Action<List<UnitView>> _onHitUnits;
 
         private void Awake()
         {
             meshRenderer.material.color = color;
             selection.SetActive(false);
-            animationEventCatcher.OnHitComplete += HitComplete;
+            
+            animationEventCatcher.OnHitFront += HitFront;
             animationEventCatcher.OnGetDamageComplete += GetDamageComplete;
+            animationEventCatcher.OnAttackComplete += CompleteAttack;
         }
 
         private void Update()
         { 
             if (!agent.enabled)
                 return;
+
+            if (!agent.pathPending && _destinationTransform != null)
+            {
+                agent.SetDestination(_destinationTransform.position);
+            }
             
             if (!agent.pathPending && agent.remainingDistance < 1f)
             {
@@ -43,13 +55,26 @@ namespace Units
                 {
                     MovementStatus = MovementStatus.Aimless;
                     OnReachDestination?.Invoke();
+                    agent.isStopped = true;
+                    _destinationTransform = null;
                 }
             }
 
             if (_target != null)
             {
                 transform.LookAt(_target.transform.position);
+                
+                if (_target.Model.IsDead)
+                    _target = null;
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            GUI.color = Color.black;
+            GUI.backgroundColor = Color.white;
+            if (Application.isPlaying)
+                Handles.Label(transform.position, $"{name}: {Model.HPPercentage}");
         }
 
         public void InjectModel(Unit model)
@@ -65,7 +90,7 @@ namespace Units
             StopAllCoroutines();
             meshRenderer.material.color = Color.black;
             agent.enabled = false;
-            animator.SetTrigger("Die");
+            animator.Play("Die");
         }
 
         /// <summary>
@@ -76,6 +101,20 @@ namespace Units
         {
             agent.SetDestination(destination);
             MovementStatus = MovementStatus.Moving;
+            agent.isStopped = false;
+            _destinationTransform = null;
+        }
+
+        /// <summary>
+        /// Set destination for move to
+        /// </summary>
+        /// <param name="destination"></param>
+        public void MoveTo(Transform destination)
+        {
+            _destinationTransform = destination;
+            agent.SetDestination(destination.position);
+            MovementStatus = MovementStatus.Moving;
+            agent.isStopped = false;
         }
 
         /// <summary>
@@ -122,16 +161,15 @@ namespace Units
 
         /// <summary>
         /// Play animation to hit enemy. If hit will successful, the callback will called.
-        /// Callback can be called multiple times with different UnitViews
         /// </summary>
-        /// <param name="callback"></param>
-        public void PerformAttackAnimation(Action<UnitView> callback)
+        /// <param name="callback">UnitViews that has been hit</param>
+        public void PerformAttackAnimation(Action<List<UnitView>> callback)
         {
+            Debug.Log("performing attack");
             FightStatus = FightStatus.Attacking;
             animator.Play("Attack");
 
-            _onHitUnit = callback;
-            weaponTrigger.OnTriggerWithUnit = (unit) => CheckAttackedUnit(unit, callback);
+            _onHitUnits = callback;
         }
 
         /// <summary>
@@ -148,10 +186,8 @@ namespace Units
         /// </summary>
         public void PerformGetDamageAnimation()
         {
-            if (FightStatus == FightStatus.Attacking)
-                HitComplete();
             FightStatus = FightStatus.GettingDamage;
-            animator.SetTrigger("GetDamage");
+            animator.Play("GetDamage");
         }
 
         /// <summary>
@@ -163,20 +199,16 @@ namespace Units
             _target = target;
         }
 
-        private void CheckAttackedUnit(UnitView target, Action<UnitView> callback)
+        private void HitFront()
         {
-            if (target == this)
-                return;
-            callback?.Invoke(target);
+            attack.BroadcastDamageInFront(_onHitUnits);
+            FightStatus = FightStatus.Idle;
         }
 
-        private void HitComplete()
+        private void CompleteAttack()
         {
-            if (_onHitUnit != null)
-                weaponTrigger.OnTriggerWithUnit = null;
-            _onHitUnit = null;
             FightStatus = FightStatus.Idle;
-            OnCompleteHit?.Invoke();
+            OnCompleteAttack?.Invoke();
         }
 
         private void GetDamageComplete()

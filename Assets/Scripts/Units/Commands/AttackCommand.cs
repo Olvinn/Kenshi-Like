@@ -5,8 +5,6 @@ namespace Units.Commands
     public class AttackCommand : Command
     {
         private Unit _attacker, _target;
-
-        private MovementCommand _movCommand;
         
         public AttackCommand(Unit attacker, Unit target)
         {
@@ -17,17 +15,29 @@ namespace Units.Commands
         public override void Execute()
         {
             Debug.Log($"Executing attack command to target {_target}");
-            base.Execute();
             _attacker.View.PerformFightReadyAnimation();
-            _movCommand = new MovementCommand(_attacker, _target.Position);
-            _movCommand.OnDone += Attack;
-            _movCommand.Execute();
+            base.Execute();
+            GetCloser();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _attacker.View.PerformIdleAnimation();
+            _attacker.View.OnReachDestination = null;
+            _attacker = null;
+            _target = null;
+        }
+
+        private void GetCloser()
+        {
+            _attacker.MoveTo(_target.View.transform);
+            _attacker.View.OnReachDestination += Attack;
         }
 
         private void Attack()
         {
-            _movCommand.Dispose();
-            
+            _attacker.View.OnReachDestination = null;
             if (_target.IsDead)
             {
                 _attacker.View.PerformIdleAnimation();
@@ -41,8 +51,7 @@ namespace Units.Commands
             }
             else
             {
-                _movCommand = new MovementCommand(_attacker, _target.Position);
-                _movCommand.OnDone += Attack;
+                GetCloser();
             }
         }
     }

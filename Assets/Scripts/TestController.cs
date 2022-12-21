@@ -14,7 +14,7 @@ public class TestController : MonoBehaviour
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
             AttackRate = Random.Range(1f, 2f)
         };
-        var unit1 = new Unit(data);
+        var unit1 = new Unit(data, TeamEnum.Player);
         unit1.InjectView(unitView1);
         unitView1.InjectModel(unit1);
         
@@ -23,7 +23,7 @@ public class TestController : MonoBehaviour
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
             AttackRate = Random.Range(1f, 2f)
         };
-        var unit2 = new Unit(data);
+        var unit2 = new Unit(data, TeamEnum.Player);
         unit2.InjectView(unitView2);
         unitView2.InjectModel(unit2);
 
@@ -32,7 +32,7 @@ public class TestController : MonoBehaviour
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
             AttackRate = Random.Range(1f, 2f)
         };
-        var unit3 = new Unit(data);
+        var unit3 = new Unit(data, TeamEnum.EnemyAI);
         unit3.InjectView(unitView3);
         unitView3.InjectModel(unit3);
         

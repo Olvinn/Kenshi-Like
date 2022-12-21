@@ -11,6 +11,8 @@ namespace Units
         public bool IsDead => _currentHP <= 0;
         public Vector3 Position => View.transform.position;
         public UnitView View { get; private set; }
+        public TeamEnum Team { get; private set; }
+        public float HPPercentage => _currentHP / _data.HP;
 
         private UnitData _data;
         private Queue<Command> _commands;
@@ -19,11 +21,11 @@ namespace Units
 
         private float _currentHP;
 
-        public Unit(UnitData data)
+        public Unit(UnitData data, TeamEnum team)
         {
             _data = data;
             _commands = new Queue<Command>();
-
+            Team = team;
             _currentHP = _data.HP;
         }
         
@@ -40,6 +42,9 @@ namespace Units
 
         public void GetDamage(Damage dmg)
         {
+            if (dmg.source == this || dmg.source.Team == Team)
+                return;
+            
             View.PerformGetDamageAnimation();
             _currentHP -= dmg.damage;
             if (_currentHP <= 0)
@@ -47,28 +52,38 @@ namespace Units
 
             if (_commands.Count == 0)
             {
-                AddCommand(new AttackCommand(this, dmg.source));
-                ExecuteCommands();
+                // AddCommand(new AttackCommand(this, dmg.source));
+                // ExecuteCommands();
             }
         }
 
         public void Attack(Unit target, Action onCompleteAttack)
         {
             View.RotateOn(target.View);
-            View.PerformAttackAnimation((unit) =>
+            View.PerformAttackAnimation((units) =>
             {
-                unit.Model.GetDamage(new Damage() { source = this, damage = _data.Damage });
+                foreach (var unit in units)
+                {
+                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.Damage });
+                }
             });
-            View.OnCompleteHit = () =>
+            
+            View.OnCompleteAttack = () =>
             {
                 onCompleteAttack?.Invoke();
-                View.OnCompleteHit = null;
+                View.OnCompleteAttack = null;
             };
-            View.OnCompleteGetDamage= () =>
+            
+            View.OnCompleteGetDamage = () =>
             {
                 onCompleteAttack?.Invoke();
-                View.OnCompleteHit = null;
+                View.OnCompleteGetDamage = null;
             };
+        }
+        
+        public void MoveTo(Transform destination)
+        {
+            View.MoveTo(destination);
         }
 
         public void MoveTo(Vector3 destination)
@@ -122,5 +137,11 @@ namespace Units
             _currentCommand.OnDone += ContinueCommands;
             _currentCommand.Execute();
         }
+    }
+
+    public enum TeamEnum
+    {
+        Player,
+        EnemyAI
     }
 }
