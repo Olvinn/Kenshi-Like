@@ -12,9 +12,9 @@ public class ToDoList
     // 5) Unit death (Done!)
     // 6) Unit visuals (Done!)
     // 7) Unit animations (Done!)
-    // 8) Unit sword fight
+    // 8) Unit sword fight with blocks and dodges
     // 9) Unit attack command (Done!)
-    // 10) Unit defend command
+    // 10) Unit defend area command
     // 11) Unit follow command
     // 12) Camera movement
     // 13) Frame units selection
