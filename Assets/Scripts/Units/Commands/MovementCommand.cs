@@ -17,14 +17,19 @@ namespace Units.Commands
         {
             Debug.Log($"Executing moving command to pos {_pos}");
             _unit.MoveTo(_pos);
-            _unit.View.OnReachDestination += Done;
         }
 
         public override void Dispose()
         {
             Debug.Log($"Disposing moving command {_pos}");
             base.Dispose();
-            _unit.View.OnReachDestination -= Done;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (_unit.View.MovementStatus == MovementStatus.Aimless)
+                Done();
         }
     }
 }

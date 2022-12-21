@@ -17,5 +17,10 @@ namespace Units.Commands
         {
             OnDone = null;
         }
+
+        public virtual void Update()
+        {
+            
+        }
     }
 }

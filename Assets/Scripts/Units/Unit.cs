@@ -35,6 +35,12 @@ namespace Units
             view.SetMaxSpeed(_data.Speed);
         }
 
+        public void Update()
+        {
+            if (_currentCommand != null)
+                _currentCommand.Update();
+        }
+
         public void Die()
         {
             View.Die();
@@ -57,7 +63,7 @@ namespace Units
             }
         }
 
-        public void Attack(Unit target, Action onCompleteAttack)
+        public void Attack(Unit target)
         {
             View.RotateOn(target.View);
             View.PerformAttackAnimation((units) =>
@@ -67,18 +73,6 @@ namespace Units
                     unit.Model.GetDamage(new Damage() { source = this, damage = _data.Damage });
                 }
             });
-            
-            View.OnCompleteAttack = () =>
-            {
-                onCompleteAttack?.Invoke();
-                View.OnCompleteAttack = null;
-            };
-            
-            View.OnCompleteGetDamage = () =>
-            {
-                onCompleteAttack?.Invoke();
-                View.OnCompleteGetDamage = null;
-            };
         }
         
         public void MoveTo(Transform destination)

@@ -24,20 +24,34 @@ namespace Units.Commands
         {
             base.Dispose();
             _attacker.View.PerformIdleAnimation();
-            _attacker.View.OnReachDestination = null;
             _attacker = null;
             _target = null;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (_attacker.View.MovementStatus == MovementStatus.Aimless)
+            {
+                if (_attacker.View.CanAttack(_target.View))
+                {
+                    if (_attacker.View.FightStatus == FightStatus.Idle)
+                        Attack();
+                }
+                else
+                {
+                    GetCloser();
+                }
+            }
         }
 
         private void GetCloser()
         {
             _attacker.MoveTo(_target.View.transform);
-            _attacker.View.OnReachDestination += Attack;
         }
 
         private void Attack()
         {
-            _attacker.View.OnReachDestination = null;
             if (_target.IsDead)
             {
                 _attacker.View.PerformIdleAnimation();
@@ -47,7 +61,7 @@ namespace Units.Commands
 
             if (_attacker.View.CanAttack(_target.View))
             {
-                _attacker.Attack(_target, Attack);
+                _attacker.Attack(_target);
             }
             else
             {

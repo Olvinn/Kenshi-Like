@@ -11,7 +11,6 @@ namespace Units
 {
     public class UnitView : MonoBehaviour
     {
-        public Action OnReachDestination, OnCompleteGetDamage, OnCompleteAttack;
         public Unit Model { get; private set; }
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
@@ -25,6 +24,7 @@ namespace Units
         [SerializeField] private MeshRenderer meshRenderer;
 
         [SerializeField] private Color color;
+        
         private UnitView _target;
         private Transform _destinationTransform;
         private Action<List<UnitView>> _onHitUnits;
@@ -40,7 +40,9 @@ namespace Units
         }
 
         private void Update()
-        { 
+        {
+            Model.Update();
+            
             if (!agent.enabled)
                 return;
 
@@ -54,7 +56,6 @@ namespace Units
                 if (MovementStatus == MovementStatus.Moving)
                 {
                     MovementStatus = MovementStatus.Aimless;
-                    OnReachDestination?.Invoke();
                     agent.isStopped = true;
                     _destinationTransform = null;
                 }
@@ -165,7 +166,6 @@ namespace Units
         /// <param name="callback">UnitViews that has been hit</param>
         public void PerformAttackAnimation(Action<List<UnitView>> callback)
         {
-            Debug.Log("performing attack");
             FightStatus = FightStatus.Attacking;
             animator.Play("Attack");
 
@@ -208,13 +208,12 @@ namespace Units
         private void CompleteAttack()
         {
             FightStatus = FightStatus.Idle;
-            OnCompleteAttack?.Invoke();
+            _onHitUnits = null;
         }
 
         private void GetDamageComplete()
         {
             FightStatus = FightStatus.Idle;
-            OnCompleteGetDamage?.Invoke();
         }
     }
 
