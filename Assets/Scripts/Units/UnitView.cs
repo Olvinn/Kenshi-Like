@@ -23,7 +23,7 @@ namespace Units
         [SerializeField] private UnitAttack attack;
         [SerializeField] private MeshRenderer meshRenderer;
 
-        [SerializeField] private Color color;
+        public Color Color => meshRenderer.material.color;
         
         private UnitView _target;
         private Transform _destinationTransform;
@@ -31,7 +31,6 @@ namespace Units
 
         private void Awake()
         {
-            meshRenderer.material.color = color;
             selection.SetActive(false);
             
             animationEventCatcher.OnHitFront += HitFront;
@@ -81,6 +80,11 @@ namespace Units
         public void InjectModel(Unit model)
         {
             Model = model;
+        }
+
+        public void SetColor(Color color)
+        {
+            meshRenderer.material.color = color;
         }
 
         /// <summary>

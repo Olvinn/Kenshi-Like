@@ -1,44 +1,48 @@
+using System;
 using Player;
 using UnityEngine;
 using Units;
+using Random = UnityEngine.Random;
 
 public class TestController : MonoBehaviour
 {
-    [SerializeField] private UnitView unitView1, unitView2, unitView3;
+    [SerializeField] private UnitView prefab;
     [SerializeField] private PlayerController player;
-    
-    void Start()
+
+    private void Start()
+    {
+        CreatePlayerUnit(new Vector3(-2f, 0, 0));
+        CreatePlayerUnit(new Vector3(0, 0, 0));
+        
+        CreateAIUnit(new Vector3(2f, 0, 0));
+        CreateAIUnit(new Vector3(4f, 0, 0));
+    }
+
+    void CreatePlayerUnit(Vector3 pos)
+    {
+        var unit = CreateUnit(TeamEnum.Player, pos);
+        player.AddControlledUnit(unit);
+    }
+
+    void CreateAIUnit(Vector3 pos)
+    {
+        player.AddEnemyUnit(CreateUnit(TeamEnum.EnemyAI, pos));
+    }
+
+    Unit CreateUnit(TeamEnum team, Vector3 pos)
     {
         UnitData data = new UnitData()
         {
             HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
-            AttackRate = Random.Range(1f, 2f)
+            AttackRate = Random.Range(1f, 2f),
+            Color = team == TeamEnum.Player ? Color.cyan : Color.red
         };
-        var unit1 = new Unit(data, TeamEnum.Player);
-        unit1.InjectView(unitView1);
-        unitView1.InjectModel(unit1);
-        
-        data = new UnitData()
-        {
-            HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
-            AttackRate = Random.Range(1f, 2f)
-        };
-        var unit2 = new Unit(data, TeamEnum.Player);
-        unit2.InjectView(unitView2);
-        unitView2.InjectModel(unit2);
-
-        data = new UnitData()
-        {
-            HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
-            AttackRate = Random.Range(1f, 2f)
-        };
-        var unit3 = new Unit(data, TeamEnum.EnemyAI);
-        unit3.InjectView(unitView3);
-        unitView3.InjectModel(unit3);
-        
-        player.AddControlledUnit(unit1);
-        player.AddControlledUnit(unit2);
-        player.AddEnemyUnit(unit3);
+        var unit = new Unit(data,team);
+        var view = Instantiate(prefab);
+        view.transform.position = pos;
+        unit.InjectView(view);
+        view.InjectModel(unit);
+        return unit;
     }
 
     void Update()

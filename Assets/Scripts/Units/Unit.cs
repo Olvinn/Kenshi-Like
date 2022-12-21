@@ -33,6 +33,7 @@ namespace Units
         {
             View = view;
             view.SetMaxSpeed(_data.Speed);
+            view.SetColor(_data.Color);
         }
 
         public void Update()

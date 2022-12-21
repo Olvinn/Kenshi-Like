@@ -8,5 +8,6 @@ namespace Units
         public float Speed;
         public float AttackRate;
         public float Damage;
+        public Color Color;
     }
 }
