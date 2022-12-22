@@ -1,21 +1,33 @@
-using System;
+using System.Collections.Generic;
 using Player;
 using UnityEngine;
 using Units;
 using Random = UnityEngine.Random;
 
-public class TestController : MonoBehaviour
+public class UnitsController : MonoBehaviour
 {
     [SerializeField] private UnitView prefab;
     [SerializeField] private PlayerController player;
 
+    private List<Unit> _units;
+
     private void Start()
     {
+        _units = new List<Unit>();
+        
         CreatePlayerUnit(new Vector3(-2f, 0, 0));
         CreatePlayerUnit(new Vector3(0, 0, 0));
         
         CreateAIUnit(new Vector3(2f, 0, 0));
         CreateAIUnit(new Vector3(4f, 0, 0));
+    }
+
+    void Update()
+    {
+        foreach (var unit in _units)
+        {
+            unit.Update();
+        }
     }
 
     void CreatePlayerUnit(Vector3 pos)
@@ -26,7 +38,7 @@ public class TestController : MonoBehaviour
 
     void CreateAIUnit(Vector3 pos)
     {
-        player.AddEnemyUnit(CreateUnit(TeamEnum.EnemyAI, pos));
+        var unit = CreateUnit(TeamEnum.EnemyAI, pos);
     }
 
     Unit CreateUnit(TeamEnum team, Vector3 pos)
@@ -42,11 +54,7 @@ public class TestController : MonoBehaviour
         view.transform.position = pos;
         unit.InjectView(view);
         view.InjectModel(unit);
+        _units.Add(unit);
         return unit;
-    }
-
-    void Update()
-    {
-        
     }
 }

@@ -28,7 +28,7 @@ namespace Units.Commands
         public override void Update()
         {
             base.Update();
-            if (_unit.View.MovementStatus == MovementStatus.Aimless)
+            if (_unit.View.MovementStatus == MovementStatus.Waiting)
                 Done();
         }
     }

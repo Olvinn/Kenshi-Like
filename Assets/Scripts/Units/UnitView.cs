@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Damages;
-using Units.Weapons;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
 namespace Units
 {
@@ -40,8 +37,6 @@ namespace Units
 
         private void Update()
         {
-            Model.Update();
-            
             if (!agent.enabled)
                 return;
 
@@ -54,7 +49,7 @@ namespace Units
             {
                 if (MovementStatus == MovementStatus.Moving)
                 {
-                    MovementStatus = MovementStatus.Aimless;
+                    MovementStatus = MovementStatus.Waiting;
                     agent.isStopped = true;
                     _destinationTransform = null;
                 }
@@ -186,11 +181,11 @@ namespace Units
         }
 
         /// <summary>
-        /// Play animation represents taking damage. It will interrupt any other animation
+        /// Play animation representing taking damage. It will interrupt any other animation
         /// </summary>
         public void PerformGetDamageAnimation()
         {
-            FightStatus = FightStatus.GettingDamage;
+            FightStatus = FightStatus.Damaging;
             animator.Play("GetDamage");
         }
 
@@ -206,32 +201,32 @@ namespace Units
         private void HitFront()
         {
             attack.BroadcastDamageInFront(_onHitUnits);
-            FightStatus = FightStatus.Idle;
+            FightStatus = FightStatus.Waiting;
         }
 
         private void CompleteAttack()
         {
-            FightStatus = FightStatus.Idle;
+            FightStatus = FightStatus.Waiting;
             _onHitUnits = null;
         }
 
         private void GetDamageComplete()
         {
-            FightStatus = FightStatus.Idle;
+            FightStatus = FightStatus.Waiting;
         }
     }
 
     public enum MovementStatus
     {
-        Aimless,
+        Waiting,
         Moving,
     }
 
     public enum FightStatus
     {
-        Idle,
+        Waiting,
         Attacking,
-        GettingDamage,
+        Damaging,
         Parrying
     }
 }

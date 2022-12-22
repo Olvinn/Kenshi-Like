@@ -31,17 +31,18 @@ namespace Units.Commands
         public override void Update()
         {
             base.Update();
-            if (_attacker.View.MovementStatus == MovementStatus.Aimless)
+            
+            if (_attacker.View.MovementStatus != MovementStatus.Waiting) 
+                return;
+            
+            if (_attacker.View.CanAttack(_target.View))
             {
-                if (_attacker.View.CanAttack(_target.View))
-                {
-                    if (_attacker.View.FightStatus == FightStatus.Idle)
-                        Attack();
-                }
-                else
-                {
-                    GetCloser();
-                }
+                if (_attacker.View.FightStatus == FightStatus.Waiting)
+                    Attack();
+            }
+            else
+            {
+                GetCloser();
             }
         }
 
