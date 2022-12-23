@@ -9,8 +9,12 @@ namespace Inputs
         
         public event Action<Ray> OnRMB, OnLMB, OnShiftRMB, OnShiftLMB;
         public event Action<Vector2> OnDragCamera;
+        public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect;
 
         [SerializeField] private Camera playCamera;
+
+        private Vector2 _start;
+        private bool _isDrawingBox;
 
         private void Awake()
         {
@@ -29,15 +33,36 @@ namespace Inputs
             }
             else
             {
+                if (Input.GetButtonDown("Fire1"))
+                {
+                    _start = Input.mousePosition;
+                    _isDrawingBox = true;
+                }
+                
+                if (Input.GetButton("Fire1"))
+                    if (Vector3.Distance(_start, Input.mousePosition) >= 3)
+                    {
+                        OnDrawBox?.Invoke(_start, Input.mousePosition);
+                    }
+
                 if (Input.GetButtonUp("Fire1"))
-                    OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                {
+                    if (Vector3.Distance(_start, Input.mousePosition) < 3)
+                        OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                    else
+                        OnBoxSelect?.Invoke(_start, Input.mousePosition);
+                    _isDrawingBox = false;
+                }
+
                 if (Input.GetButtonUp("Fire2"))
                     OnRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
             }
-            
+
             if (Input.mousePosition.x <= 1 || Input.mousePosition.x >= Screen.width - 1
-                || Input.mousePosition.y <= 1 || Input.mousePosition.y >= Screen.height - 1)
+                                           || Input.mousePosition.y <= 1 || Input.mousePosition.y >= Screen.height - 1)
+            {
                 OnDragCamera?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
+            }
         }
     }
 }
