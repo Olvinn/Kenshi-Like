@@ -126,22 +126,18 @@ namespace Units
             if (IsDead)
                 return;
 
+            if (_currentCommand != null && _currentCommand.Equals(command))
+                return;
+
+            if (_commands.Contains(command))
+                return;
+
             if (_currentCommand != null)
             {
-                if (_currentCommand.Equals(command))
-                {
-                    return;
-                }
-                else
-                {
-                    _currentCommand.Interrupt();
-                    _commands.AddFirst(_currentCommand);
-                }
+                _currentCommand.Interrupt();
+                _commands.AddFirst(_currentCommand);
             }
 
-            if (_commands.Count > 0 && _commands.First.Value.Equals(command))
-                return;
-            
             _commands.AddFirst(command);
             _isExecutingCommands = true;
             ContinueCommands();
