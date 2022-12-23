@@ -125,11 +125,18 @@ namespace Units
         {
             if (IsDead)
                 return;
-            
+
             if (_currentCommand != null)
             {
-                _currentCommand.Interrupt();
-                _commands.AddFirst(_currentCommand);
+                if (_currentCommand.Equals(command))
+                {
+                    return;
+                }
+                else
+                {
+                    _currentCommand.Interrupt();
+                    _commands.AddFirst(_currentCommand);
+                }
             }
 
             if (_commands.Count > 0 && _commands.First.Value.Equals(command))
