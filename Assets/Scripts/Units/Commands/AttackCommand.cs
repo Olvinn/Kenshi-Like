@@ -4,6 +4,8 @@ namespace Units.Commands
 {
     public class AttackCommand : Command
     {
+        public override string CommandName => "Attack"; 
+        
         private Unit _attacker, _target;
         
         public AttackCommand(Unit attacker, Unit target)
@@ -14,22 +16,31 @@ namespace Units.Commands
 
         public override void Execute()
         {
-            Debug.Log($"Executing attack command to target {_target}");
-            _attacker.View.PerformFightReadyAnimation();
             base.Execute();
+            if (_attacker == null || _target == null || _target.IsDead)
+            {
+                Done();
+                return;
+            }
+
+            _attacker.View.PerformFightReadyAnimation();
             GetCloser();
         }
 
         public override void Dispose()
         {
             base.Dispose();
-            _attacker.View.PerformIdleAnimation();
+            if (_attacker != null)
+                _attacker.View.PerformIdleAnimation();
             _attacker = null;
             _target = null;
         }
 
         public override void Update()
         {
+            if (!IsRunning)
+                return;
+            
             base.Update();
             
             if (_attacker.View.MovementStatus != MovementStatus.Waiting) 
@@ -68,6 +79,16 @@ namespace Units.Commands
             {
                 GetCloser();
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var c = obj as AttackCommand;
+            if (c == null)
+                return false;
+            if (c._attacker.Equals(_attacker) && c._target.Equals(_target))
+                return true;
+            return false;
         }
     }
 }

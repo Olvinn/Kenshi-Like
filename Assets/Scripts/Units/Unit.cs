@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Units.Commands;
 using UnityEngine;
 using Damages;
@@ -15,16 +16,26 @@ namespace Units
         public float HPPercentage => _currentHP / _data.HP;
 
         private UnitData _data;
-        private Queue<Command> _commands;
+        private LinkedList<Command> _commands;
         private Command _currentCommand;
         private bool _isExecutingCommands = false;
 
         private float _currentHP;
 
+        public List<string> GetListOfCommands()
+        {
+            List<string> result = new List<string>();
+            if (_currentCommand != null)
+                result.Add(_currentCommand.CommandName);
+            if (_commands.Count != 0)
+                result.AddRange(_commands.Select((x) => x.CommandName));
+            return result;
+        }
+
         public Unit(UnitData data, TeamEnum team)
         {
             _data = data;
-            _commands = new Queue<Command>();
+            _commands = new LinkedList<Command>();
             Team = team;
             _currentHP = _data.HP;
         }
@@ -66,11 +77,8 @@ namespace Units
             if (_currentHP <= 0)
                 Die();
 
-            if (_commands.Count == 0)
-            {
-                AddCommand(new AttackCommand(this, dmg.source));
-                ExecuteCommands();
-            }
+            AddReactionCommand(new AttackCommand(this, dmg.source));
+            ExecuteCommands();
         }
 
         public void Attack(Unit target)
@@ -106,7 +114,30 @@ namespace Units
         {
             if (IsDead)
                 return;
-            _commands.Enqueue(command);
+            
+            if (_commands.Count > 0 && _commands.First.Value.Equals(command))
+                return;
+            
+            _commands.AddLast(command);
+        }
+
+        public void AddReactionCommand(Command command)
+        {
+            if (IsDead)
+                return;
+            
+            if (_currentCommand != null)
+            {
+                _currentCommand.Interrupt();
+                _commands.AddFirst(_currentCommand);
+            }
+
+            if (_commands.Count > 0 && _commands.First.Value.Equals(command))
+                return;
+            
+            _commands.AddFirst(command);
+            _isExecutingCommands = true;
+            ContinueCommands();
         }
 
         public void ExecuteCommands()
@@ -125,7 +156,6 @@ namespace Units
             if (_currentCommand == null)
                 return;
             
-            _currentCommand.OnDone -= ExecuteCommands;
             foreach (var command in _commands)
                 command.Dispose();
             _commands.Clear();
@@ -148,7 +178,8 @@ namespace Units
                 return;
             }
             
-            _currentCommand = _commands.Dequeue();
+            _currentCommand = _commands.First.Value;
+            _commands.RemoveFirst();
             _currentCommand.OnDone += ContinueCommands;
             _currentCommand.Execute();
         }

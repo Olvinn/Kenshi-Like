@@ -69,7 +69,16 @@ namespace Units
             GUI.color = Color.black;
             GUI.backgroundColor = Color.white;
             if (Application.isPlaying)
+            {
                 Handles.Label(transform.position, $"{name}: {Model.HPPercentage}");
+                var cs = Model.GetListOfCommands();
+                float offset = .1f;
+                foreach (var c in cs)
+                {
+                    Handles.Label(transform.position + Vector3.down * offset, $"Command: {c}");
+                    offset += .1f;
+                }
+            }
         }
 
         public void InjectModel(Unit model)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Inputs;
 using Units;
 using Units.Commands;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Player
@@ -63,19 +64,30 @@ namespace Player
             if (Physics.Raycast(ray, out hit))
             {
                 var view = hit.collider.GetComponent<UnitView>();
-                if (view != null && view.Model.Team != TeamEnum.Player && !view.Model.IsDead)
+                if (view != null && !view.Model.IsDead)
                 {
-                    foreach (var unit in _selected)
+                    if (view.Model.Team == TeamEnum.Player)
                     {
-                        unit.AddCommand(new AttackCommand(unit, view.Model));
-                        unit.ExecuteCommands();
+                        foreach (var unit in _selected)
+                        {
+                            unit.AddCommand(new FollowCommand(unit, view.Model));
+                            unit.ExecuteCommands();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var unit in _selected)
+                        {
+                            unit.AddCommand(new AttackCommand(unit, view.Model));
+                            unit.ExecuteCommands();
+                        }
                     }
                 }
                 else
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.AddCommand(new MovementCommand(unit, hit.point));
+                        unit.AddCommand(new MoveCommand(unit, hit.point));
                         unit.ExecuteCommands();
                     }
                 }
@@ -99,13 +111,25 @@ namespace Player
             if (Physics.Raycast(ray, out hit))
             {
                 var view = hit.collider.GetComponent<UnitView>();
-                if (view != null && view.Model.Team != TeamEnum.Player && !view.Model.IsDead)
+                if (view != null && !view.Model.IsDead)
                 {
-                    foreach (var unit in _selected)
+                    if (view.Model.Team == TeamEnum.Player)
                     {
-                        unit.ClearCommands();
-                        unit.AddCommand(new AttackCommand(unit, view.Model));
-                        unit.ExecuteCommands();
+                        foreach (var unit in _selected)
+                        {
+                            unit.ClearCommands();
+                            unit.AddCommand(new FollowCommand(unit, view.Model));
+                            unit.ExecuteCommands();
+                        }
+                    }
+                    else
+                    {
+                        foreach (var unit in _selected)
+                        {
+                            unit.ClearCommands();
+                            unit.AddCommand(new AttackCommand(unit, view.Model));
+                            unit.ExecuteCommands();
+                        }
                     }
                 }
                 else
@@ -113,7 +137,7 @@ namespace Player
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        unit.AddCommand(new MovementCommand(unit, hit.point));
+                        unit.AddCommand(new MoveCommand(unit, hit.point));
                         unit.ExecuteCommands();
                     }
                 }

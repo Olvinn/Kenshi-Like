@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class ToDoList
-{
     //TODO: 
     // 1) Unit movement (Done!)
     // 2) Unit movement by point and click (Done!)
@@ -12,7 +7,7 @@ public class ToDoList
     // 5) Unit death (Done!)
     // 6) Unit visuals (Done!)
     // 7) Unit animations (Done!)
-    // 8) Unit sword fight with blocks and dodges
+    // 8) Unit sword fight with blocks
     // 9) Unit attack command (Done!)
     // 10) Unit defend area command
     // 11) Unit follow command
@@ -21,4 +16,5 @@ public class ToDoList
     // 14) Aggressive bot
     // 15) Units reactions
     // 16) Units autonomy
-}
+    // 17) Units dodges
+    // 18) Unit defend another unit command
