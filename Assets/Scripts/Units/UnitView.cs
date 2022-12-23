@@ -100,6 +100,7 @@ namespace Units
             meshRenderer.material.color = Color.black;
             agent.enabled = false;
             animator.Play("Die");
+            Deselect();
         }
 
         /// <summary>

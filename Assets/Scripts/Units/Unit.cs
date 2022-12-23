@@ -59,9 +59,7 @@ namespace Units
         public void Die()
         {
             View.Die();
-            if (_currentCommand != null)
-                _currentCommand.Dispose();
-            _currentCommand = null;
+            ClearCommands();
         }
 
         public void GetDamage(Damage dmg)
