@@ -7,10 +7,10 @@
     // 5) Unit death (Done!)
     // 6) Unit visuals (Done!)
     // 7) Unit animations (Done!)
-    // 8) Unit sword fight with blocks
+    // 8) Unit sword fight with blocking
     // 9) Unit attack command (Done!)
     // 10) Unit defend area command
-    // 11) Unit follow command
+    // 11) Unit follow command (Done!)
     // 12) Camera movement
     // 13) Frame units selection
     // 14) Aggressive bot
