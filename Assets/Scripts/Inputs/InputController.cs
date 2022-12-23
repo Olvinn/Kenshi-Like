@@ -37,7 +37,7 @@ namespace Inputs
             
             if (Input.mousePosition.x <= 1 || Input.mousePosition.x >= Screen.width - 1
                 || Input.mousePosition.y <= 1 || Input.mousePosition.y >= Screen.height - 1)
-                OnDragCamera?.Invoke( new Vector2(Screen.width, Screen.height) * .5f - (Vector2)Input.mousePosition);
+                OnDragCamera?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
         }
     }
 }

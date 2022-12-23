@@ -9,6 +9,8 @@ namespace Cameras
     {
         [SerializeField] private float speed = 10f;
         [SerializeField] private Camera camera;
+
+        private Vector2 _mov;
         
         private void Awake()
         {
@@ -21,11 +23,17 @@ namespace Cameras
             InputController.Instance.OnDragCamera += MoveCamera;
         }
 
+        private void LateUpdate()
+        {
+            transform.position += new Vector3(_mov.x, 0, _mov.y);
+            _mov = Vector2.zero;
+        }
+
         private void MoveCamera(Vector2 mov)
         {
             mov.Normalize();
             mov *= Time.deltaTime * speed;
-            transform.position += new Vector3(-mov.x, 0, -mov.y);
+            _mov = mov;
         }
     }
 }
