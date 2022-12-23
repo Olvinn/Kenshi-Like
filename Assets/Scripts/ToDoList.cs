@@ -18,3 +18,4 @@
     // 18) Unit defend another unit command
     // 8) Unit sword fight with blocking
     // 10) Unit defend area command
+    // 11) Inherit Player and AI from abstract player?

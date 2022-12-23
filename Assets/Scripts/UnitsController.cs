@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Player;
+using Players;
 using UnityEngine;
 using Units;
 using Units.Commands;
@@ -12,12 +12,16 @@ public class UnitsController : MonoBehaviour
     
     [SerializeField] private UnitView prefab;
     [SerializeField] private PlayerController player;
+    [SerializeField] private AIController bot;
 
     private List<Unit> _units;
 
     private void Start()
     {
         _units = new List<Unit>();
+        
+        player.SetTeam(TeamEnum.Player);
+        bot.SetTeam(TeamEnum.EnemyAI);
 
         for (int i = 0; i < unitCount; i++)
         {
@@ -54,13 +58,14 @@ public class UnitsController : MonoBehaviour
     Unit CreatePlayerUnit(Vector3 pos)
     {
         var unit = CreateUnit(TeamEnum.Player, pos);
-        player.AddControlledUnit(unit);
+        player.AddUnit(unit);
         return unit;
     }
 
     Unit CreateAIUnit(Vector3 pos)
     {
         var unit = CreateUnit(TeamEnum.EnemyAI, pos);
+        bot.AddUnit(unit);
         return unit;
     }
 
@@ -72,7 +77,7 @@ public class UnitsController : MonoBehaviour
             AttackRate = Random.Range(1f, 2f),
             Color = team == TeamEnum.Player ? Color.cyan : Color.red
         };
-        var unit = new Unit(data,team);
+        var unit = new Unit(data);
         var view = Instantiate(prefab);
         view.transform.position = pos;
         unit.InjectView(view);

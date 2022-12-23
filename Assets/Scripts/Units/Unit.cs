@@ -32,11 +32,10 @@ namespace Units
             return result;
         }
 
-        public Unit(UnitData data, TeamEnum team)
+        public Unit(UnitData data)
         {
             _data = data;
             _commands = new LinkedList<Command>();
-            Team = team;
             _currentHP = _data.HP;
         }
         
@@ -163,6 +162,11 @@ namespace Units
             _currentCommand.Dispose();
             _currentCommand = null;
             _isExecutingCommands = false;
+        }
+
+        public void SetTeam(TeamEnum team)
+        {
+            Team = team;
         }
 
         private void ContinueCommands()

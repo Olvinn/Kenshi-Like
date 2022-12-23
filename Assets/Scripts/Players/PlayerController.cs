@@ -1,17 +1,17 @@
-using System;
 using System.Collections.Generic;
 using Inputs;
 using Units;
 using Units.Commands;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-namespace Player
+namespace Players
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IPlayer
     {
         private List<Unit> _units;
         private List<Unit> _selected;
+
+        private TeamEnum _team;
 
         private void Start()
         {
@@ -25,9 +25,10 @@ namespace Player
             InputController.Instance.OnBoxSelect += BoxSelect;
         }
 
-        public void AddControlledUnit(Unit unit)
+        public void AddUnit(Unit unit)
         {
             _units.Add(unit);
+            unit.SetTeam(_team);
         }
 
         public void SelectUnit(Unit unit)
@@ -57,6 +58,15 @@ namespace Player
             }
 
             _selected.Clear();
+        }
+
+        public void SetTeam(TeamEnum team)
+        {
+            _team = team;
+            foreach (var unit in _units)
+            {
+                unit.SetTeam(team);
+            }
         }
 
         private void ShiftRightMouseButtonClick(Ray ray)
