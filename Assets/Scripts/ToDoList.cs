@@ -10,7 +10,7 @@
     // 9) Unit attack command (Done!)
     // 11) Unit follow command (Done!)
     // 12) Camera movement (Done!)
-    // 13) Frame units selection
+    // 13) Frame units selection (Done!)
     // 14) Aggressive bot
     // 15) Units reactions
     // 16) Units autonomy
