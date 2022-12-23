@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 6778482651088509265}
   - component: {fileID: 2538532018309399269}
   - component: {fileID: 6452606682630688038}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ GameObject:
   - component: {fileID: 6305124464293504807}
   - component: {fileID: 1145127852336681432}
   - component: {fileID: 4166096956245853401}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Glasses
   m_TagString: Untagged
   m_Icon: {fileID: 0}

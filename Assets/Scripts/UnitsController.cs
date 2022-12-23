@@ -24,7 +24,7 @@ public class UnitsController : MonoBehaviour
             Unit unit;
             if (i % 2 == 0)
             {
-                unit = CreatePlayerUnit(new Vector3(-i, 0, 0));
+                unit = CreatePlayerUnit(new Vector3(-1, unitCount / 2 - i, 0));
                 if (fightInstantly)
                 {
                     unit.AddCommand(new AttackCommand(unit, i > 0 ? _units[i - 1] : null));
@@ -33,7 +33,7 @@ public class UnitsController : MonoBehaviour
             }
             else
             {
-                unit = CreateAIUnit(new Vector3(i + 2, 0, 0));
+                unit = CreateAIUnit(new Vector3(1, unitCount / 2 - i, 0));
                 if (fightInstantly)
                 {
                     unit.AddCommand(new AttackCommand(unit, i > 0 ? _units[i - 1] : null));

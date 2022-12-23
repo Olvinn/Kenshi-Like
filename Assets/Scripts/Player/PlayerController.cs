@@ -31,7 +31,7 @@ namespace Player
 
         public void SelectUnit(Unit unit)
         {
-            if (_allControlledUnits.Contains(unit) && !_selected.Contains(unit))
+            if (_allControlledUnits.Contains(unit) && !_selected.Contains(unit) && !unit.IsDead)
             {
                 unit.View.Select();
                 _selected.Add(unit);
