@@ -42,7 +42,10 @@ namespace Inputs
                 if (Input.GetButton("Fire1"))
                     if (Vector3.Distance(_start, Input.mousePosition) >= 3)
                     {
-                        OnDrawBox?.Invoke(_start, Input.mousePosition);
+                        var end = Input.mousePosition;
+                        Vector2 pos = new Vector2(end.x < _start.x ? end.x : _start.x, end.y < _start.y ? end.y : _start.y);
+                        Vector2 size = new Vector2(Mathf.Abs(end.x - _start.x), Mathf.Abs(end.y - _start.y));
+                        OnDrawBox?.Invoke(pos, size);
                     }
 
                 if (Input.GetButtonUp("Fire1"))
@@ -50,7 +53,12 @@ namespace Inputs
                     if (Vector3.Distance(_start, Input.mousePosition) < 3)
                         OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
                     else
-                        OnBoxSelect?.Invoke(_start, Input.mousePosition);
+                    {
+                        var end = Input.mousePosition;
+                        Vector2 pos = new Vector2(end.x < _start.x ? end.x : _start.x, end.y < _start.y ? end.y : _start.y);
+                        Vector2 size = new Vector2(Mathf.Abs(end.x - _start.x), Mathf.Abs(end.y - _start.y));
+                        OnBoxSelect?.Invoke(pos, size);
+                    }
                     _isDrawingBox = false;
                 }
 

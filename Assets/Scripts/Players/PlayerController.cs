@@ -167,11 +167,9 @@ namespace Players
             }
         }
 
-        private void BoxSelect(Vector2 from, Vector2 to)
+        private void BoxSelect(Vector2 pos, Vector2 size)
         {
             DeselectAll();
-            Vector2 pos = new Vector2(to.x < from.x ? to.x : from.x, to.y < from.y ? to.y : from.y);
-            Vector2 size = new Vector2(Mathf.Abs(to.x - from.x), Mathf.Abs(to.y - from.y));
             foreach (var unit in _units)
             {
                 Vector3 screen = Camera.main.WorldToScreenPoint(unit.Position);
