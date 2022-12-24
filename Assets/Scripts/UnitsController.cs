@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Players;
 using UI;
@@ -74,6 +76,19 @@ public class UnitsController : MonoBehaviour
         unit.InjectView(view);
         view.InjectModel(unit);
         _units.Add(unit);
+        unit.OnDie += RemoveUnit;
         return unit;
+    }
+
+    void RemoveUnit(Unit unit)
+    {
+        _units.Remove(unit);
+        // StartCoroutine(DelayedAction(()=>Destroy(unit.View.gameObject), 10));
+    }
+
+    IEnumerator DelayedAction(Action action, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        action?.Invoke();
     }
 }
