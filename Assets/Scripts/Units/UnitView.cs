@@ -88,7 +88,7 @@ namespace Units
         {
             GUI.color = Color.black;
             GUI.backgroundColor = Color.white;
-            if (Application.isPlaying)
+            if (Model != null)
             {
                 Handles.Label(transform.position, $"{name}: {Model.HPPercentage}");
                 var cs = Model.GetListOfCommands();
@@ -118,14 +118,29 @@ namespace Units
         {
             StopAllCoroutines();
             meshRenderer.material.color = Color.black;
-            agent.enabled = false;
             animator.Play("Die");
             Deselect();
+            this.enabled = false;
+        }
+
+        private void OnDisable()
+        {
+            agent.enabled = false;
             sense.enabled = false;
             attack.enabled = false;
             var c = GetComponent<CapsuleCollider>();
             c.radius = 0f;
-            Destroy(c);
+            c.enabled = false;
+        }
+
+        private void OnEnable()
+        {
+            agent.enabled = true;
+            sense.enabled = true;
+            attack.enabled = true;
+            var c = GetComponent<CapsuleCollider>();
+            c.radius = .5f;
+            c.enabled = true;
         }
 
         /// <summary>

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +5,6 @@ namespace Units.Weapons
 {
     public class TriggerDetector : MonoBehaviour
     {
-        public int cap = 5;
         public List<UnitView> views
         {
             get { return new List<UnitView>(_views.ToArray()); }
@@ -23,8 +21,6 @@ namespace Units.Weapons
             var unit = other.GetComponent<UnitView>();
             if (unit)
             {
-                if (_views.Count > cap)
-                    RemoveUnit(_views[0].Model);
                 _views.Add(unit);
                 unit.Model.OnDie += RemoveUnit;
             }

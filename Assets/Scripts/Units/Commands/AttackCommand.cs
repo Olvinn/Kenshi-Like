@@ -62,7 +62,7 @@ namespace Units.Commands
 
         private void GetCloser()
         {
-            _attacker.MoveTo(Target.Position);
+            _attacker.MoveTo(Target.View.transform);
         }
 
         private void Attack()
