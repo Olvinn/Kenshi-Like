@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Players;
+using UI;
 using UnityEngine;
 using Units;
 using Units.Commands;
@@ -12,6 +13,8 @@ public class UnitsController : MonoBehaviour
     [SerializeField] private UnitView prefab;
     [SerializeField] private PlayerController player;
     [SerializeField] private AIController bot;
+
+    [SerializeField] private HPBarsController hps;
 
     private List<Unit> _units;
 
@@ -32,6 +35,7 @@ public class UnitsController : MonoBehaviour
                 CreateAIUnit(new Vector3(10, 0, unitCount / 2 - i));
             }
         }
+        hps.SetUpUnits(_units);
     }
 
     void FixedUpdate()

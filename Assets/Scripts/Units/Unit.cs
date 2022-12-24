@@ -178,17 +178,6 @@ namespace Units
             ContinueCommands();
         }
 
-        public void ExecuteCommands()
-        {
-            if (IsDead)
-                return;
-            if (_isExecutingCommands)
-                return;
-            
-            _isExecutingCommands = true;
-            ContinueCommands();
-        }
-
         public void ClearCommands()
         {
             if (_currentCommand == null)
@@ -209,6 +198,17 @@ namespace Units
             {
                 WhoIsIt(view);
             }
+        }
+
+        private void ExecuteCommands()
+        {
+            if (IsDead)
+                return;
+            if (_isExecutingCommands)
+                return;
+            
+            _isExecutingCommands = true;
+            ContinueCommands();
         }
 
         private void ContinueCommands()

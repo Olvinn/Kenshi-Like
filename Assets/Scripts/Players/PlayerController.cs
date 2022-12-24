@@ -82,7 +82,6 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.AddCommand(new FollowCommand(unit, view.Model, true));
-                            unit.ExecuteCommands();
                         }
                     }
                     else
@@ -90,7 +89,6 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.AddCommand(new AttackCommand(unit, view.Model, true));
-                            unit.ExecuteCommands();
                         }
                     }
                 }
@@ -99,7 +97,6 @@ namespace Players
                     foreach (var unit in _selected)
                     {
                         unit.AddCommand(new MoveCommand(unit, hit.point, true));
-                        unit.ExecuteCommands();
                     }
                 }
             }
@@ -130,7 +127,6 @@ namespace Players
                         {
                             unit.ClearCommands();
                             unit.AddCommand(new FollowCommand(unit, view.Model, true));
-                            unit.ExecuteCommands();
                         }
                     }
                     else
@@ -139,7 +135,6 @@ namespace Players
                         {
                             unit.ClearCommands();
                             unit.AddCommand(new AttackCommand(unit, view.Model,true));
-                            unit.ExecuteCommands();
                         }
                     }
                 }
@@ -149,7 +144,6 @@ namespace Players
                     {
                         unit.ClearCommands();
                         unit.AddCommand(new MoveCommand(unit, hit.point,true));
-                        unit.ExecuteCommands();
                     }
                 }
             }
