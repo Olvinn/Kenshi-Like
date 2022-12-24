@@ -86,8 +86,14 @@ namespace Units
             if (_currentHP <= 0)
                 Die();
 
-            AddCommandInFront(new AttackCommand(this, dmg.source, false));
-            ExecuteCommands();
+            if (_currentCommand == null || _currentCommand.Type == CommandType.Attack)
+            {
+                var c = _currentCommand as AttackCommand;
+                if (c == null)
+                    return;
+                if (Vector3.Distance(c.Target.Position, Position) > Vector3.Distance(dmg.source.Position, Position))
+                    AddCommandInFront(new AttackCommand(this, dmg.source, false));
+            }
         }
 
         public void Attack(Unit target)

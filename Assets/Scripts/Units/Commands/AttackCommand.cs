@@ -5,21 +5,22 @@ namespace Units.Commands
     public class AttackCommand : Command
     {
         public override CommandType Type => CommandType.Attack;
-        public override string CommandName => "Attack"; 
+        public override string CommandName => "Attack";
+        public Unit Target;
         
-        private Unit _attacker, _target;
+        private Unit _attacker;
         
         public AttackCommand(Unit attacker, Unit target, bool isDirectCommand)
         {
             IsDirectCommand = isDirectCommand;
-            _target = target;
+            Target = target;
             _attacker = attacker;
         }
 
         public override void Execute()
         {
             base.Execute();
-            if (_attacker == null || _target == null || _target.IsDead)
+            if (_attacker == null || Target == null || Target.IsDead)
             {
                 Done();
                 return;
@@ -34,12 +35,12 @@ namespace Units.Commands
             if (_attacker != null)
                 _attacker.View.PerformIdleAnimation();
             _attacker = null;
-            _target = null;
+            Target = null;
         }
 
         public override void Update()
         {
-            if (_target.IsDead)
+            if (Target.IsDead)
             {
                 Done();
                 return;
@@ -50,7 +51,7 @@ namespace Units.Commands
             
             base.Update();
 
-            if (_attacker.View.CanAttack(_target.View))
+            if (_attacker.View.CanAttack(Target.View))
             {
                 if (_attacker.View.FightStatus == FightStatus.Waiting)
                     Attack();
@@ -63,12 +64,12 @@ namespace Units.Commands
 
         private void GetCloser()
         {
-            _attacker.MoveTo(_target.Position);
+            _attacker.MoveTo(Target.Position);
         }
 
         private void Attack()
         {
-            _attacker.Attack(_target);
+            _attacker.Attack(Target);
         }
 
         public override bool Equals(object obj)
@@ -76,7 +77,7 @@ namespace Units.Commands
             var c = obj as AttackCommand;
             if (c == null)
                 return false;
-            if (c._attacker.Equals(_attacker) && c._target.Equals(_target))
+            if (c._attacker.Equals(_attacker) && c.Target.Equals(Target))
                 return true;
             return false;
         }
