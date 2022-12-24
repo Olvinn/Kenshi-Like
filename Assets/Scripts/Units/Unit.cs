@@ -24,8 +24,6 @@ namespace Units
 
         private float _currentHP;
 
-        private Task _task;
-
         public List<string> GetListOfCommands()
         {
             List<string> result = new List<string>();
@@ -52,16 +50,14 @@ namespace Units
             view.OnUnitSensed += WhoIsIt;
         }
 
-        public async void Update()
+        public void Update()
         {
             if (IsDead)
                 return;
 
-            if (!_isExecutingCommands && _task is not { Status: TaskStatus.Running })
+            if (!_isExecutingCommands)
             {
-                _task = new Task(ProcessSense);
-                _task.Start();
-                await _task;
+                ProcessSense();
             }
 
             if (_currentCommand != null)
