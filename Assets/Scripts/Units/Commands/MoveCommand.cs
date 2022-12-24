@@ -4,13 +4,15 @@ namespace Units.Commands
 {
     public class MoveCommand : Command
     {
+        public override CommandType Type => CommandType.Move;
         public override string CommandName => "Move"; 
         
         private Unit _unit;
         private Vector3 _pos;
 
-        public MoveCommand(Unit unit, Vector3 pos)
+        public MoveCommand(Unit unit, Vector3 pos, bool isDirectCommand)
         {
+            IsDirectCommand = isDirectCommand;
             _unit = unit;
             _pos = pos;
         }

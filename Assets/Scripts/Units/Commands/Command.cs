@@ -1,10 +1,11 @@
 using System;
-using UnityEngine;
 
 namespace Units.Commands
 {
     public class Command : IDisposable
     {
+        public bool IsDirectCommand { get; protected set; }
+        public virtual CommandType Type => CommandType.Command;
         public virtual string CommandName => "Command"; 
         public event Action OnDone;
 
@@ -34,5 +35,13 @@ namespace Units.Commands
         public virtual void Update()
         {
         }
+    }
+
+    public enum CommandType
+    {
+        Command,
+        Move,
+        Attack,
+        Follow
     }
 }

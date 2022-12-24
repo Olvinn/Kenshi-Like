@@ -4,15 +4,19 @@ using UnityEngine;
 
 namespace Units.Weapons
 {
-    public class WeaponTriggerDetector : MonoBehaviour
+    public class TriggerDetector : MonoBehaviour
     {
+        public event Action<UnitView> OnUnitSensed;
         public List<UnitView> views;
-        
+
         private void OnTriggerEnter(Collider other)
         {
             var unit = other.GetComponent<UnitView>();
             if (unit)
+            {
                 views.Add(unit);
+                OnUnitSensed?.Invoke(unit);
+            }
         }
 
         private void OnTriggerExit(Collider other)

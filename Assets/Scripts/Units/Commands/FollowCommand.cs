@@ -2,13 +2,15 @@ namespace Units.Commands
 {
     public class FollowCommand : Command
     {
+        public override CommandType Type => CommandType.Follow;
         public override string CommandName => "Follow"; 
         
         private Unit _unit;
         private Unit _unitToFollow;
 
-        public FollowCommand(Unit unit, Unit unitToFollow)
+        public FollowCommand(Unit unit, Unit unitToFollow, bool isDirectCommand)
         {
+            IsDirectCommand = isDirectCommand;
             _unit = unit;
             _unitToFollow = unitToFollow;
         }

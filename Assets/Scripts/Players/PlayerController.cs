@@ -81,7 +81,7 @@ namespace Players
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new FollowCommand(unit, view.Model));
+                            unit.AddCommand(new FollowCommand(unit, view.Model, true));
                             unit.ExecuteCommands();
                         }
                     }
@@ -89,7 +89,7 @@ namespace Players
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new AttackCommand(unit, view.Model));
+                            unit.AddCommand(new AttackCommand(unit, view.Model, true));
                             unit.ExecuteCommands();
                         }
                     }
@@ -98,7 +98,7 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.AddCommand(new MoveCommand(unit, hit.point));
+                        unit.AddCommand(new MoveCommand(unit, hit.point, true));
                         unit.ExecuteCommands();
                     }
                 }
@@ -129,7 +129,7 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
-                            unit.AddCommand(new FollowCommand(unit, view.Model));
+                            unit.AddCommand(new FollowCommand(unit, view.Model, true));
                             unit.ExecuteCommands();
                         }
                     }
@@ -138,7 +138,7 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
-                            unit.AddCommand(new AttackCommand(unit, view.Model));
+                            unit.AddCommand(new AttackCommand(unit, view.Model,true));
                             unit.ExecuteCommands();
                         }
                     }
@@ -148,7 +148,7 @@ namespace Players
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        unit.AddCommand(new MoveCommand(unit, hit.point));
+                        unit.AddCommand(new MoveCommand(unit, hit.point,true));
                         unit.ExecuteCommands();
                     }
                 }

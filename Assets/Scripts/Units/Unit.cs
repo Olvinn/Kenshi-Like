@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Units.Commands;
 using UnityEngine;
 using Damages;
@@ -10,7 +12,7 @@ namespace Units
     public class Unit
     {
         public bool IsDead => _currentHP <= 0;
-        public Vector3 Position => View.transform.position;
+        public Vector3 Position => View.Position;
         public UnitView View { get; private set; }
         public TeamEnum Team { get; private set; }
         public float HPPercentage => _currentHP / _data.HP;
@@ -21,6 +23,8 @@ namespace Units
         private bool _isExecutingCommands = false;
 
         private float _currentHP;
+
+        private Task _task;
 
         public List<string> GetListOfCommands()
         {
@@ -44,15 +48,27 @@ namespace Units
             View = view;
             view.SetMaxSpeed(_data.Speed);
             view.SetColor(_data.Color);
+
+            view.OnUnitSensed += WhoIsIt;
         }
 
-        public void Update()
+        public async void Update()
         {
             if (IsDead)
                 return;
-            
+
+            if (!_isExecutingCommands && _task is not { Status: TaskStatus.Running })
+            {
+                _task = new Task(ProcessSense);
+                _task.Start();
+                await _task;
+            }
+
             if (_currentCommand != null)
                 _currentCommand.Update();
+            
+            if (_commands.Count > 0 && !_isExecutingCommands)
+                ExecuteCommands();
         }
 
         public void Die()
@@ -74,7 +90,7 @@ namespace Units
             if (_currentHP <= 0)
                 Die();
 
-            AddReactionCommand(new AttackCommand(this, dmg.source));
+            AddCommandInFront(new AttackCommand(this, dmg.source, false));
             ExecuteCommands();
         }
 
@@ -112,22 +128,42 @@ namespace Units
             if (IsDead)
                 return;
             
-            if (_commands.Count > 0 && _commands.First.Value.Equals(command))
+            if (command == null)
                 return;
+
+            if (_currentCommand != null)
+            {
+                if (_currentCommand.Equals(command))
+                    return;
+                if (_currentCommand.IsDirectCommand && !command.IsDirectCommand)
+                    return;
+                if (!_currentCommand.IsDirectCommand && command.IsDirectCommand)
+                    ClearCommands();
+            }
             
             _commands.AddLast(command);
         }
 
-        public void AddReactionCommand(Command command)
+        public void AddCommandInFront(Command command)
         {
             if (IsDead)
                 return;
-
-            if (_currentCommand != null && _currentCommand.Equals(command))
+            
+            if (command == null)
                 return;
+
+            if (_currentCommand != null)
+            {
+                if (_currentCommand.Equals(command))
+                    return;
+                if (_currentCommand.IsDirectCommand && !command.IsDirectCommand)
+                    return;
+                if (!_currentCommand.IsDirectCommand && command.IsDirectCommand)
+                    ClearCommands();
+            }
 
             if (_commands.Contains(command))
-                return;
+                _commands.Remove(command);
 
             if (_currentCommand != null)
             {
@@ -167,6 +203,10 @@ namespace Units
         public void SetTeam(TeamEnum team)
         {
             Team = team;
+            foreach (var view in View.Sensed)
+            {
+                WhoIsIt(view);
+            }
         }
 
         private void ContinueCommands()
@@ -187,6 +227,39 @@ namespace Units
             _commands.RemoveFirst();
             _currentCommand.OnDone += ContinueCommands;
             _currentCommand.Execute();
+        }
+
+        private void WhoIsIt(UnitView view)
+        {
+            if (view.Model != this && !view.Model.IsDead && view.Model.Team != Team)
+                if (_currentCommand == null)
+                {
+                    AddCommand(new AttackCommand(this, view.Model, false));
+                    ExecuteCommands();
+                }
+        }
+
+        private void ProcessSense()
+        {
+            float d = float.MaxValue;
+            Unit enemy = null;
+            foreach (var view in View.Sensed)
+            {
+                if (view.Model != this && !view.Model.IsDead && view.Model.Team != Team)
+                {
+                    float temp = Vector3.Distance(Position, view.Model.Position);
+                    if (temp < d)
+                    {
+                        enemy = view.Model;
+                        d = temp;
+                    }
+                }
+            }
+
+            if (enemy != null)
+            {
+                AddCommandInFront(new AttackCommand(this, enemy, false));
+            }
         }
     }
 

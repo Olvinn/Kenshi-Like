@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Units.Weapons;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,6 +10,9 @@ namespace Units
     public class UnitView : MonoBehaviour
     {
         public Unit Model { get; private set; }
+        public event Action<UnitView> OnUnitSensed;
+        public List<UnitView> Sensed => sense.views;
+        public Vector3 Position { get; private set; }
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
         [field:SerializeField] public FightStatus FightStatus { get; private set; }
@@ -19,11 +23,11 @@ namespace Units
         [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
         [SerializeField] private UnitAttack attack;
         [SerializeField] private MeshRenderer meshRenderer;
-
-        public Color Color => meshRenderer.material.color;
+        [SerializeField] private TriggerDetector sense;
         
         private UnitView _target;
         private Transform _destinationTransform;
+        private Vector3 _destinationPos;
         private Action<List<UnitView>> _onHitUnits;
 
         private void Awake()
@@ -33,6 +37,8 @@ namespace Units
             animationEventCatcher.OnHitFront += HitFront;
             animationEventCatcher.OnGetDamageComplete += GetDamageComplete;
             animationEventCatcher.OnAttackComplete += CompleteAttack;
+            
+            sense.OnUnitSensed += OnUnitSensed;
         }
 
         private void Update()
@@ -40,9 +46,14 @@ namespace Units
             if (!agent.enabled)
                 return;
 
-            if (!agent.pathPending && _destinationTransform != null)
+            Position = transform.position;
+            if (!agent.pathPending && MovementStatus == MovementStatus.Moving)
             {
-                agent.SetDestination(_destinationTransform.position);
+                agent.isStopped = false;
+                if (_destinationTransform != null)
+                    agent.SetDestination(_destinationTransform.position);
+                else
+                    agent.SetDestination(_destinationPos);
             }
             
             if (!agent.pathPending && agent.remainingDistance < 1f)
@@ -61,6 +72,18 @@ namespace Units
                 
                 if (_target.Model.IsDead)
                     _target = null;
+            }
+
+            switch (FightStatus)
+            {
+                case FightStatus.AwaitingAttacking:
+                    animator.Play("Attack");
+                    FightStatus = FightStatus.Attacking;
+                    break;
+                case FightStatus.AwaitingDamaging:
+                    animator.Play("GetDamage");
+                    FightStatus = FightStatus.Damaging;
+                    break;
             }
         }
 
@@ -109,9 +132,8 @@ namespace Units
         /// <param name="destination"></param>
         public void MoveTo(Vector3 destination)
         {
-            agent.SetDestination(destination);
+            _destinationPos = destination;
             MovementStatus = MovementStatus.Moving;
-            agent.isStopped = false;
             _destinationTransform = null;
         }
 
@@ -122,9 +144,7 @@ namespace Units
         public void MoveTo(Transform destination)
         {
             _destinationTransform = destination;
-            agent.SetDestination(destination.position);
             MovementStatus = MovementStatus.Moving;
-            agent.isStopped = false;
         }
 
         /// <summary>
@@ -166,7 +186,7 @@ namespace Units
         /// <returns></returns>
         public bool CanAttack(UnitView target)
         {
-            return Vector3.Distance(target.transform.position, transform.position) < 2f;
+            return Vector3.Distance(target.Position, Position) < 2f;
         }
 
         /// <summary>
@@ -175,8 +195,7 @@ namespace Units
         /// <param name="callback">UnitViews that has been hit</param>
         public void PerformAttackAnimation(Action<List<UnitView>> callback)
         {
-            FightStatus = FightStatus.Attacking;
-            animator.Play("Attack");
+            FightStatus = FightStatus.AwaitingAttacking;
 
             _onHitUnits = callback;
         }
@@ -195,8 +214,7 @@ namespace Units
         /// </summary>
         public void PerformGetDamageAnimation()
         {
-            FightStatus = FightStatus.Damaging;
-            animator.Play("GetDamage");
+            FightStatus = FightStatus.AwaitingDamaging;
         }
 
         /// <summary>
@@ -235,7 +253,9 @@ namespace Units
     public enum FightStatus
     {
         Waiting,
+        AwaitingAttacking,
         Attacking,
+        AwaitingDamaging,
         Damaging,
         Parrying
     }

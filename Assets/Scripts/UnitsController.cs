@@ -8,7 +8,6 @@ using Random = UnityEngine.Random;
 public class UnitsController : MonoBehaviour
 {
     [SerializeField] private int unitCount;
-    [SerializeField] private bool fightInstantly;
     
     [SerializeField] private UnitView prefab;
     [SerializeField] private PlayerController player;
@@ -22,32 +21,20 @@ public class UnitsController : MonoBehaviour
         
         player.SetTeam(TeamEnum.Player);
         bot.SetTeam(TeamEnum.EnemyAI);
-
-        for (int i = 0; i < unitCount; i++)
+        for(int i = 0; i < unitCount; i++)
         {
-            Unit unit;
             if (i % 2 == 0)
             {
-                unit = CreatePlayerUnit(new Vector3(-1, unitCount / 2 - i, 0));
-                if (fightInstantly)
-                {
-                    unit.AddCommand(new AttackCommand(unit, i > 0 ? _units[i - 1] : null));
-                    unit.ExecuteCommands();
-                }
+                CreatePlayerUnit(new Vector3(-10, 0, unitCount / 2 - i));
             }
             else
             {
-                unit = CreateAIUnit(new Vector3(1, unitCount / 2 - i, 0));
-                if (fightInstantly)
-                {
-                    unit.AddCommand(new AttackCommand(unit, i > 0 ? _units[i - 1] : null));
-                    unit.ExecuteCommands();
-                }
+                CreateAIUnit(new Vector3(10, 0, unitCount / 2 - i));
             }
         }
     }
 
-    void Update()
+    void FixedUpdate()
     {
         foreach (var unit in _units)
         {
@@ -55,18 +42,16 @@ public class UnitsController : MonoBehaviour
         }
     }
 
-    Unit CreatePlayerUnit(Vector3 pos)
+    void CreatePlayerUnit(Vector3 pos)
     {
         var unit = CreateUnit(TeamEnum.Player, pos);
         player.AddUnit(unit);
-        return unit;
     }
 
-    Unit CreateAIUnit(Vector3 pos)
+    void CreateAIUnit(Vector3 pos)
     {
         var unit = CreateUnit(TeamEnum.EnemyAI, pos);
         bot.AddUnit(unit);
-        return unit;
     }
 
     Unit CreateUnit(TeamEnum team, Vector3 pos)

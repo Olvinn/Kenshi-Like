@@ -7,7 +7,7 @@ namespace Units
 {
     public class UnitAttack : MonoBehaviour
     {
-        [SerializeField] private WeaponTriggerDetector front;
+        [SerializeField] private TriggerDetector front;
         
         public void BroadcastDamageInFront(Action<List<UnitView>> callback)
         {
