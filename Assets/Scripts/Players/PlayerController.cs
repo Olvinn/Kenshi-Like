@@ -52,10 +52,7 @@ namespace Players
         public void DeselectAll()
         {
             foreach (var unit in _selected)
-            {
                 unit.View.Deselect();
-                unit.View.PerformIdleAnimation();
-            }
 
             _selected.Clear();
         }

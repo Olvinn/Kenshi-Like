@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdabde5538fb7b348ba3a4bec9c0b470, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitCount: 100
+  unitCount: 300
   prefab: {fileID: 2277092710586213329, guid: af6a566f914a99640a1e019183e771a0, type: 3}
   player: {fileID: 307540572}
   bot: {fileID: 1069751059}

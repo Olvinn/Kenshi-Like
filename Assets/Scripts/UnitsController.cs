@@ -28,21 +28,23 @@ public class UnitsController : MonoBehaviour
         {
             if (i % 2 == 0)
             {
-                CreatePlayerUnit(new Vector3(-10, 0, unitCount / 2 - i));
+                CreatePlayerUnit(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
             }
             else
             {
-                CreateAIUnit(new Vector3(10, 0, unitCount / 2 - i));
+                CreateAIUnit(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
             }
         }
         hps.SetUpUnits(_units);
     }
 
+    int j = 0;
     void FixedUpdate()
     {
-        foreach (var unit in _units)
+        for (int i = 0; i < 25; i++)
         {
-            unit.Update();
+            _units[(i + j) % _units.Count].Update();
+            _units[Random.Range(0, _units.Count)].Update();
         }
     }
 

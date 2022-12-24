@@ -32,8 +32,6 @@ namespace Units.Commands
         public override void Dispose()
         {
             base.Dispose();
-            if (_attacker != null)
-                _attacker.View.PerformIdleAnimation();
             _attacker = null;
             Target = null;
         }

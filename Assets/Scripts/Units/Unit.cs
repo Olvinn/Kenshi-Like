@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Units.Commands;
 using UnityEngine;
 using Damages;
@@ -11,6 +9,7 @@ namespace Units
 {
     public class Unit
     {
+        public event Action<Unit> OnDie; 
         public bool IsDead => _currentHP <= 0;
         public Vector3 Position => View.Position;
         public UnitView View { get; private set; }
@@ -23,6 +22,7 @@ namespace Units
         private bool _isExecutingCommands = false;
 
         private float _currentHP;
+        private bool _isBusy = false;
 
         public List<string> GetListOfCommands()
         {
@@ -46,8 +46,6 @@ namespace Units
             View = view;
             view.SetMaxSpeed(_data.Speed);
             view.SetColor(_data.Color);
-
-            view.OnUnitSensed += WhoIsIt;
         }
 
         public void Update()
@@ -55,7 +53,7 @@ namespace Units
             if (IsDead)
                 return;
 
-            if (!_isExecutingCommands)
+            if (!_isExecutingCommands && !_isBusy)
             {
                 ProcessSense();
             }
@@ -71,6 +69,7 @@ namespace Units
         {
             View.Die();
             ClearCommands();
+            OnDie?.Invoke(this);
         }
 
         public void GetDamage(Damage dmg)
@@ -194,10 +193,6 @@ namespace Units
         public void SetTeam(TeamEnum team)
         {
             Team = team;
-            foreach (var view in View.Sensed)
-            {
-                WhoIsIt(view);
-            }
         }
 
         private void ExecuteCommands()
@@ -222,27 +217,20 @@ namespace Units
             if (_commands.Count == 0)
             {
                 _isExecutingCommands = false;
-                return;
             }
-            
-            _currentCommand = _commands.First.Value;
-            _commands.RemoveFirst();
-            _currentCommand.OnDone += ContinueCommands;
-            _currentCommand.Execute();
-        }
-
-        private void WhoIsIt(UnitView view)
-        {
-            if (view.Model != this && !view.Model.IsDead && view.Model.Team != Team)
-                if (_currentCommand == null)
-                {
-                    AddCommand(new AttackCommand(this, view.Model, false));
-                    ExecuteCommands();
-                }
+            else
+            {
+                _currentCommand = _commands.First.Value;
+                _commands.RemoveFirst();
+                _currentCommand.OnDone += ContinueCommands;
+                _currentCommand.Execute();
+            }
         }
 
         private void ProcessSense()
         {
+            _isBusy = true;
+            
             float d = float.MaxValue;
             Unit enemy = null;
             foreach (var view in View.Sensed)
@@ -262,6 +250,8 @@ namespace Units
             {
                 AddCommandInFront(new AttackCommand(this, enemy, false));
             }
+
+            _isBusy = false;
         }
     }
 

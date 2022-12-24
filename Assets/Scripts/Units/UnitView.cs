@@ -10,7 +10,6 @@ namespace Units
     public class UnitView : MonoBehaviour
     {
         public Unit Model { get; private set; }
-        public event Action<UnitView> OnUnitSensed;
         public List<UnitView> Sensed => sense.views;
         public Vector3 Position { get; private set; }
 
@@ -37,8 +36,6 @@ namespace Units
             animationEventCatcher.OnHitFront += HitFront;
             animationEventCatcher.OnGetDamageComplete += GetDamageComplete;
             animationEventCatcher.OnAttackComplete += CompleteAttack;
-            
-            sense.OnUnitSensed += OnUnitSensed;
         }
 
         private void Update()
@@ -124,6 +121,11 @@ namespace Units
             agent.enabled = false;
             animator.Play("Die");
             Deselect();
+            sense.enabled = false;
+            attack.enabled = false;
+            var c = GetComponent<CapsuleCollider>();
+            c.radius = 0f;
+            Destroy(c);
         }
 
         /// <summary>

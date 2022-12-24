@@ -13,5 +13,15 @@ namespace Units
         {
             callback?.Invoke(front.views);
         }
+
+        public void OnDisable()
+        {
+            front.enabled = false;
+        }
+
+        private void OnEnable()
+        {
+            front.enabled = true;
+        }
     }
 }
