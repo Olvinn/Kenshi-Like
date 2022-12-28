@@ -1,3 +1,5 @@
+using Units.Views;
+
 namespace Units.Commands
 {
     public class FollowCommand : Command

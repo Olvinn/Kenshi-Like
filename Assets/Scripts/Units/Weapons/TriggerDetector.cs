@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Units.Views;
 using UnityEngine;
 
 namespace Units.Weapons

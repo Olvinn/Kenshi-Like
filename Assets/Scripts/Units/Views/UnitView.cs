@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Data;
 using Units.Weapons;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-namespace Units
+namespace Units.Views
 {
     public class UnitView : MonoBehaviour
     {
@@ -22,6 +24,7 @@ namespace Units
         [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
         [SerializeField] private UnitAttack attack;
         [SerializeField] private TriggerDetector sense;
+        [SerializeField] private UnitVisuals visuals;
         
         private UnitView _target;
         private Transform _destinationTransform;
@@ -105,8 +108,18 @@ namespace Units
             Model = model;
         }
 
-        public void SetColor(Color color)
+        /// <summary>
+        /// Set the units appearance
+        /// TODO: separate appearance data from Character
+        /// </summary>
+        /// <param name="appearance"></param>
+        public void SetAppearance(Character appearance)
         {
+            var arr = Enum.GetValues(typeof(UnitColorType)).Cast<UnitColorType>().ToList();
+            foreach (var color in arr)
+            {
+                visuals.SetColor(color, appearance.GetColor(color));
+            }
         }
 
         /// <summary>

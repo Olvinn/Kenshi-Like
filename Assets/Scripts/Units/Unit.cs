@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Units.Commands;
 using UnityEngine;
 using Damages;
+using Data;
+using Units.Views;
 
 namespace Units
 {
@@ -15,9 +17,9 @@ namespace Units
         public Vector3 Position => View.Position;
         public UnitView View { get; private set; }
         public TeamEnum Team { get; private set; }
-        public float HPPercentage => _currentHP / _data.HP;
+        public float HPPercentage => _currentHP / _data.hp;
 
-        private UnitData _data;
+        private Character _data;
         private LinkedList<Command> _commands;
         private Command _currentCommand;
         private bool _isExecutingCommands = false;
@@ -35,18 +37,18 @@ namespace Units
             return result;
         }
 
-        public Unit(UnitData data)
+        public Unit(Character data)
         {
             _data = data;
             _commands = new LinkedList<Command>();
-            _currentHP = _data.HP;
+            _currentHP = _data.hp;
         }
         
         public void InjectView(UnitView view)
         {
             View = view;
-            view.SetMaxSpeed(_data.Speed);
-            view.SetColor(_data.Color);
+            view.SetMaxSpeed(_data.speed);
+            view.SetAppearance(_data);
         }
 
         public void Update()
@@ -106,7 +108,7 @@ namespace Units
             {
                 foreach (var unit in units)
                 {
-                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.Damage });
+                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.damage });
                 }
             });
         }

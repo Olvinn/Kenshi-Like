@@ -1,15 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data;
 using Players;
 using UI;
 using UnityEngine;
 using Units;
 using Units.Commands;
+using Units.Views;
 using Random = UnityEngine.Random;
 
 public class UnitsController : MonoBehaviour
 {
+    [SerializeField] private List<Character> charactersPresets;
     [SerializeField] private int unitCount;
     
     [SerializeField] private UnitView prefab;
@@ -64,12 +67,7 @@ public class UnitsController : MonoBehaviour
 
     Unit CreateUnit(TeamEnum team, Vector3 pos)
     {
-        UnitData data = new UnitData()
-        {
-            HP = Random.Range(50, 151), Damage = Random.Range(10, 26), Speed = Random.Range(3, 8),
-            AttackRate = Random.Range(1f, 2f),
-            Color = team == TeamEnum.Player ? Color.cyan : Color.red
-        };
+        Character data = charactersPresets[Random.Range(0, charactersPresets.Count)];
         var unit = new Unit(data);
         var view = Instantiate(prefab);
         view.transform.position = pos;
