@@ -21,7 +21,6 @@ namespace Units
         [SerializeField] private GameObject selection;
         [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
         [SerializeField] private UnitAttack attack;
-        [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private TriggerDetector sense;
         
         private UnitView _target;
@@ -108,7 +107,6 @@ namespace Units
 
         public void SetColor(Color color)
         {
-            meshRenderer.material.color = color;
         }
 
         /// <summary>
@@ -117,7 +115,6 @@ namespace Units
         public void Die()
         {
             StopAllCoroutines();
-            meshRenderer.material.color = Color.black;
             animator.Play("Die");
             Deselect();
             this.enabled = false;

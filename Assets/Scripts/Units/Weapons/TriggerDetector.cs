@@ -19,7 +19,7 @@ namespace Units.Weapons
         private void OnTriggerEnter(Collider other)
         {
             var unit = other.GetComponent<UnitView>();
-            if (unit)
+            if (unit && unit.Model is { IsDead: false })
             {
                 _views.Add(unit);
                 unit.Model.OnDie += RemoveUnit;
@@ -35,10 +35,24 @@ namespace Units.Weapons
 
         void RemoveUnit(Unit unit)
         {
-            if (_views.Contains(unit.View))
+            if (unit == null)
             {
-                _views.Remove(unit.View);
-                unit.OnDie -= RemoveUnit;
+                foreach (var view in _views)
+                {
+                    if (view.Model == null)
+                    {
+                        _views.Remove(view);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if (_views.Contains(unit.View))
+                {
+                    _views.Remove(unit.View);
+                    unit.OnDie -= RemoveUnit;
+                } 
             }
         }
     }

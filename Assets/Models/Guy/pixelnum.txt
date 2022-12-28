@@ -1,0 +1,16 @@
+1 - skin
+2 - eyes
+3 - hair
+4 - mustaghe
+
+5 - beard
+6 - underwear
+7 - shirt
+8 - top
+
+9 - pants
+10 - shoes
+11 - boots
+12 - gloves
+
+13 - fingers
