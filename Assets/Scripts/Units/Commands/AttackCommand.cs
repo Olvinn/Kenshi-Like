@@ -21,6 +21,8 @@ namespace Units.Commands
         public override void Execute()
         {
             base.Execute();
+            _attacker.View.Target = Target.View;
+            _attacker.View.PerformFightReadyAnimation();
             if (_attacker == null || Target == null || Target.IsDead)
             {
                 Done();
@@ -33,6 +35,8 @@ namespace Units.Commands
         public override void Dispose()
         {
             base.Dispose();
+            _attacker.View.Target = null;
+            _attacker.View.PerformIdleAnimation();
             _attacker = null;
             Target = null;
         }

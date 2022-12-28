@@ -9,6 +9,8 @@ namespace Players
 {
     public class PlayerController : MonoBehaviour, IPlayer
     {
+        [SerializeField] private LayerMask mask;
+        
         private List<Unit> _units;
         private List<Unit> _selected;
 
@@ -70,7 +72,7 @@ namespace Players
         private void ShiftRightMouseButtonClick(Ray ray)
         {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit, 1000f, mask))
             {
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && !view.Model.IsDead)
@@ -103,7 +105,7 @@ namespace Players
         private void ShiftLeftMouseButtonClick(Ray ray)
         {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f))
+            if (Physics.Raycast(ray, out hit, 1000f, mask))
             {
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && _units.Contains(view.Model))
@@ -114,13 +116,18 @@ namespace Players
         private void RightMouseButtonClick(Ray ray)
         {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out hit,1000f,  mask.value))
             {
+                GameObject go = new GameObject();
+                // var lr = go.AddComponent<LineRenderer>();
+                // lr.SetPositions(new []{ray.origin, hit.point});
+                // lr.material = new Material(Shader.Find("Diffuse"));
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && !view.Model.IsDead)
                 {
                     if (view.Model.Team == TeamEnum.Player)
                     {
+                        // lr.material.color = Color.blue;
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
@@ -129,6 +136,7 @@ namespace Players
                     }
                     else
                     {
+                        // lr.material.color  = Color.red;
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
@@ -138,6 +146,7 @@ namespace Players
                 }
                 else
                 {
+                    // lr.material.color  = Color.green;
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
@@ -151,7 +160,7 @@ namespace Players
         {
             DeselectAll();
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f))
+            if (Physics.Raycast(ray, out hit, 1000f, mask.value))
             {
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && _units.Contains(view.Model))

@@ -167,6 +167,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd9fcf596329b44ba98c7c9ae62717f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mask:
+    serializedVersion: 2
+    m_Bits: 9
 --- !u!1 &345544460
 GameObject:
   m_ObjectHideFlags: 0
@@ -246,7 +249,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charactersPresets:
   - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
-  unitCount: 200
+  unitCount: 2
   prefab: {fileID: 2277092710586213329, guid: af6a566f914a99640a1e019183e771a0, type: 3}
   player: {fileID: 307540572}
   bot: {fileID: 1069751059}

@@ -26,7 +26,7 @@ namespace Units.Views
         [SerializeField] private TriggerDetector sense;
         [SerializeField] private UnitVisuals visuals;
         
-        private UnitView _target;
+        public UnitView Target;
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
         private Action<List<UnitView>> _onHitUnits;
@@ -65,12 +65,12 @@ namespace Units.Views
                 }
             }
 
-            if (_target != null)
+            if (Target != null)
             {
-                transform.LookAt(_target.transform.position);
+                transform.LookAt(Target.transform.position);
                 
-                if (_target.Model.IsDead)
-                    _target = null;
+                if (Target.Model.IsDead)
+                    Target = null;
             }
 
             switch (FightStatus)
@@ -250,7 +250,7 @@ namespace Units.Views
         /// <param name="target"></param>
         public void RotateOn(UnitView target)
         {
-            _target = target;
+            Target = target;
         }
 
         private void HitFront()
