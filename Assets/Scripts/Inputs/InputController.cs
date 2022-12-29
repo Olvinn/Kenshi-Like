@@ -10,6 +10,7 @@ namespace Inputs
         public event Action<Ray> OnRMB, OnLMB, OnShiftRMB, OnShiftLMB;
         public event Action<Vector2> OnDragCamera;
         public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect;
+        public event Action<float> OnScroll;
 
         [SerializeField] private Camera playCamera;
 
@@ -71,6 +72,9 @@ namespace Inputs
             {
                 OnDragCamera?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
             }
+            
+            if (Input.mouseScrollDelta != Vector2.zero)
+                OnScroll?.Invoke(Input.mouseScrollDelta.y);
         }
     }
 }
