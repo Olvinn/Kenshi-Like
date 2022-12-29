@@ -106,6 +106,7 @@ namespace Units.Views
         public void InjectModel(Unit model)
         {
             Model = model;
+            agent.enabled = true;
         }
 
         /// <summary>
@@ -251,6 +252,11 @@ namespace Units.Views
         public void RotateOn(UnitView target)
         {
             Target = target;
+        }
+
+        public void SetPosition(Vector3 pos)
+        {
+            agent.Warp(pos);
         }
 
         private void HitFront()

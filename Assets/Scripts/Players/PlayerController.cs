@@ -118,7 +118,7 @@ namespace Players
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit,1000f,  mask.value))
             {
-                GameObject go = new GameObject();
+                // GameObject go = new GameObject();
                 // var lr = go.AddComponent<LineRenderer>();
                 // lr.SetPositions(new []{ray.origin, hit.point});
                 // lr.material = new Material(Shader.Find("Diffuse"));

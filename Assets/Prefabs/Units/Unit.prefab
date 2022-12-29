@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2277092710586213328}
   - component: {fileID: 2277092710586213329}
   - component: {fileID: 5296493730584232009}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Unit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,6 +179,7 @@ MonoBehaviour:
   attack: {fileID: 4970059542099626717}
   sense: {fileID: 302513375463923675}
   visuals: {fileID: 3136515151165650912}
+  Target: {fileID: 0}
 --- !u!54 &5296493730584232009
 Rigidbody:
   m_ObjectHideFlags: 0

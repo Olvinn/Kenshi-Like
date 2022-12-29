@@ -6,7 +6,6 @@ using Players;
 using UI;
 using UnityEngine;
 using Units;
-using Units.Commands;
 using Units.Views;
 using Random = UnityEngine.Random;
 
@@ -20,6 +19,7 @@ public class UnitsController : MonoBehaviour
     [SerializeField] private AIController bot;
 
     [SerializeField] private HPBarsController hps;
+    [SerializeField] private LayerMask mask;
 
     private List<Unit> _units;
 
@@ -55,26 +55,34 @@ public class UnitsController : MonoBehaviour
 
     void CreatePlayerUnit(Vector3 pos)
     {
-        var unit = CreateUnit(TeamEnum.Player, pos);
+        var unit = CreateUnit(pos);
         player.AddUnit(unit);
     }
 
     void CreateAIUnit(Vector3 pos)
     {
-        var unit = CreateUnit(TeamEnum.EnemyAI, pos);
+        var unit = CreateUnit(pos);
         bot.AddUnit(unit);
     }
 
-    Unit CreateUnit(TeamEnum team, Vector3 pos)
+    Unit CreateUnit(Vector3 pos)
     {
         Character data = charactersPresets[Random.Range(0, charactersPresets.Count)];
         var unit = new Unit(data);
         var view = Instantiate(prefab);
-        view.transform.position = pos;
+        
+        RaycastHit hit;
+        Ray ray = new Ray(pos + Vector3.up * 1000, Vector3.down);
+        if (Physics.Raycast(ray, out hit, 2000f, mask))
+        {
+            view.SetPosition(hit.point + Vector3.up);
+        }
+        
         unit.InjectView(view);
         view.InjectModel(unit);
         _units.Add(unit);
         unit.OnDie += RemoveUnit;
+        
         return unit;
     }
 
