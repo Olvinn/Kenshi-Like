@@ -20,13 +20,15 @@ namespace Units.Commands
         public override void Execute()
         {
             base.Execute();
-            _attacker.View.Target = Target.View;
-            _attacker.View.PerformFightReadyAnimation();
+            
             if (_attacker == null || Target == null || Target.IsDead)
             {
                 Done();
                 return;
             }
+            
+            _attacker.View.Target = Target.View;
+            _attacker.View.PerformFightReadyAnimation();
 
             GetCloser();
         }
@@ -56,7 +58,7 @@ namespace Units.Commands
             
             base.Update();
 
-            if (_attacker.View.CanAttack(Target.View))
+            if (_attacker.CanAttack(Target))
             {
                 if (_attacker.View.FightStatus == FightStatus.Waiting)
                     Attack();

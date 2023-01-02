@@ -7,7 +7,7 @@ namespace Data
     public class Character : ScriptableObject
     {
         [Header("Attributes")]
-        [SerializeField] public Attributes attributes;
+        [SerializeField] public Parameters parameters;
 
         [Header("Appearance")] 
         [SerializeField] private Color skinColor;
@@ -24,9 +24,9 @@ namespace Data
         [SerializeField] private Color glovesColor;
         [SerializeField] private Color fingersColor;
 
-        public float GetAttribute(AttributeType type)
+        public float GetParameter(ParametersType type)
         {
-            return attributes.GetAttribute(type);
+            return parameters.GetParameter(type);
         }
 
         public Color GetColor(UnitColorType type)
@@ -82,34 +82,38 @@ namespace Data
         Fingers
     }
 
-    public enum AttributeType
+    public enum ParametersType
     {
         HealthPoints = 0,
         Speed = 100,
         Damage = 200,
         AttackRate = 300,
+        AttackDelay = 301
     }
 
     [Serializable]
-    public struct Attributes
+    public struct Parameters
     {
         [SerializeField, Range(100f, 1000f)] private float hp;
         [SerializeField, Range(1f, 10f)] private float speed;
         [SerializeField, Range(1f, 200f)] private float damage;
         [SerializeField, Range(.1f, 1.5f)] private float attackRate;
+        [SerializeField, Range(.5f, 5f)] private float attackDelay;
 
-        public float GetAttribute(AttributeType type)
+        public float GetParameter(ParametersType type)
         {
             switch (type)
             {
-                case AttributeType.HealthPoints:
+                case ParametersType.HealthPoints:
                     return hp;
-                case AttributeType.Speed:
+                case ParametersType.Speed:
                     return speed;
-                case AttributeType.Damage:
+                case ParametersType.Damage:
                     return damage;
-                case AttributeType.AttackRate:
+                case ParametersType.AttackRate:
                     return attackRate;
+                case ParametersType.AttackDelay:
+                    return attackDelay;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

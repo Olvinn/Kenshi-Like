@@ -17,7 +17,7 @@ namespace Units
         public Vector3 Position => View.Position;
         public UnitView View { get; private set; }
         public TeamEnum Team { get; private set; }
-        public float HPPercentage => _currentHP / _data.GetAttribute(AttributeType.HealthPoints);
+        public float HPPercentage => _currentHP / _data.GetParameter(ParametersType.HealthPoints);
 
         private Character _data;
         private LinkedList<Command> _commands;
@@ -26,6 +26,8 @@ namespace Units
 
         private float _currentHP;
         private bool _isBusy = false;
+        private float _attackDelay = 0f;
+        private float _savedTime;
 
         public List<string> GetListOfCommands()
         {
@@ -41,13 +43,13 @@ namespace Units
         {
             _data = data;
             _commands = new LinkedList<Command>();
-            _currentHP = _data.GetAttribute(AttributeType.HealthPoints);
+            _currentHP = _data.GetParameter(ParametersType.HealthPoints);
         }
         
         public void InjectView(UnitView view)
         {
             View = view;
-            view.SetMaxSpeed(_data.GetAttribute(AttributeType.Speed));
+            view.SetMaxSpeed(_data.GetParameter(ParametersType.Speed));
             view.SetAppearance(_data);
         }
 
@@ -55,6 +57,11 @@ namespace Units
         {
             if (IsDead)
                 return;
+
+            float delta = Time.time - _savedTime;
+
+            if (_attackDelay > 0)
+                _attackDelay -= delta;
 
             if (!_isExecutingCommands && !_isBusy)
             {
@@ -66,6 +73,8 @@ namespace Units
             
             if (_commands.Count > 0 && !_isExecutingCommands)
                 ExecuteCommands();
+
+            _savedTime = Time.time;
         }
 
         public void Die()
@@ -100,15 +109,16 @@ namespace Units
 
         public void Attack(Unit target)
         {
-            if (IsDead)
+            if (IsDead || !CanAttack(target))
                 return;
-            
+
+            _attackDelay = _data.GetParameter(ParametersType.AttackDelay);
             View.RotateOn(target.View);
-            View.PerformAttackAnimation(_data.GetAttribute(AttributeType.AttackRate), (units) =>
+            View.PerformAttackAnimation(_data.GetParameter(ParametersType.AttackRate), (units) =>
             {
                 foreach (var unit in units)
                 {
-                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.GetAttribute(AttributeType.Damage) });
+                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.GetParameter(ParametersType.Damage) });
                 }
             });
         }
@@ -152,6 +162,11 @@ namespace Units
                 _currentCommand.OnDone += ContinueCommands;
                 _currentCommand.Execute();
             }
+        }
+
+        public bool CanAttack(Unit unit)
+        {
+            return _attackDelay <= 0 && View.CanAttack(unit.View);
         }
 
         private void AddReactionCommand(Command command)

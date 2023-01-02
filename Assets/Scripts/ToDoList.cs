@@ -8,8 +8,9 @@
     // 19) HP bars (Done!)
     // 17) Units dodges
     // 8) Unit sword fight with blocking
+    // 21) Damage labels
     // 18) Unit defend another unit command
     // 10) Unit defend area command
     // 11) Inherit Player and AI from abstract player?
     // 20) Camera zoom and rotation
-    // 21) Damage labels
+    // 22) Simple UI
