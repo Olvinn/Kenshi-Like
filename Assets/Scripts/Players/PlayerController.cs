@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Inputs;
 using Units;
@@ -10,7 +9,7 @@ namespace Players
 {
     public class PlayerController : MonoBehaviour, IPlayer
     {
-        [SerializeField] private LayerMask mask;
+        [SerializeField] private LayerMask workWithMask;
         
         private List<Unit> _units;
         private List<Unit> _selected;
@@ -76,7 +75,7 @@ namespace Players
         private void ShiftRightMouseButtonClick(Ray ray)
         {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f, mask))
+            if (Physics.Raycast(ray, out hit, 1000f, workWithMask))
             {
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && !view.Model.IsDead)
@@ -109,7 +108,7 @@ namespace Players
         private void ShiftLeftMouseButtonClick(Ray ray)
         {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f, mask))
+            if (Physics.Raycast(ray, out hit, 1000f, workWithMask))
             {
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && _units.Contains(view.Model))
@@ -120,7 +119,7 @@ namespace Players
         private void RightMouseButtonClick(Ray ray)
         {
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit,1000f,  mask.value))
+            if (Physics.Raycast(ray, out hit,1000f,  workWithMask.value))
             {
                 // GameObject go = new GameObject();
                 // var lr = go.AddComponent<LineRenderer>();
@@ -164,7 +163,7 @@ namespace Players
         {
             DeselectAll();
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 1000f, mask.value))
+            if (Physics.Raycast(ray, out hit, 1000f, workWithMask.value))
             {
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && _units.Contains(view.Model))

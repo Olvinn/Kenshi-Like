@@ -41,7 +41,7 @@ namespace Units.Views
             animationEventCatcher.OnAttackComplete += CompleteAttack;
         }
 
-        private void Update()
+        public void UpdateLogic()
         {
             if (!agent.enabled)
                 return;

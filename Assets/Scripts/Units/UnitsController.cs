@@ -16,7 +16,7 @@ public class UnitsController : MonoBehaviour
     [SerializeField] private AIController bot;
 
     [SerializeField] private HPBarsController hps;
-    [SerializeField] private LayerMask mask;
+    [SerializeField] private LayerMask spawnMask;
 
     private List<Unit> _units;
     int _j = 0;
@@ -62,7 +62,7 @@ public class UnitsController : MonoBehaviour
         
         RaycastHit hit;
         Ray ray = new Ray(pos + Vector3.up * 1000, Vector3.down);
-        if (Physics.Raycast(ray, out hit, 2000f, mask))
+        if (Physics.Raycast(ray, out hit, 2000f, spawnMask))
         {
             view.SetPosition(hit.point + Vector3.up);
         }

@@ -11,11 +11,13 @@ namespace Inputs
         public event Action<Vector2> OnDragCamera;
         public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect;
         public event Action<float> OnScroll;
+        public event Action<Vector2> OnMMBDrag;
 
         [SerializeField] private Camera playCamera;
 
-        private Vector2 _start;
+        private Vector2 _startBox;
         private bool _isDrawingBox;
+        private Vector3 _savedMMB;
 
         private void Awake()
         {
@@ -36,28 +38,28 @@ namespace Inputs
             {
                 if (Input.GetButtonDown("Fire1"))
                 {
-                    _start = Input.mousePosition;
+                    _startBox = Input.mousePosition;
                     _isDrawingBox = true;
                 }
                 
                 if (Input.GetButton("Fire1"))
-                    if (Vector3.Distance(_start, Input.mousePosition) >= 3)
+                    if (Vector3.Distance(_startBox, Input.mousePosition) >= 3)
                     {
                         var end = Input.mousePosition;
-                        Vector2 pos = new Vector2(end.x < _start.x ? end.x : _start.x, end.y < _start.y ? end.y : _start.y);
-                        Vector2 size = new Vector2(Mathf.Abs(end.x - _start.x), Mathf.Abs(end.y - _start.y));
+                        Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
+                        Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
                         OnDrawBox?.Invoke(pos, size);
                     }
 
                 if (Input.GetButtonUp("Fire1"))
                 {
-                    if (Vector3.Distance(_start, Input.mousePosition) < 3)
+                    if (Vector3.Distance(_startBox, Input.mousePosition) < 3)
                         OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
                     else
                     {
                         var end = Input.mousePosition;
-                        Vector2 pos = new Vector2(end.x < _start.x ? end.x : _start.x, end.y < _start.y ? end.y : _start.y);
-                        Vector2 size = new Vector2(Mathf.Abs(end.x - _start.x), Mathf.Abs(end.y - _start.y));
+                        Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
+                        Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
                         OnBoxSelect?.Invoke(pos, size);
                     }
                     _isDrawingBox = false;
@@ -66,9 +68,18 @@ namespace Inputs
                 if (Input.GetButtonUp("Fire2"))
                     OnRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
             }
-
-            if (Input.mousePosition.x <= 1 || Input.mousePosition.x >= Screen.width - 1
-                                           || Input.mousePosition.y <= 1 || Input.mousePosition.y >= Screen.height - 1)
+            
+            if (Input.GetButtonDown("Fire3"))
+            {
+                _savedMMB = Input.mousePosition;
+            }
+            else if (Input.GetButton("Fire3"))
+            {
+                OnMMBDrag?.Invoke(_savedMMB - Input.mousePosition);
+                _savedMMB = Input.mousePosition;
+            }
+            else if (Input.mousePosition.x <= 1 || Input.mousePosition.x >= Screen.width - 1
+                                                || Input.mousePosition.y <= 1 || Input.mousePosition.y >= Screen.height - 1)
             {
                 OnDragCamera?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
             }

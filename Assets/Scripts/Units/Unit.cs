@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Units.Commands;
 using UnityEngine;
 using Damages;
@@ -75,6 +74,8 @@ namespace Units
                 ExecuteCommands();
 
             _savedTime = Time.time;
+
+            View.UpdateLogic();
         }
 
         public void Die()

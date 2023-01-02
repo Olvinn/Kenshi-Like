@@ -16,7 +16,7 @@ MonoBehaviour:
     hp: 150
     speed: 4
     damage: 25
-    attackRate: 1.5
+    attackRate: 0.25
     attackDelay: 1.5
   skinColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
   eyesColor: {r: 1, g: 1, b: 1, a: 1}

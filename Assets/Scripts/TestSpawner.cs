@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cameras;
 using Data;
 using UnityEngine;
 
@@ -13,12 +14,14 @@ public class TestSpawner : MonoBehaviour
     [SerializeField] private List<Character> playerSquad;
     [SerializeField] private List<Character> enemies;
 
-    [SerializeField] private UnitsController uc;
+    [SerializeField] private UnitsController unitsController;
+    [SerializeField] private CameraController cameraController;
 
     private void Start()
     {
         CreatePlayerSquad();
         CreateEnemies();
+        MoveCameraToPlayerSquad();
     }
 
     void CreatePlayerSquad()
@@ -26,7 +29,7 @@ public class TestSpawner : MonoBehaviour
         foreach (var c in playerSquad)
         {
             Vector3 pos = Random.insideUnitSphere * spawnerRadius + playerPos.position;
-            uc.CreatePlayerUnit(c, pos);
+            unitsController.CreatePlayerUnit(c, pos);
         }
     }
 
@@ -37,8 +40,14 @@ public class TestSpawner : MonoBehaviour
             for (int i = 0; i < enemiesCountInCamp; i++)
             {
                 Vector3 pos = Random.insideUnitSphere * spawnerRadius + t.position;
-                uc.CreateAIUnit(enemies[Random.Range(0, enemies.Count)], pos);
+                unitsController.CreateAIUnit(enemies[Random.Range(0, enemies.Count)], pos);
             }
         }
+    }
+
+    void MoveCameraToPlayerSquad()
+    {
+        cameraController.Warp(playerPos.position);
+        cameraController.SetScroll(10f);
     }
 }
