@@ -875,7 +875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerRadius: 10
-  enemiesCountInCamp: 5
+  enemiesCountInCamp: 10
   playerPos: {fileID: 1271764037}
   enemyPos:
   - {fileID: 1861566037}

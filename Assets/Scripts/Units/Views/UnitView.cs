@@ -14,6 +14,7 @@ namespace Units.Views
         public Unit Model { get; private set; }
         public List<UnitView> Sensed => sense.views;
         public Vector3 Position { get; private set; }
+        public UnitView Target;
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
         [field:SerializeField] public FightStatus FightStatus { get; private set; }
@@ -26,10 +27,10 @@ namespace Units.Views
         [SerializeField] private TriggerDetector sense;
         [SerializeField] private UnitVisuals visuals;
         
-        public UnitView Target;
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
         private Action<List<UnitView>> _onHitUnits;
+        private float _animationSpeed = 1f;
 
         private void Awake()
         {
@@ -73,6 +74,7 @@ namespace Units.Views
                     Target = null;
             }
 
+            animator.speed = _animationSpeed;
             switch (FightStatus)
             {
                 case FightStatus.AwaitingAttacking:
@@ -84,6 +86,26 @@ namespace Units.Views
                     FightStatus = FightStatus.Damaging;
                     break;
             }
+        }
+
+        private void OnDisable()
+        {
+            agent.enabled = false;
+            sense.enabled = false;
+            attack.enabled = false;
+            var c = GetComponent<CapsuleCollider>();
+            c.radius = 0f;
+            c.enabled = false;
+        }
+
+        private void OnEnable()
+        {
+            agent.enabled = true;
+            sense.enabled = true;
+            attack.enabled = true;
+            var c = GetComponent<CapsuleCollider>();
+            c.radius = .5f;
+            c.enabled = true;
         }
 
         private void OnDrawGizmos()
@@ -132,26 +154,6 @@ namespace Units.Views
             animator.Play("Die");
             Deselect();
             this.enabled = false;
-        }
-
-        private void OnDisable()
-        {
-            agent.enabled = false;
-            sense.enabled = false;
-            attack.enabled = false;
-            var c = GetComponent<CapsuleCollider>();
-            c.radius = 0f;
-            c.enabled = false;
-        }
-
-        private void OnEnable()
-        {
-            agent.enabled = true;
-            sense.enabled = true;
-            attack.enabled = true;
-            var c = GetComponent<CapsuleCollider>();
-            c.radius = .5f;
-            c.enabled = true;
         }
 
         /// <summary>
@@ -209,6 +211,7 @@ namespace Units.Views
 
         /// <summary>
         /// Checking can this unit attack target due their Views
+        /// Multithreading safe
         /// </summary>
         /// <param name="target">Target which want to attack</param>
         /// <returns></returns>
@@ -219,12 +222,13 @@ namespace Units.Views
 
         /// <summary>
         /// Play animation to hit enemy. If hit will successful, the callback will called.
+        /// Multithreading safe
         /// </summary>
         /// <param name="callback">UnitViews that has been hit</param>
-        public void PerformAttackAnimation(Action<List<UnitView>> callback)
+        public void PerformAttackAnimation(float attackRate, Action<List<UnitView>> callback)
         {
             FightStatus = FightStatus.AwaitingAttacking;
-
+            _animationSpeed = attackRate;
             _onHitUnits = callback;
         }
 
@@ -239,19 +243,22 @@ namespace Units.Views
 
         /// <summary>
         /// Play animation representing taking damage. It will interrupt any other animation
+        /// Multithreading safe
         /// </summary>
         public void PerformGetDamageAnimation()
         {
+            _animationSpeed = 1f;
             FightStatus = FightStatus.AwaitingDamaging;
         }
 
         /// <summary>
         /// Rotate UnitView on target
+        /// Multithreading safe
         /// </summary>
         /// <param name="target"></param>
         public void RotateOn(UnitView target)
         {
-            Target = target;
+            this.Target = target;
         }
 
         public void SetPosition(Vector3 pos)
@@ -268,6 +275,7 @@ namespace Units.Views
         private void CompleteAttack()
         {
             FightStatus = FightStatus.Waiting;
+            _animationSpeed = 1f;
             _onHitUnits = null;
         }
 

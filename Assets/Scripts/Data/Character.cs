@@ -86,15 +86,17 @@ namespace Data
     {
         HealthPoints = 0,
         Speed = 100,
-        Damage = 200
+        Damage = 200,
+        AttackRate = 300,
     }
 
     [Serializable]
     public struct Attributes
     {
-        [SerializeField] private  float hp;
-        [SerializeField] private  float speed;
-        [SerializeField] private  float damage;
+        [SerializeField, Range(100f, 1000f)] private float hp;
+        [SerializeField, Range(1f, 10f)] private float speed;
+        [SerializeField, Range(1f, 200f)] private float damage;
+        [SerializeField, Range(.1f, 1.5f)] private float attackRate;
 
         public float GetAttribute(AttributeType type)
         {
@@ -106,6 +108,8 @@ namespace Data
                     return speed;
                 case AttributeType.Damage:
                     return damage;
+                case AttributeType.AttackRate:
+                    return attackRate;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

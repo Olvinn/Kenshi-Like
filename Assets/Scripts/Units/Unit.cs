@@ -104,7 +104,7 @@ namespace Units
                 return;
             
             View.RotateOn(target.View);
-            View.PerformAttackAnimation((units) =>
+            View.PerformAttackAnimation(_data.GetAttribute(AttributeType.AttackRate), (units) =>
             {
                 foreach (var unit in units)
                 {
