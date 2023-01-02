@@ -1,5 +1,4 @@
 using Units.Views;
-using UnityEngine;
 
 namespace Units.Commands
 {
@@ -35,9 +34,12 @@ namespace Units.Commands
         public override void Dispose()
         {
             base.Dispose();
-            _attacker.View.Target = null;
-            _attacker.View.PerformIdleAnimation();
-            _attacker = null;
+            if (_attacker != null)
+            {
+                _attacker.View.Target = null;
+                _attacker.View.PerformIdleAnimation();
+                _attacker = null;
+            }
             Target = null;
         }
 

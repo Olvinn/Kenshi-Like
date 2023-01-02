@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Inputs;
 using Units;
@@ -16,11 +17,14 @@ namespace Players
 
         private TeamEnum _team;
 
-        private void Start()
+        private void Awake()
         {
             _units = new List<Unit>();
             _selected = new List<Unit>();
+        }
 
+        private void Start()
+        {
             InputController.Instance.OnShiftRMB += ShiftRightMouseButtonClick;
             InputController.Instance.OnShiftLMB += ShiftLeftMouseButtonClick;
             InputController.Instance.OnRMB += RightMouseButtonClick;
