@@ -1,5 +1,4 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace Data
@@ -8,9 +7,7 @@ namespace Data
     public class Character : ScriptableObject
     {
         [Header("Attributes")]
-        public float hp;
-        public float speed;
-        public float damage;
+        [SerializeField] public Attributes attributes;
 
         [Header("Appearance")] 
         [SerializeField] private Color skinColor;
@@ -26,6 +23,11 @@ namespace Data
         [SerializeField] private Color bootsColor;
         [SerializeField] private Color glovesColor;
         [SerializeField] private Color fingersColor;
+
+        public float GetAttribute(AttributeType type)
+        {
+            return attributes.GetAttribute(type);
+        }
 
         public Color GetColor(UnitColorType type)
         {
@@ -78,5 +80,35 @@ namespace Data
         Boots,
         Gloves,
         Fingers
+    }
+
+    public enum AttributeType
+    {
+        HealthPoints = 0,
+        Speed = 100,
+        Damage = 200
+    }
+
+    [Serializable]
+    public struct Attributes
+    {
+        [SerializeField] private  float hp;
+        [SerializeField] private  float speed;
+        [SerializeField] private  float damage;
+
+        public float GetAttribute(AttributeType type)
+        {
+            switch (type)
+            {
+                case AttributeType.HealthPoints:
+                    return hp;
+                case AttributeType.Speed:
+                    return speed;
+                case AttributeType.Damage:
+                    return damage;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Units
         public Vector3 Position => View.Position;
         public UnitView View { get; private set; }
         public TeamEnum Team { get; private set; }
-        public float HPPercentage => _currentHP / _data.hp;
+        public float HPPercentage => _currentHP / _data.GetAttribute(AttributeType.HealthPoints);
 
         private Character _data;
         private LinkedList<Command> _commands;
@@ -41,13 +41,13 @@ namespace Units
         {
             _data = data;
             _commands = new LinkedList<Command>();
-            _currentHP = _data.hp;
+            _currentHP = _data.GetAttribute(AttributeType.HealthPoints);
         }
         
         public void InjectView(UnitView view)
         {
             View = view;
-            view.SetMaxSpeed(_data.speed);
+            view.SetMaxSpeed(_data.GetAttribute(AttributeType.Speed));
             view.SetAppearance(_data);
         }
 
@@ -108,7 +108,7 @@ namespace Units
             {
                 foreach (var unit in units)
                 {
-                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.damage });
+                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.GetAttribute(AttributeType.Damage) });
                 }
             });
         }
@@ -143,6 +143,8 @@ namespace Units
                     return;
                 if (!_currentCommand.IsDirectCommand && command.IsDirectCommand)
                     ClearCommands();
+
+                _commands.AddLast(command);
             }
             else
             {
