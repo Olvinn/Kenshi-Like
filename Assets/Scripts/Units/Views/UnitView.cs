@@ -107,9 +107,13 @@ namespace Units.Views
                     FightStatus = FightStatus.Damaging;
                     break;
             }
-            
+
             if (animatorNew.isActiveAndEnabled)
-                animatorNew.SetFloat("Speed", agent.velocity.magnitude);
+            {
+                var v = transform.worldToLocalMatrix * agent.velocity;
+                animatorNew.SetFloat("Speed", v.z);
+                animatorNew.SetFloat("Strafe", v.x);
+            }
         }
 
         private void OnDisable()
