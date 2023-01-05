@@ -4,7 +4,8 @@ namespace Units.Views.IK
 {
     public class IKController : MonoBehaviour
     {
-        public Transform Target;
+        public Transform target;
+        public float transitionSpeed = 2f;
         
         [SerializeField] private Animator animator;
         [SerializeField] private UnitAppearance appearance;
@@ -22,20 +23,20 @@ namespace Units.Views.IK
 
         private void OnAnimatorIK(int layerIndex)
         {
-            if (Target != null && _curTarget == Target)
+            if (!_isVisible)
+                return;
+            
+            if (_curTarget != null && _curTarget == target)
             {
-                _lookPos = Target.position;
-                _lookWeight += Time.deltaTime;
+                _lookPos = _curTarget.position;
+                _lookWeight += Time.deltaTime * transitionSpeed;
             }
             else
             {
-                _lookWeight -= Time.deltaTime;
-                if (_lookWeight != 0)
-                    _curTarget = Target;
+                _lookWeight -= Time.deltaTime * transitionSpeed;
+                if (_lookWeight <= 0)
+                    _curTarget = target;
             }
-            
-            if (!_isVisible)
-                return;
             
             _lookWeight = Mathf.Clamp01(_lookWeight);
             animator.SetLookAtWeight(_lookWeight);
