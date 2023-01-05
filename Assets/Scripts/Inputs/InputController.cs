@@ -8,7 +8,7 @@ namespace Inputs
         public static InputController Instance { get; private set; }
         
         public event Action<Ray> OnRMB, OnLMB, OnShiftRMB, OnShiftLMB;
-        public event Action<Vector2> OnDragCamera;
+        public event Action<Vector2> OnTouchScreenCorners, OnMove;
         public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect;
         public event Action<float> OnScroll;
         public event Action<Vector2> OnMMBDrag;
@@ -81,8 +81,12 @@ namespace Inputs
             else if (Input.mousePosition.x <= 1 || Input.mousePosition.x >= Screen.width - 1
                                                 || Input.mousePosition.y <= 1 || Input.mousePosition.y >= Screen.height - 1)
             {
-                OnDragCamera?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
+                OnTouchScreenCorners?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
             }
+
+            var move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if (move != Vector2.zero)
+                OnMove?.Invoke(move);
             
             if (Input.mouseScrollDelta != Vector2.zero)
                 OnScroll?.Invoke(Input.mouseScrollDelta.y);
