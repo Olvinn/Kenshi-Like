@@ -20,6 +20,11 @@ namespace Units.Commands
         public override void Execute()
         {
             base.Execute();
+            if (_unit.Equals(_unitToFollow))
+            {
+                Done();
+                return;
+            }
             _unit.MoveTo(_unitToFollow.View.transform);
         }
 

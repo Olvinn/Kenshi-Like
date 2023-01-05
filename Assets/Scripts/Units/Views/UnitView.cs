@@ -82,13 +82,11 @@ namespace Units.Views
                 ik.target = Target.transform;
 
                 if (Target.Model.IsDead)
-                {
                     Target = null;
-                    ik.target = null;
-                }
             }
             else if (MovementStatus == MovementStatus.Moving)
             {
+                ik.target = null;
                 Vector3 dir = agent.velocity;
                 dir.y = 0;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),Time.deltaTime * 120);
