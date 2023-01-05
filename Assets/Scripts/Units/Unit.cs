@@ -74,8 +74,6 @@ namespace Units
                 ExecuteCommands();
 
             _savedTime = Time.time;
-
-            View.UpdateLogic();
         }
 
         public void Die()

@@ -20,7 +20,8 @@ namespace Units.Views
         [field:SerializeField] public FightStatus FightStatus { get; private set; }
         
         [SerializeField] private NavMeshAgent agent;
-        [SerializeField] private Animator animator;
+        [SerializeField] private Animator animatorOld;
+        [SerializeField] private Animator animatorNew;
         [SerializeField] private GameObject selection;
         [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
         [SerializeField] private UnitAttack attack;
@@ -41,7 +42,7 @@ namespace Units.Views
             animationEventCatcher.OnAttackComplete += CompleteAttack;
         }
 
-        public void UpdateLogic()
+        public void Update()
         {
             if (!agent.enabled)
                 return;
@@ -74,18 +75,20 @@ namespace Units.Views
                     Target = null;
             }
 
-            animator.speed = _animationSpeed;
+            animatorOld.speed = _animationSpeed;
             switch (FightStatus)
             {
                 case FightStatus.AwaitingAttacking:
-                    animator.Play("Attack");
+                    animatorOld.Play("Attack");
                     FightStatus = FightStatus.Attacking;
                     break;
                 case FightStatus.AwaitingDamaging:
-                    animator.Play("GetDamage");
+                    animatorOld.Play("GetDamage");
                     FightStatus = FightStatus.Damaging;
                     break;
             }
+            
+            animatorNew.SetFloat("Speed", agent.velocity.magnitude);
         }
 
         private void OnDisable()
@@ -151,7 +154,7 @@ namespace Units.Views
         public void Die()
         {
             StopAllCoroutines();
-            animator.Play("Die");
+            animatorOld.Play("Die");
             Deselect();
             this.enabled = false;
         }
@@ -198,7 +201,7 @@ namespace Units.Views
         /// </summary>
         public void PerformFightReadyAnimation()
         {
-            animator.SetBool("Provoked", true);
+            animatorOld.SetBool("Provoked", true);
         }
 
         /// <summary>
@@ -206,7 +209,7 @@ namespace Units.Views
         /// </summary>
         public void PerformIdleAnimation()
         {
-            animator.SetBool("Provoked", false);
+            animatorOld.SetBool("Provoked", false);
         }
 
         /// <summary>

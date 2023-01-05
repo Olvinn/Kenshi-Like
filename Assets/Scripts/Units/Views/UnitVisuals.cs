@@ -6,7 +6,7 @@ namespace Units.Views
 {
     public class UnitVisuals : MonoBehaviour
     {
-        [SerializeField] private MeshRenderer mr;
+        [SerializeField] private Renderer mr;
 
         private Texture2D _tex;
         private bool _isColorChanged;
