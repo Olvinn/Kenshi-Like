@@ -19,6 +19,8 @@ namespace Units.Views.Ragdolls
             float delta = Time.time - _prevUpdate;
             if (delta < 1f)
                 _velocity = (transform.position - _savedPos) / delta;
+            else
+                _velocity = Vector3.zero;
             _savedPos = transform.position;
             _prevUpdate = Time.time;
         }

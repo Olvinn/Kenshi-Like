@@ -180,7 +180,7 @@ MonoBehaviour:
   animationEventCatcher: {fileID: 5562940736809719508}
   attack: {fileID: 4970059542099626717}
   sense: {fileID: 302513375463923675}
-  appearance: {fileID: 7047511236628179052}
+  appearance: {fileID: 5318714859792630538}
   ragdoll: {fileID: 2872181797602841927}
 --- !u!54 &5296493730584232009
 Rigidbody:
@@ -634,6 +634,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6973484766409984878}
     m_Modifications:
+    - target: {fileID: 1009155596776956448, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
+      propertyPath: m_Swing2Limit.limit
+      value: 21.86223
+      objectReference: {fileID: 0}
     - target: {fileID: 1592449354278565449, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
       propertyPath: m_Name
       value: guy
@@ -682,6 +686,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4534139574129326266, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
+      propertyPath: m_Swing2Limit.limit
+      value: 19.12619
+      objectReference: {fileID: 0}
+    - target: {fileID: 5356653966132612440, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 65931bf26bd814c4ba0f83c175bf828e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
 --- !u!95 &1599334193925670467 stripped
@@ -705,9 +717,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2112844550969142515, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
   m_PrefabInstance: {fileID: 6738372137453367498}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7047511236628179052 stripped
+--- !u!114 &5318714859792630538 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4345494118328686758, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1462648697920959424, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
   m_PrefabInstance: {fileID: 6738372137453367498}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

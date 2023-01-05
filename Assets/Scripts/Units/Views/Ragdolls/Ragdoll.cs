@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,9 +8,16 @@ namespace Units.Views.Ragdolls
     {
         [SerializeField] private List<RagdollPart> parts;
         [SerializeField] private Animator animator;
+        [SerializeField] private UnitAppearance appearance;
 
         private bool _isVisible;
         private bool _isRagdolled;
+
+        private void Start()
+        {
+            appearance.OnVisible += OnBecameVisible;
+            appearance.OnInvisible += OnBecameInvisible;
+        }
 
         private void FixedUpdate()
         {

@@ -9,7 +9,7 @@
     // 20) Camera zoom and rotation (Done!)
     // 23) Character model (Done!)
     // 24) Character run and idle animations (Done!)
-    // 25) Ragdoll for unit
+    // 25) Ragdoll for unit (Done!)
     // 26) IK for unit
     // 22) Simple UI
     // 21) Damage labels

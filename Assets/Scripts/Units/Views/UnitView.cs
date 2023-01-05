@@ -149,7 +149,10 @@ namespace Units.Views
             var arr = Enum.GetValues(typeof(UnitColorType)).Cast<UnitColorType>().ToList();
             foreach (var color in arr)
             {
-                this.appearance.SetColor(color, appearance.GetColor(color));
+                Color metallic = appearance.GetColor(color) == appearance.GetColor(UnitColorType.Skin)
+                    ? Color.white * .2f
+                    : Color.black;
+                this.appearance.SetColor(color, appearance.GetColor(color), color == UnitColorType.Eyes ? Color.white * .5f : metallic);
             }
         }
 
