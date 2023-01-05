@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Units.Views
 {
-    public class UnitVisuals : MonoBehaviour
+    public class UnitAppearance : MonoBehaviour
     {
         [SerializeField] private Renderer mr;
 

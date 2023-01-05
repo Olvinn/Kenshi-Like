@@ -27,6 +27,14 @@ namespace Inputs
 
         private void Update()
         {
+            MouseClickInput();
+            BoxSelectionInput();
+            CameraMovementInput();
+            KeyboardMovementInput();
+        }
+
+        void MouseClickInput()
+        {
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 if (Input.GetButtonUp("Fire2"))
@@ -36,39 +44,45 @@ namespace Inputs
             }
             else
             {
-                if (Input.GetButtonDown("Fire1"))
-                {
-                    _startBox = Input.mousePosition;
-                    _isDrawingBox = true;
-                }
-                
-                if (Input.GetButton("Fire1"))
-                    if (Vector3.Distance(_startBox, Input.mousePosition) >= 3)
-                    {
-                        var end = Input.mousePosition;
-                        Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
-                        Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
-                        OnDrawBox?.Invoke(pos, size);
-                    }
-
-                if (Input.GetButtonUp("Fire1"))
-                {
-                    if (Vector3.Distance(_startBox, Input.mousePosition) < 3)
-                        OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
-                    else
-                    {
-                        var end = Input.mousePosition;
-                        Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
-                        Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
-                        OnBoxSelect?.Invoke(pos, size);
-                    }
-                    _isDrawingBox = false;
-                }
-
                 if (Input.GetButtonUp("Fire2"))
                     OnRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
             }
-            
+        }
+        
+        void BoxSelectionInput()
+        {
+            if (Input.GetButtonDown("Fire1"))
+            {
+                _startBox = Input.mousePosition;
+                _isDrawingBox = true;
+            }
+                
+            if (Input.GetButton("Fire1"))
+                if (Vector3.Distance(_startBox, Input.mousePosition) >= 3)
+                {
+                    var end = Input.mousePosition;
+                    Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
+                    Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
+                    OnDrawBox?.Invoke(pos, size);
+                }
+
+            if (Input.GetButtonUp("Fire1"))
+            {
+                if (Vector3.Distance(_startBox, Input.mousePosition) < 3)
+                    OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                else
+                {
+                    var end = Input.mousePosition;
+                    Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
+                    Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
+                    OnBoxSelect?.Invoke(pos, size);
+                }
+                _isDrawingBox = false;
+            }
+        }
+
+        void CameraMovementInput()
+        {
             if (Input.GetButtonDown("Fire3"))
             {
                 _savedMMB = Input.mousePosition;
@@ -83,13 +97,16 @@ namespace Inputs
             {
                 OnTouchScreenCorners?.Invoke( (Vector2)Input.mousePosition - new Vector2(Screen.width, Screen.height) * .5f);
             }
-
-            var move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            if (move != Vector2.zero)
-                OnMove?.Invoke(move);
             
             if (Input.mouseScrollDelta != Vector2.zero)
                 OnScroll?.Invoke(Input.mouseScrollDelta.y);
+        }
+
+        void KeyboardMovementInput()
+        {
+            var move = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if (move != Vector2.zero)
+                OnMove?.Invoke(move);
         }
     }
 }

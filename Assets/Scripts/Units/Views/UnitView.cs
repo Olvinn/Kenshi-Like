@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using Units.Views.Ragdolls;
 using Units.Weapons;
 using UnityEditor;
 using UnityEngine;
@@ -26,7 +27,8 @@ namespace Units.Views
         [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
         [SerializeField] private UnitAttack attack;
         [SerializeField] private TriggerDetector sense;
-        [SerializeField] private UnitVisuals visuals;
+        [SerializeField] private UnitAppearance appearance;
+        [SerializeField] private Ragdoll ragdoll;
         
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
@@ -88,11 +90,13 @@ namespace Units.Views
                     break;
             }
             
-            animatorNew.SetFloat("Speed", agent.velocity.magnitude);
+            if (animatorNew.isActiveAndEnabled)
+                animatorNew.SetFloat("Speed", agent.velocity.magnitude);
         }
 
         private void OnDisable()
         {
+            ragdoll.StartRagdoll();
             agent.enabled = false;
             sense.enabled = false;
             attack.enabled = false;
@@ -103,6 +107,7 @@ namespace Units.Views
 
         private void OnEnable()
         {
+            ragdoll.StopRagdoll();
             agent.enabled = true;
             sense.enabled = true;
             attack.enabled = true;
@@ -144,7 +149,7 @@ namespace Units.Views
             var arr = Enum.GetValues(typeof(UnitColorType)).Cast<UnitColorType>().ToList();
             foreach (var color in arr)
             {
-                visuals.SetColor(color, appearance.GetColor(color));
+                this.appearance.SetColor(color, appearance.GetColor(color));
             }
         }
 
