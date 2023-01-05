@@ -28,6 +28,10 @@ namespace Cameras
             InputController.Instance.OnMMBDrag += Rotate;
         }
 
+        //TODO: Add math to this madness:
+        //1) calculate camera height and distance.
+        //2) correct it with rays.
+        //3) calculate diff between actual and expect pos and apply it somehow
         private void LateUpdate()
         {
             RaycastHit hit;
