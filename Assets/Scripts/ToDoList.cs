@@ -10,8 +10,8 @@
     // 23) Character model (Done!)
     // 24) Character run and idle animations (Done!)
     // 25) Ragdoll for unit (Done!)
-    // 26) IK for unit
-    // 22) Simple UI
+    // 26) IK for unit (Done!)
+    // 22) Simple UI with unit icons
     // 21) Damage labels
     // 27) Squad logic and triggers optimization
     // 17) Units dodges
@@ -21,3 +21,6 @@
     // 11) Inherit Player and AI from abstract player?
     // 28) Campfire and sit around animation
     // 29) Unit autonomy
+    // 30) Hide UnitView in Unit
+    // 31) Foot IK for unit
+    // 32) Bootstrap scene

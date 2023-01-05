@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Data;
+using Units.Views.IK;
 using Units.Views.Ragdolls;
 using Units.Weapons;
 using UnityEditor;
@@ -29,6 +30,7 @@ namespace Units.Views
         [SerializeField] private TriggerDetector sense;
         [SerializeField] private UnitAppearance appearance;
         [SerializeField] private Ragdoll ragdoll;
+        [SerializeField] private IKController ik;
         
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
@@ -49,6 +51,7 @@ namespace Units.Views
             if (!agent.enabled)
                 return;
 
+            //Processing moving logic
             Position = transform.position;
             if (!agent.pathPending && MovementStatus == MovementStatus.Moving)
             {
@@ -59,6 +62,7 @@ namespace Units.Views
                     agent.SetDestination(_destinationPos);
             }
             
+            //Updating movement status
             if (!agent.pathPending && agent.remainingDistance < 1f)
             {
                 if (MovementStatus == MovementStatus.Moving)
@@ -69,14 +73,28 @@ namespace Units.Views
                 }
             }
 
+            //Rotating unit on specific target
             if (Target != null)
             {
-                transform.LookAt(Target.transform.position);
-                
+                Vector3 dir = Target.transform.position - Position;
+                dir.y = 0;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),Time.deltaTime * 120);
+                ik.Target = Target.transform;
+
                 if (Target.Model.IsDead)
+                {
                     Target = null;
+                    ik.Target = null;
+                }
+            }
+            else if (MovementStatus == MovementStatus.Moving)
+            {
+                Vector3 dir = agent.velocity;
+                dir.y = 0;
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),Time.deltaTime * 120);
             }
 
+            //Updating animations and current animation status
             animatorOld.speed = _animationSpeed;
             switch (FightStatus)
             {
@@ -96,6 +114,7 @@ namespace Units.Views
 
         private void OnDisable()
         {
+            ik.enabled = false;
             ragdoll.StartRagdoll();
             agent.enabled = false;
             sense.enabled = false;
@@ -107,6 +126,7 @@ namespace Units.Views
 
         private void OnEnable()
         {
+            ik.enabled = true;
             ragdoll.StopRagdoll();
             agent.enabled = true;
             sense.enabled = true;
