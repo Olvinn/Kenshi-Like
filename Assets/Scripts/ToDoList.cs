@@ -10,6 +10,7 @@
     // 31) Foot IK for unit
     // 32) Bootstrap scene
     // 35) Water and swimming
+    // 38) Spawn units to special parent
     
     //TODO Models and animations:
     // 8) Unit sword fight with blocking

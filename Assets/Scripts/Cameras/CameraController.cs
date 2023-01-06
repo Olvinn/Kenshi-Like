@@ -5,11 +5,15 @@ namespace Cameras
 {
     public class CameraController : MonoBehaviour
     {
+        [Header("Camera bounds")]
+        [SerializeField] private Vector3 center;
+        [SerializeField] private Vector3 size;
+        
         [SerializeField] private float speed = 10f;
         [SerializeField] private Camera camera;
         [SerializeField] private LayerMask raycastMask;
 
-        private Vector3 _pos;
+        [SerializeField] private Vector3 _pos;
         private Vector3 _center, _camPos;
         private float _scroll;
         private Vector3 _rotation;
@@ -56,6 +60,7 @@ namespace Cameras
         {
             _pos = pos;
             _pos.y = 0;
+            _pos.x = Mathf.Clamp(_pos.x, center.x - size.x, center.x + size.x);
         }
 
         public void SetScroll(float scroll)
@@ -69,6 +74,7 @@ namespace Cameras
             mov.Normalize();
             mov *= Time.unscaledDeltaTime * speed * _scroll * .1f;
             _pos += (Vector3)(camera.transform.localToWorldMatrix * new Vector3(mov.x, 0, mov.y));
+            _pos.x = Mathf.Clamp(_pos.x, center.x - size.x, center.x + size.x);
         }
 
         private void ScrollCamera(float delta)
