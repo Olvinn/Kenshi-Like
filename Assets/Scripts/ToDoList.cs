@@ -11,6 +11,9 @@
     // 32) Bootstrap scene
     // 35) Water and swimming (Done!)
     // 38) Spawn units to special parent
+    // 40) Fix camera jitter
+    // 41) Unit patrolling command and command repeat system
+    // 42) AI encounters and patrolling
     
     //TODO Models and animations:
     // 8) Unit sword fight with blocking
@@ -33,3 +36,4 @@
     // - Animations, attack animations
     // - Simple sounds
     // - Environment: trees, grass, water
+    // - Simple commands to units (Done!)
