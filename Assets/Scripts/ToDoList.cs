@@ -1,26 +1,21 @@
 
-    //TODO: 
-    // 12) Camera movement (Done!)
-    // 13) Frame units selection (Done!)
-    // 14) Aggressive bot (Done!)
-    // 15) Units sense (Done!)
-    // 16) Units autonomy (Done!)
-    // 19) HP bars (Done!)
-    // 20) Camera zoom and rotation (Done!)
-    // 23) Character model (Done!)
-    // 24) Character run and idle animations (Done!)
-    // 25) Ragdoll for unit (Done!)
-    // 26) IK for unit (Done!)
-    // 22) Simple UI with unit icons
-    // 21) Damage labels
+    //TODO Scripts: 
     // 27) Squad logic and triggers optimization
     // 17) Units dodges
-    // 8) Unit sword fight with blocking
     // 18) Unit defend another unit command
     // 10) Unit defend area command
     // 11) Inherit Player and AI from abstract player?
-    // 28) Campfire and sit around animation
-    // 29) Unit autonomy
+    // 29) Unit autonomy with locating campfire and sitting around
     // 30) Hide UnitView in Unit
     // 31) Foot IK for unit
     // 32) Bootstrap scene
+    
+    //TODO Models and animations:
+    // 8) Unit sword fight with blocking
+    // 28) Campfire model and sit around animation
+    
+    //TODO Graphics, effects and UI:
+    // 33) URP and Terrain shader (Done!)
+    // 22) Simple UI with unit icons
+    // 21) Damage labels
+    // 34) Fire effect for campfire
