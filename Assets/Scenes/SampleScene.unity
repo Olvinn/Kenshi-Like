@@ -481,7 +481,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   workWithMask:
     serializedVersion: 2
-    m_Bits: 9
+    m_Bits: 25
 --- !u!1 &345544460
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +530,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &355061577
 Transform:
   m_ObjectHideFlags: 0
@@ -1457,7 +1457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
-  m_CollectObjects: 1
+  m_CollectObjects: 2
   m_Size: {x: 1000, y: 320, z: 1000}
   m_Center: {x: 500, y: 150, z: 500}
   m_LayerMask:
@@ -1471,7 +1471,7 @@ MonoBehaviour:
   m_TileSize: 256
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
-  m_MinRegionArea: 2
+  m_MinRegionArea: 10
   m_NavMeshData: {fileID: 23800000, guid: 9b89518e1c90fc54f83125ea7b5e694b, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &1156270057
@@ -1654,7 +1654,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1271764036}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -175.4, y: 68, z: -92.9}
+  m_LocalPosition: {x: -4.5, y: 10.1, z: 181.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1706,7 +1706,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerRadius: 10
-  enemiesCountInCamp: 10
+  enemiesCountInCamp: 20
   playerPos: {fileID: 1271764037}
   enemyPos:
   - {fileID: 1861566037}
@@ -1715,8 +1715,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
   - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
   - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: 778ff03f988944b4eab16a2714886dbd, type: 2}
+  - {fileID: 11400000, guid: 778ff03f988944b4eab16a2714886dbd, type: 2}
   enemies:
   - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
+  - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
+  - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
+  - {fileID: 11400000, guid: e45bcceb878d47148b2c83d5dd0ee305, type: 2}
+  - {fileID: 11400000, guid: e45bcceb878d47148b2c83d5dd0ee305, type: 2}
+  - {fileID: 11400000, guid: 1896e74ede96ddd4698bd66fa977c70e, type: 2}
   unitsController: {fileID: 559250844}
   cameraController: {fileID: 1384127059}
 --- !u!1 &1366058752
@@ -1878,7 +1894,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 3
-  m_StaticEditorFlags: 119
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1446798409
 Transform:

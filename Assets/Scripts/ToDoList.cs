@@ -9,13 +9,14 @@
     // 30) Hide UnitView in Unit
     // 31) Foot IK for unit
     // 32) Bootstrap scene
-    // 35) Water and swimming
+    // 35) Water and swimming (Done!)
     // 38) Spawn units to special parent
     
     //TODO Models and animations:
     // 8) Unit sword fight with blocking
     // 28) Campfire model and sit around animation
     // 37) Swimming animation
+    // 39) Fix models butt, underwear and weights, especially on chest
     
     //TODO Graphics, effects and UI:
     // 33) URP and Terrain shader (Done!)
