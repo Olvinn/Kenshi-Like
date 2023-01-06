@@ -28,30 +28,26 @@ namespace Cameras
             InputController.Instance.OnMMBDrag += Rotate;
         }
 
-        //TODO: Add math to this madness:
-        //1) calculate camera height and distance.
-        //2) correct it with rays.
-        //3) calculate diff between actual and expect pos and apply it somehow
         private void LateUpdate()
         {
+            _pos.y = 0;
+            
             RaycastHit hit;
             Ray ray = new Ray(_pos + Vector3.up * 1000, Vector3.down);
-            if (Physics.Raycast(ray, out hit, 1100, raycastMask))
-                _center = hit.point + Vector3.up;
+            if (Physics.Raycast(ray, out hit, 1500, raycastMask))
+                _center = hit.point + Vector3.up * 1.5f;
             else
                 _center = _pos;
             
-            _camPos = _center + new Vector3(0, 0, -_scroll);
-
-            ray = new Ray(_center, Quaternion.Euler(_rotation) * (-hit.point + _camPos));
-            if (Physics.Raycast(ray, out hit, _scroll, raycastMask))
-            {
-                float temp = (Vector3.Distance(ray.origin, hit.point) * .9f);
-                _camPos = ray.origin + ray.direction * temp + Vector3.up * Mathf.Clamp01(temp);
-            }
-            else
-                _camPos = ray.origin + ray.direction * _scroll;
+            _camPos = _center + Quaternion.Euler(_rotation) * new Vector3(0, 0, -_scroll);
             
+            ray = new Ray(_center, _camPos - _center);
+            if (Physics.SphereCast(ray, camera.nearClipPlane + .1f, out hit, _scroll, raycastMask))
+            {
+                float dist = Vector3.Distance(_center, hit.point) - 1;
+                _camPos = _center + ray.direction * dist;
+            }
+
             camera.transform.position = _camPos;      
             camera.transform.LookAt(_center);
         }
@@ -59,6 +55,7 @@ namespace Cameras
         public void Warp(Vector3 pos)
         {
             _pos = pos;
+            _pos.y = 0;
         }
 
         public void SetScroll(float scroll)
@@ -70,7 +67,7 @@ namespace Cameras
         private void MoveCamera(Vector2 mov)
         {
             mov.Normalize();
-            mov *= Time.deltaTime * speed * _scroll * .1f;
+            mov *= Time.unscaledDeltaTime * speed * _scroll * .1f;
             _pos += (Vector3)(camera.transform.localToWorldMatrix * new Vector3(mov.x, 0, mov.y));
         }
 
