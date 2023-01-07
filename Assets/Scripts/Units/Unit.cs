@@ -6,6 +6,7 @@ using UnityEngine;
 using Damages;
 using Data;
 using Units.Views;
+using Random = UnityEngine.Random;
 
 namespace Units
 {
@@ -50,6 +51,7 @@ namespace Units
             View = view;
             view.SetMaxSpeed(_data.GetParameter(ParametersType.Speed));
             view.SetAppearance(_data);
+            view.OnHit = OnHit;
         }
 
         public void Update()
@@ -83,6 +85,13 @@ namespace Units
             OnDie?.Invoke(this);
         }
 
+        public void DetectAttack(Unit attacker)
+        {
+            if (attacker._data.GetParameter(ParametersType.AttackRate) > _data.GetParameter(ParametersType.AttackRate) || _attackDelay > 0)
+                if (Random.Range(0f,1f) < _data.GetParameter(ParametersType.DodgeChance))
+                    View.PerformDodgeAnimation();
+        }
+
         public void GetDamage(Damage dmg)
         {
             if (IsDead)
@@ -91,10 +100,13 @@ namespace Units
             if (dmg.source == this || dmg.source.Team == Team)
                 return;
             
-            View.PerformGetDamageAnimation();
-            _currentHP -= dmg.damage;
-            if (_currentHP <= 0)
-                Die();
+            if (View.CanDodge())
+            {
+                View.PerformGetDamageAnimation();
+                _currentHP -= dmg.damage;
+                if (_currentHP <= 0)
+                    Die();
+            }
 
             if (_currentCommand == null || _currentCommand.Type == CommandType.Attack)
             {
@@ -113,13 +125,8 @@ namespace Units
 
             _attackDelay = _data.GetParameter(ParametersType.AttackDelay);
             View.RotateOn(target.View);
-            View.PerformAttackAnimation(_data.GetParameter(ParametersType.AttackRate), (units) =>
-            {
-                foreach (var unit in units)
-                {
-                    unit.Model.GetDamage(new Damage() { source = this, damage = _data.GetParameter(ParametersType.Damage) });
-                }
-            });
+            View.PerformAttackAnimation(_data.GetParameter(ParametersType.AttackRate));
+            target.DetectAttack(this);
         }
         
         public void MoveTo(Transform destination, float stopDistance)
@@ -166,6 +173,18 @@ namespace Units
         public bool CanAttack(Unit unit)
         {
             return _attackDelay <= 0 && View.CanAttack(unit.View);
+        }
+        
+        private void OnHit(List<UnitView> units)
+        {
+            if (units != null)
+            {
+                foreach (var unit in units)
+                {
+                    unit.Model.GetDamage(new Damage()
+                        { source = this, damage = _data.GetParameter(ParametersType.Damage) });
+                }
+            }
         }
 
         private void AddReactionCommand(Command command)

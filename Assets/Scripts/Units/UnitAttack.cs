@@ -10,9 +10,9 @@ namespace Units
     {
         [SerializeField] private TriggerDetector front;
         
-        public void BroadcastDamageInFront(Action<List<UnitView>> callback)
+        public List<UnitView> GetUnitViewsFromBasicAttack()
         {
-            callback?.Invoke(front.views);
+            return front.views;
         }
 
         public void OnDisable()

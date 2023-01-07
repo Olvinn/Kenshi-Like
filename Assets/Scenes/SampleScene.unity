@@ -1755,33 +1755,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerRadius: 10
-  enemiesCountInCamp: 20
+  enemiesCountInCamp: 5
   playerPos: {fileID: 1271764037}
   enemyPos:
   - {fileID: 1861566037}
   - {fileID: 1471377564}
   playerSquad:
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
   - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
-  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
-  - {fileID: 11400000, guid: 778ff03f988944b4eab16a2714886dbd, type: 2}
-  - {fileID: 11400000, guid: 778ff03f988944b4eab16a2714886dbd, type: 2}
   enemies:
   - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
-  - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
-  - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
-  - {fileID: 11400000, guid: e45bcceb878d47148b2c83d5dd0ee305, type: 2}
-  - {fileID: 11400000, guid: e45bcceb878d47148b2c83d5dd0ee305, type: 2}
-  - {fileID: 11400000, guid: 1896e74ede96ddd4698bd66fa977c70e, type: 2}
   unitsController: {fileID: 559250844}
   cameraController: {fileID: 1384127059}
 --- !u!1 &1366058752
@@ -2045,7 +2027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471377563}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -200.87, y: 48.74, z: -44.54}
+  m_LocalPosition: {x: -21.3, y: 26.6, z: 222.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

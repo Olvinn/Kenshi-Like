@@ -17,35 +17,32 @@ namespace Units.Views
         public List<UnitView> Sensed => sense.views;
         public Vector3 Position { get; private set; }
         public UnitView Target;
+        public Action<List<UnitView>> OnHit;
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
-        [field:SerializeField] public FightStatus FightStatus { get; private set; }
         
         [SerializeField] private NavMeshAgent agent;
-        [SerializeField] private Animator animatorOld;
-        [SerializeField] private Animator animatorNew;
         [SerializeField] private GameObject selection;
-        [SerializeField] private UnitAnimationEventCatcher animationEventCatcher;
         [SerializeField] private UnitAttack attack;
         [SerializeField] private TriggerDetector sense;
         [SerializeField] private UnitAppearance appearance;
         [SerializeField] private Ragdoll ragdoll;
         [SerializeField] private IKController ik;
+        [SerializeField] private AnimationController anim;
         
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
-        private float _stopDistance; 
-            
-        private Action<List<UnitView>> _onHitUnits;
-        private float _animationSpeed = 1f;
+        private float _stopDistance;
+        private bool _destinationSet;
 
         private void Awake()
         {
             selection.SetActive(false);
-            
-            animationEventCatcher.OnHitFront += HitFront;
-            animationEventCatcher.OnGetDamageComplete += GetDamageComplete;
-            animationEventCatcher.OnAttackComplete += CompleteAttack;
+        }
+
+        private void Start()
+        {
+            anim.OnHitBasic += HitBasic;
         }
 
         public void Update()
@@ -55,25 +52,26 @@ namespace Units.Views
 
             //Processing moving logic
             Position = transform.position;
-            if (!agent.pathPending && MovementStatus == MovementStatus.Moving)
+            bool stay = agent.isStopped;
+            if (!agent.pathPending && _destinationSet && anim.CanMove)
             {
-                agent.isStopped = false;
-                if (_destinationTransform != null)
-                    agent.SetDestination(_destinationTransform.position);
-                else
-                    agent.SetDestination(_destinationPos);
-            }
-            
-            //Updating movement status
-            if (!agent.pathPending && agent.remainingDistance < _stopDistance)
-            {
-                if (MovementStatus == MovementStatus.Moving)
+                stay = false;
+                agent.SetDestination(_destinationTransform != null ? _destinationTransform.position : _destinationPos);
+
+                if (agent.remainingDistance <= _stopDistance)
                 {
                     MovementStatus = MovementStatus.Waiting;
-                    agent.isStopped = true;
+                    stay = true;
                     _destinationTransform = null;
+                    _destinationSet = false;
+                }
+                else
+                {
+                    MovementStatus = MovementStatus.Moving;
                 }
             }
+            agent.isStopped = stay;
+            agent.stoppingDistance = _stopDistance;
 
             //Rotating unit on specific target
             if (Target != null)
@@ -94,25 +92,14 @@ namespace Units.Views
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),Time.deltaTime * 120);
             }
 
-            //Updating animations and current animation status
-            animatorOld.speed = _animationSpeed;
-            switch (FightStatus)
-            {
-                case FightStatus.AwaitingAttacking:
-                    animatorOld.Play("Attack");
-                    FightStatus = FightStatus.Attacking;
-                    break;
-                case FightStatus.AwaitingDamaging:
-                    animatorOld.Play("GetDamage");
-                    FightStatus = FightStatus.Damaging;
-                    break;
-            }
+            //Update animations
+            var v = transform.worldToLocalMatrix * agent.velocity;
+            anim.UpdateMovingAnimation(v);
 
-            if (animatorNew.isActiveAndEnabled)
+            if (anim.State == AnimationControllerState.Dodging)
             {
-                var v = transform.worldToLocalMatrix * agent.velocity;
-                animatorNew.SetFloat("Speed", v.z);
-                animatorNew.SetFloat("Strafe", v.x);
+                agent.nextPosition = anim.AnimatorTransform.position;
+                anim.AnimatorTransform.localPosition = Vector3.zero;
             }
         }
 
@@ -186,7 +173,7 @@ namespace Units.Views
         public void Die()
         {
             StopAllCoroutines();
-            animatorOld.Play("Die");
+            anim.PerformDyingAnimation();
             Deselect();
             this.enabled = false;
         }
@@ -198,9 +185,9 @@ namespace Units.Views
         public void MoveTo(Vector3 destination, float stopDistance)
         {
             _destinationPos = destination;
-            MovementStatus = MovementStatus.Moving;
             _destinationTransform = null;
             _stopDistance = stopDistance;
+            _destinationSet = true;
         }
 
         /// <summary>
@@ -210,8 +197,8 @@ namespace Units.Views
         public void MoveTo(Transform destination, float stopDistance)
         {
             _destinationTransform = destination;
-            MovementStatus = MovementStatus.Moving;
             _stopDistance = stopDistance;
+            _destinationSet = true;
         }
 
         /// <summary>
@@ -235,7 +222,7 @@ namespace Units.Views
         /// </summary>
         public void PerformFightReadyAnimation()
         {
-            animatorOld.SetBool("Provoked", true);
+            anim.PerformFightReadyAnimation();
         }
 
         /// <summary>
@@ -243,7 +230,7 @@ namespace Units.Views
         /// </summary>
         public void PerformIdleAnimation()
         {
-            animatorOld.SetBool("Provoked", false);
+            anim.PerformIdleAnimation();
         }
 
         /// <summary>
@@ -254,7 +241,12 @@ namespace Units.Views
         /// <returns></returns>
         public bool CanAttack(UnitView target)
         {
-            return Vector3.Distance(target.Position, Position) < 2f;
+            return Vector3.Distance(target.Position, Position) < 2f && anim.State == AnimationControllerState.Idle;
+        }
+
+        public bool CanDodge()
+        {
+            return anim.State == AnimationControllerState.Idle;
         }
 
         /// <summary>
@@ -262,11 +254,9 @@ namespace Units.Views
         /// Multithreading safe
         /// </summary>
         /// <param name="callback">UnitViews that has been hit</param>
-        public void PerformAttackAnimation(float attackRate, Action<List<UnitView>> callback)
+        public void PerformAttackAnimation(float attackRate)
         {
-            FightStatus = FightStatus.AwaitingAttacking;
-            _animationSpeed = attackRate;
-            _onHitUnits = callback;
+            anim.PerformAttackAnimation(null, attackRate);
         }
 
         /// <summary>
@@ -284,8 +274,12 @@ namespace Units.Views
         /// </summary>
         public void PerformGetDamageAnimation()
         {
-            _animationSpeed = 1f;
-            FightStatus = FightStatus.AwaitingDamaging;
+            anim.PerformGetDamageAnimation(null);
+        }
+
+        public void PerformDodgeAnimation()
+        {
+            anim.PerformDodgeAnimation(null);
         }
 
         /// <summary>
@@ -303,22 +297,9 @@ namespace Units.Views
             agent.Warp(pos);
         }
 
-        private void HitFront()
+        private void HitBasic()
         {
-            attack.BroadcastDamageInFront(_onHitUnits);
-            FightStatus = FightStatus.Waiting;
-        }
-
-        private void CompleteAttack()
-        {
-            FightStatus = FightStatus.Waiting;
-            _animationSpeed = 1f;
-            _onHitUnits = null;
-        }
-
-        private void GetDamageComplete()
-        {
-            FightStatus = FightStatus.Waiting;
+            OnHit?.Invoke(attack.GetUnitViewsFromBasicAttack());
         }
     }
 
@@ -326,15 +307,5 @@ namespace Units.Views
     {
         Waiting,
         Moving,
-    }
-
-    public enum FightStatus
-    {
-        Waiting,
-        AwaitingAttacking,
-        Attacking,
-        AwaitingDamaging,
-        Damaging,
-        Parrying
     }
 }

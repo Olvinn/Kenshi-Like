@@ -17,6 +17,7 @@
     // 43) Ragdoll freezing
     // 44) Console and simple console commands
     // 45) Clearing cash and replay
+    // 47) Realize idea with bus-controller that executes queue of actions every frame partially
     
     //TODO Models and animations:
     // 8) Unit sword fight with blocking

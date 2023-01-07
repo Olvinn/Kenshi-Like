@@ -1,5 +1,3 @@
-using Units.Views;
-
 namespace Units.Commands
 {
     public class AttackCommand : Command
@@ -56,8 +54,7 @@ namespace Units.Commands
 
             if (CommandOwner.CanAttack(Target))
             {
-                if (CommandOwner.View.FightStatus == FightStatus.Waiting)
-                    Attack();
+                Attack();
             }
             else
             {

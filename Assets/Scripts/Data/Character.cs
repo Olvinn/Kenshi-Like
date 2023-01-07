@@ -88,7 +88,8 @@ namespace Data
         Speed = 100,
         Damage = 200,
         AttackRate = 300,
-        AttackDelay = 301
+        AttackDelay = 301,
+        DodgeChance = 400
     }
 
     [Serializable]
@@ -99,6 +100,7 @@ namespace Data
         [SerializeField, Range(1f, 200f)] private float damage;
         [SerializeField, Range(.1f, 1.5f)] private float attackRate;
         [SerializeField, Range(.5f, 5f)] private float attackDelay;
+        [SerializeField, Range(0, 1f)] private float chanceToDodge;
 
         public float GetParameter(ParametersType type)
         {
@@ -114,6 +116,8 @@ namespace Data
                     return attackRate;
                 case ParametersType.AttackDelay:
                     return attackDelay;
+                case ParametersType.DodgeChance:
+                    return chanceToDodge;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

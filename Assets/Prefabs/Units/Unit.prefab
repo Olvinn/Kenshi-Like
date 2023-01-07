@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2277092710586213331}
   - component: {fileID: 2277092710586213328}
   - component: {fileID: 2277092710586213329}
+  - component: {fileID: 8072482473156819058}
   - component: {fileID: 5296493730584232009}
   m_Layer: 3
   m_Name: Unit
@@ -172,17 +173,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   <MovementStatus>k__BackingField: 0
-  <FightStatus>k__BackingField: 0
   agent: {fileID: 2277092710586213328}
-  animatorOld: {fileID: 1538881614067719520}
-  animatorNew: {fileID: 1599334193925670467}
   selection: {fileID: 2396101599360412613}
-  animationEventCatcher: {fileID: 5562940736809719508}
   attack: {fileID: 4970059542099626717}
   sense: {fileID: 302513375463923675}
   appearance: {fileID: 5318714859792630538}
   ragdoll: {fileID: 2872181797602841927}
   ik: {fileID: 5672460242256324818}
+  anim: {fileID: 8072482473156819058}
+--- !u!114 &8072482473156819058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2277092710586213343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a61b8e06cecd9841b50a713e230aa63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oldAnimator: {fileID: 1538881614067719520}
+  newAnimator: {fileID: 1599334193925670467}
+  oldCatcher: {fileID: 5562940736809719508}
+  newCatcher: {fileID: 8136231273783945660}
 --- !u!54 &5296493730584232009
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -726,5 +740,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21aa7bf752cdf6c46bfc78ed55034c95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8136231273783945660 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3272484143947897206, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
+  m_PrefabInstance: {fileID: 6738372137453367498}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffc606232e961fa4ab6ebea9352f2ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
