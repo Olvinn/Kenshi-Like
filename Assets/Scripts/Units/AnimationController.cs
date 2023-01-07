@@ -52,6 +52,7 @@ namespace Units
             
             _onCompleteAnimation = callback;
             newAnimator.SetTrigger("AttackBasic");
+            newAnimator.speed = animationSpeed;
             State = AnimationControllerState.Attacking;
 
             StartCoroutine(Saver(3f));
@@ -67,6 +68,7 @@ namespace Units
             
             _onCompleteAnimation = callback;
             oldAnimator.Play("GetDamage");
+            newAnimator.speed = 1;
             State = AnimationControllerState.Damaging;
 
             StartCoroutine(Saver(3f));
@@ -82,6 +84,7 @@ namespace Units
 
             _onCompleteAnimation = callback;
             newAnimator.SetTrigger("Dodge");
+            newAnimator.speed = 1;
             State = AnimationControllerState.Dodging;
 
             StartCoroutine(Saver(2f));
@@ -127,6 +130,7 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
+            newAnimator.speed = 1;
             StopAllCoroutines();
         }
 
@@ -135,6 +139,7 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
+            newAnimator.speed = 1;
             StopAllCoroutines();
         }
 
@@ -143,6 +148,7 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
+            newAnimator.speed = 1;
             StopAllCoroutines();
         }
 
