@@ -29,6 +29,7 @@ namespace Players
             InputController.Instance.OnRMB += RightMouseButtonClick;
             InputController.Instance.OnLMB += LeftMouseButtonClick;
             InputController.Instance.OnBoxSelect += BoxSelect;
+            InputController.Instance.OnShiftBoxSelect += ShiftBoxSelect;
         }
 
         public void AddUnit(Unit unit)
@@ -174,6 +175,16 @@ namespace Players
         private void BoxSelect(Vector2 pos, Vector2 size)
         {
             DeselectAll();
+            foreach (var unit in _units)
+            {
+                Vector3 screen = Camera.main.WorldToScreenPoint(unit.Position);
+                if (screen.x > pos.x && screen.y > pos.y && screen.x < pos.x + size.x && screen.y < pos.y + size.y)
+                    SelectUnit(unit);
+            }
+        }
+
+        private void ShiftBoxSelect(Vector2 pos, Vector2 size)
+        {
             foreach (var unit in _units)
             {
                 Vector3 screen = Camera.main.WorldToScreenPoint(unit.Position);

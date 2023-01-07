@@ -9,7 +9,7 @@ namespace Inputs
         
         public event Action<Ray> OnRMB, OnLMB, OnShiftRMB, OnShiftLMB;
         public event Action<Vector2> OnTouchScreenCorners, OnMove;
-        public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect;
+        public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect, OnShiftBoxSelect;
         public event Action<float> OnScroll;
         public event Action<Vector2> OnMMBDrag;
 
@@ -35,16 +35,21 @@ namespace Inputs
 
         void MouseClickInput()
         {
+            if (_isDrawingBox)
+                return;
+
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                if (Input.GetButtonUp("Fire2"))
-                    OnShiftRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
                 if (Input.GetButtonUp("Fire1"))
                     OnShiftLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                else if (Input.GetButtonUp("Fire2"))
+                    OnShiftRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
             }
             else
             {
-                if (Input.GetButtonUp("Fire2"))
+                if (Input.GetButtonUp("Fire1") && !_isDrawingBox)
+                    OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                else if (Input.GetButtonUp("Fire2"))
                     OnRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
             }
         }
@@ -54,7 +59,6 @@ namespace Inputs
             if (Input.GetButtonDown("Fire1"))
             {
                 _startBox = Input.mousePosition;
-                _isDrawingBox = true;
             }
                 
             if (Input.GetButton("Fire1"))
@@ -64,19 +68,18 @@ namespace Inputs
                     Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
                     Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
                     OnDrawBox?.Invoke(pos, size);
+                    _isDrawingBox = true;
                 }
 
-            if (Input.GetButtonUp("Fire1"))
+            if (Input.GetButtonUp("Fire1") && _isDrawingBox)
             {
-                if (Vector3.Distance(_startBox, Input.mousePosition) < 3)
-                    OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                var end = Input.mousePosition;
+                Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
+                Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
+                if (Input.GetKey(KeyCode.LeftShift))
+                    OnShiftBoxSelect?.Invoke(pos, size);
                 else
-                {
-                    var end = Input.mousePosition;
-                    Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
-                    Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
                     OnBoxSelect?.Invoke(pos, size);
-                }
                 _isDrawingBox = false;
             }
         }

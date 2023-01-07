@@ -14,6 +14,9 @@
     // 40) Fix camera jitter
     // 41) Unit patrolling command and command repeat system
     // 42) AI encounters and patrolling
+    // 43) Ragdoll freezing
+    // 44) Console and simple console commands
+    // 45) Clearing cash and replay
     
     //TODO Models and animations:
     // 8) Unit sword fight with blocking
