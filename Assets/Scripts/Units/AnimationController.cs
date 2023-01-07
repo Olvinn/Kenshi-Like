@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Units.Views.IK;
 using UnityEngine;
 
 namespace Units
@@ -15,6 +16,8 @@ namespace Units
         [SerializeField] private Animator newAnimator;
         [SerializeField] private UnitAnimationEventCatcher oldCatcher;
         [SerializeField] private UnitAnimationEventCatcher newCatcher;
+        [SerializeField] private IKController ik;
+        [SerializeField] private Transform blockFront;
 
         private Action _onCompleteAnimation;
 
@@ -44,7 +47,7 @@ namespace Units
 
         public void PerformAttackAnimation(Action callback, float animationSpeed = 1f)
         {
-            if (!oldAnimator.isActiveAndEnabled || State != AnimationControllerState.Idle)
+            if (!oldAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
             {
                 callback?.Invoke();
                 return;
@@ -54,13 +57,15 @@ namespace Units
             newAnimator.SetTrigger("AttackBasic");
             newAnimator.speed = animationSpeed;
             State = AnimationControllerState.Attacking;
+            ik.armsPos = null;
 
+            StopAllCoroutines();
             StartCoroutine(Saver(3f));
         }
 
         public void PerformGetDamageAnimation(Action callback)
         {
-            if (!oldAnimator.isActiveAndEnabled || State != AnimationControllerState.Idle)
+            if (!oldAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
             {
                 callback?.Invoke();
                 return;
@@ -70,13 +75,15 @@ namespace Units
             oldAnimator.Play("GetDamage");
             newAnimator.speed = 1;
             State = AnimationControllerState.Damaging;
+            ik.armsPos = null;
 
+            StopAllCoroutines();
             StartCoroutine(Saver(3f));
         }
 
         public void PerformDodgeAnimation(Action callback)
         {
-            if (!newAnimator.isActiveAndEnabled || State != AnimationControllerState.Idle)
+            if (!newAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
             {
                 callback?.Invoke();
                 return;
@@ -86,8 +93,21 @@ namespace Units
             newAnimator.SetTrigger("Dodge");
             newAnimator.speed = 1;
             State = AnimationControllerState.Dodging;
+            ik.armsPos = null;
 
+            StopAllCoroutines();
             StartCoroutine(Saver(2f));
+        }
+
+        public void PerformBlockAnimation()
+        {
+            if (!newAnimator.isActiveAndEnabled || State is AnimationControllerState.Attacking or AnimationControllerState.Damaging)
+                return;
+            
+            ik.armsPos = blockFront;
+            State = AnimationControllerState.Blocking;
+            StopAllCoroutines();
+            StartCoroutine(Saver(5f));
         }
 
         public void PerformDyingAnimation()
@@ -118,6 +138,7 @@ namespace Units
                 return;
 
             newAnimator.SetLayerWeight(1, 0);
+            ik.armsPos = null;
         }
 
         private void HitBasic()
@@ -130,7 +151,6 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
-            newAnimator.speed = 1;
             StopAllCoroutines();
         }
 
@@ -139,7 +159,6 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
-            newAnimator.speed = 1;
             StopAllCoroutines();
         }
 
@@ -148,7 +167,6 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
-            newAnimator.speed = 1;
             StopAllCoroutines();
         }
 
@@ -157,6 +175,7 @@ namespace Units
             yield return new WaitForSeconds(time);
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
+            ik.armsPos = null;
             State = AnimationControllerState.Idle;
         }
     }
@@ -166,6 +185,7 @@ namespace Units
         Idle,
         Attacking,
         Damaging,
-        Dodging
+        Dodging,
+        Blocking
     }
 }

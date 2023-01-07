@@ -244,7 +244,12 @@ namespace Units.Views
 
         public bool IsDodging()
         {
-            return anim.State == AnimationControllerState.Idle;
+            return anim.State == AnimationControllerState.Dodging;
+        }
+
+        public bool IsBlocking()
+        {
+            return anim.State == AnimationControllerState.Blocking;
         }
 
         /// <summary>
@@ -255,6 +260,11 @@ namespace Units.Views
         public void Attack(float attackRate)
         {
             anim.PerformAttackAnimation(null, attackRate);
+        }
+
+        public void Block()
+        {
+            anim.PerformBlockAnimation();
         }
 
         /// <summary>

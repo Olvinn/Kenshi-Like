@@ -89,9 +89,18 @@ namespace Units
         public void DetectAttack(Unit attacker)
         {
             _attackers++;
-            if (attacker._data.GetParameter(ParametersType.AttackRate) < _data.GetParameter(ParametersType.AttackRate) || _attackDelay > 0 || _attackers >= 3)
-                if (Random.Range(0f,1f) < _data.GetParameter(ParametersType.DodgeChance))
+            
+            if (View.IsDodging() || View.IsBlocking())
+                return;
+            
+            if (attacker._data.GetParameter(ParametersType.AttackRate) <
+                _data.GetParameter(ParametersType.AttackRate) || _attackDelay > 0 || _attackers >= 3)
+            {
+                if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
                     View.Dodge();
+                else if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
+                    View.Block();
+            }
         }
 
         public void GetDamage(Damage dmg)
@@ -103,7 +112,7 @@ namespace Units
             if (dmg.source == this || dmg.source.Team == Team)
                 return;
             
-            if (!View.IsDodging())
+            if (!View.IsDodging() && !View.IsBlocking())
             {
                 View.GetDamage();
                 _currentHP -= dmg.damage;
