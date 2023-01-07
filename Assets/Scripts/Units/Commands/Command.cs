@@ -8,11 +8,13 @@ namespace Units.Commands
         public virtual CommandType Type => CommandType.Command;
         public virtual string CommandName => "Command"; 
         public event Action OnDone;
+        public Unit CommandOwner { get; private set; }
 
         public bool IsRunning { get; protected set; } = false;
 
-        public virtual void Execute()
+        public virtual void Do(Unit owner)
         {
+            CommandOwner = owner;
             IsRunning = true;
         }
 
@@ -29,6 +31,7 @@ namespace Units.Commands
 
         public virtual void Dispose()
         {
+            CommandOwner = null;
             OnDone = null;
         }
 

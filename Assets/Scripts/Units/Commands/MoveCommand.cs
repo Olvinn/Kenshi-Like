@@ -8,20 +8,18 @@ namespace Units.Commands
         public override CommandType Type => CommandType.Move;
         public override string CommandName => "Move"; 
         
-        private Unit _unit;
         private Vector3 _pos;
 
-        public MoveCommand(Unit unit, Vector3 pos, bool isDirectCommand)
+        public MoveCommand(Vector3 pos, bool isDirectCommand)
         {
             IsDirectCommand = isDirectCommand;
-            _unit = unit;
             _pos = pos;
         }
 
-        public override void Execute()
+        public override void Do(Unit owner)
         {
-            base.Execute();
-            _unit.MoveTo(_pos);
+            base.Do(owner);
+            owner.MoveTo(_pos, 1f);
         }
 
         public override void Update()
@@ -30,7 +28,7 @@ namespace Units.Commands
                 return;
             
             base.Update();
-            if (_unit.View.MovementStatus == MovementStatus.Waiting)
+            if (CommandOwner.View.MovementStatus == MovementStatus.Waiting)
                 Done();
         }
         
@@ -39,7 +37,7 @@ namespace Units.Commands
             var c = obj as MoveCommand;
             if (c == null)
                 return false;
-            if (c._unit.Equals(_unit) && c._pos == _pos)
+            if (CommandOwner != null && CommandOwner.Equals(c.CommandOwner) && c._pos == _pos)
                 return true;
             return false;
         }

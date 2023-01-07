@@ -34,6 +34,8 @@ namespace Units.Views
         
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
+        private float _stopDistance; 
+            
         private Action<List<UnitView>> _onHitUnits;
         private float _animationSpeed = 1f;
 
@@ -63,7 +65,7 @@ namespace Units.Views
             }
             
             //Updating movement status
-            if (!agent.pathPending && agent.remainingDistance < 1f)
+            if (!agent.pathPending && agent.remainingDistance < _stopDistance)
             {
                 if (MovementStatus == MovementStatus.Moving)
                 {
@@ -193,21 +195,23 @@ namespace Units.Views
         /// Set destination for move to
         /// </summary>
         /// <param name="destination"></param>
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(Vector3 destination, float stopDistance)
         {
             _destinationPos = destination;
             MovementStatus = MovementStatus.Moving;
             _destinationTransform = null;
+            _stopDistance = stopDistance;
         }
 
         /// <summary>
         /// Set destination for move to
         /// </summary>
         /// <param name="destination"></param>
-        public void MoveTo(Transform destination)
+        public void MoveTo(Transform destination, float stopDistance)
         {
             _destinationTransform = destination;
             MovementStatus = MovementStatus.Moving;
+            _stopDistance = stopDistance;
         }
 
         /// <summary>

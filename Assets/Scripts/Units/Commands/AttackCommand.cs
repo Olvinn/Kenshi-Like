@@ -8,41 +8,37 @@ namespace Units.Commands
         public override string CommandName => "Attack";
         public Unit Target;
         
-        private Unit _attacker;
-        
-        public AttackCommand(Unit attacker, Unit target, bool isDirectCommand)
+        public AttackCommand(Unit target, bool isDirectCommand)
         {
             IsDirectCommand = isDirectCommand;
             Target = target;
-            _attacker = attacker;
         }
 
-        public override void Execute()
+        public override void Do(Unit owner)
         {
-            base.Execute();
+            base.Do(owner);
             
-            if (_attacker == null || Target == null || Target.IsDead)
+            if (owner == null || Target == null || Target.IsDead)
             {
                 Done();
                 return;
             }
             
-            _attacker.View.Target = Target.View;
-            _attacker.View.PerformFightReadyAnimation();
+            owner.View.Target = Target.View;
+            owner.View.PerformFightReadyAnimation();
 
             GetCloser();
         }
 
         public override void Dispose()
         {
-            base.Dispose();
-            if (_attacker != null)
+            if (CommandOwner != null)
             {
-                _attacker.View.Target = null;
-                _attacker.View.PerformIdleAnimation();
-                _attacker = null;
+                CommandOwner.View.Target = null;
+                CommandOwner.View.PerformIdleAnimation();
             }
             Target = null;
+            base.Dispose();
         }
 
         public override void Update()
@@ -58,9 +54,9 @@ namespace Units.Commands
             
             base.Update();
 
-            if (_attacker.CanAttack(Target))
+            if (CommandOwner.CanAttack(Target))
             {
-                if (_attacker.View.FightStatus == FightStatus.Waiting)
+                if (CommandOwner.View.FightStatus == FightStatus.Waiting)
                     Attack();
             }
             else
@@ -71,12 +67,12 @@ namespace Units.Commands
 
         private void GetCloser()
         {
-            _attacker.MoveTo(Target.View.transform);
+            CommandOwner.MoveTo(Target.View.transform, 2f);
         }
 
         private void Attack()
         {
-            _attacker.Attack(Target);
+            CommandOwner.Attack(Target);
         }
 
         public override bool Equals(object obj)
@@ -84,7 +80,8 @@ namespace Units.Commands
             var c = obj as AttackCommand;
             if (c == null)
                 return false;
-            if (c._attacker.Equals(_attacker) && c.Target.Equals(Target))
+            if (CommandOwner != null && CommandOwner.Equals(c.CommandOwner) &&
+                Target != null && Target.Equals(c.Target))
                 return true;
             return false;
         }

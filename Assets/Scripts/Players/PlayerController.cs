@@ -85,14 +85,14 @@ namespace Players
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new FollowCommand(unit, view.Model, true));
+                            unit.AddCommand(new FollowCommand(view.Model, true));
                         }
                     }
                     else
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new AttackCommand(unit, view.Model, true));
+                            unit.AddCommand(new AttackCommand(view.Model, true));
                         }
                     }
                 }
@@ -100,7 +100,7 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.AddCommand(new MoveCommand(unit, hit.point, true));
+                        unit.AddCommand(new MoveCommand(hit.point, true));
                     }
                 }
             }
@@ -135,7 +135,7 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
-                            unit.AddCommand(new FollowCommand(unit, view.Model, true));
+                            unit.AddCommand(new FollowCommand(view.Model, true));
                         }
                     }
                     else
@@ -144,7 +144,7 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
-                            unit.AddCommand(new AttackCommand(unit, view.Model,true));
+                            unit.AddCommand(new AttackCommand(view.Model,true));
                         }
                     }
                 }
@@ -154,7 +154,7 @@ namespace Players
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        unit.AddCommand(new MoveCommand(unit, hit.point,true));
+                        unit.AddCommand(new MoveCommand(hit.point,true));
                     }
                 }
             }

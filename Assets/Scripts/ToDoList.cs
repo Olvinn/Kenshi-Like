@@ -1,6 +1,6 @@
 
     //TODO Scripts: 
-    // 27) Squad logic and triggers optimization
+    // 27) Squad logic and triggers optimization (Req: 22)
     // 17) Units dodges
     // 18) Unit defend another unit command
     // 10) Unit defend area command

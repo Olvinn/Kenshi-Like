@@ -102,7 +102,7 @@ namespace Units
                 if (c == null)
                     return;
                 if (Vector3.Distance(c.Target.Position, Position) > Vector3.Distance(dmg.source.Position, Position))
-                    AddReactionCommand(new AttackCommand(this, dmg.source, false));
+                    AddReactionCommand(new AttackCommand(dmg.source, false));
             }
         }
 
@@ -122,18 +122,18 @@ namespace Units
             });
         }
         
-        public void MoveTo(Transform destination)
+        public void MoveTo(Transform destination, float stopDistance)
         {
             if (IsDead)
                 return;
-            View.MoveTo(destination);
+            View.MoveTo(destination, stopDistance);
         }
 
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(Vector3 destination, float stopDistance)
         {
             if (IsDead)
                 return;
-            View.MoveTo(destination);
+            View.MoveTo(destination, stopDistance);
         }
 
         public void AddCommand(Command command)
@@ -159,7 +159,7 @@ namespace Units
             {
                 _currentCommand = command;
                 _currentCommand.OnDone += ContinueCommands;
-                _currentCommand.Execute();
+                _currentCommand.Do(this);
             }
         }
 
@@ -244,7 +244,7 @@ namespace Units
                 _currentCommand = _commands.First.Value;
                 _commands.RemoveFirst();
                 _currentCommand.OnDone += ContinueCommands;
-                _currentCommand.Execute();
+                _currentCommand.Do(this);
             }
         }
 
@@ -269,7 +269,7 @@ namespace Units
 
             if (enemy != null)
             {
-                AddReactionCommand(new AttackCommand(this, enemy, false));
+                AddReactionCommand(new AttackCommand(enemy, false));
             }
 
             _isBusy = false;
