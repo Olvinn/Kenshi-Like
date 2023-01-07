@@ -242,7 +242,7 @@ namespace Units.Views
             return Vector3.Distance(target.Position, Position) < 2f && anim.State == AnimationControllerState.Idle;
         }
 
-        public bool CanDodge()
+        public bool IsDodging()
         {
             return anim.State == AnimationControllerState.Idle;
         }

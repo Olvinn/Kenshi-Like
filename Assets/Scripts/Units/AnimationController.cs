@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 namespace Units
@@ -19,9 +20,9 @@ namespace Units
 
         private void Awake()
         {
-            oldCatcher.OnHitFront += HitFront;
+            newCatcher.OnHitBasic += HitBasic;
             oldCatcher.OnGetDamageComplete += GetDamageComplete;
-            oldCatcher.OnAttackComplete += AttackComplete;
+            newCatcher.OnAttackComplete += AttackComplete;
             newCatcher.OnDodgingComplete += DodgeComplete;
         }
 
@@ -50,8 +51,10 @@ namespace Units
             }
             
             _onCompleteAnimation = callback;
-            oldAnimator.Play("Attack");
+            newAnimator.SetTrigger("AttackBasic");
             State = AnimationControllerState.Attacking;
+
+            StartCoroutine(Saver(3f));
         }
 
         public void PerformGetDamageAnimation(Action callback)
@@ -65,6 +68,8 @@ namespace Units
             _onCompleteAnimation = callback;
             oldAnimator.Play("GetDamage");
             State = AnimationControllerState.Damaging;
+
+            StartCoroutine(Saver(3f));
         }
 
         public void PerformDodgeAnimation(Action callback)
@@ -78,6 +83,8 @@ namespace Units
             _onCompleteAnimation = callback;
             newAnimator.SetTrigger("Dodge");
             State = AnimationControllerState.Dodging;
+
+            StartCoroutine(Saver(2f));
         }
 
         public void PerformDyingAnimation()
@@ -96,7 +103,7 @@ namespace Units
             if (!oldAnimator.isActiveAndEnabled)
                 return;
 
-            oldAnimator.SetBool("Provoked", true);
+            newAnimator.SetLayerWeight(1, 1);
         }
 
         /// <summary>
@@ -107,10 +114,10 @@ namespace Units
             if (!oldAnimator.isActiveAndEnabled)
                 return;
 
-            oldAnimator.SetBool("Provoked", false);
+            newAnimator.SetLayerWeight(1, 0);
         }
 
-        private void HitFront()
+        private void HitBasic()
         {
             OnHitBasic?.Invoke();
         }
@@ -120,6 +127,7 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
+            StopAllCoroutines();
         }
 
         private void GetDamageComplete()
@@ -127,10 +135,20 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
+            StopAllCoroutines();
         }
 
         private void DodgeComplete()
         {
+            _onCompleteAnimation?.Invoke();
+            _onCompleteAnimation = null;
+            State = AnimationControllerState.Idle;
+            StopAllCoroutines();
+        }
+
+        IEnumerator Saver(float time)
+        {
+            yield return new WaitForSeconds(time);
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;

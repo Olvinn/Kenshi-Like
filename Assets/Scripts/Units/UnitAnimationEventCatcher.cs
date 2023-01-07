@@ -5,11 +5,11 @@ namespace Units
 {
     public class UnitAnimationEventCatcher : MonoBehaviour
     {
-        public event Action OnHitFront, OnGetDamageComplete, OnAttackComplete, OnDodgingComplete;
+        public event Action OnHitBasic, OnGetDamageComplete, OnAttackComplete, OnDodgingComplete;
 
-        private void HitFront()
+        private void HitBasic()
         {
-            OnHitFront?.Invoke();
+            OnHitBasic?.Invoke();
         }
         
         private void AttackComplete()

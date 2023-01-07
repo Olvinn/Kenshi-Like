@@ -103,7 +103,7 @@ namespace Units
             if (dmg.source == this || dmg.source.Team == Team)
                 return;
             
-            if (View.CanDodge())
+            if (!View.IsDodging())
             {
                 View.GetDamage();
                 _currentHP -= dmg.damage;
