@@ -30,6 +30,7 @@
     // 21) Damage labels
     // 34) Fire effect for campfire
     // 36) Water effect
+    // 46) Render paths and destination points
 
     //Goals v0.1:
     // - UI, show player units
