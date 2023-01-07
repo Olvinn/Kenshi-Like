@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: PlayerCharacter_Start
   m_EditorClassIdentifier: 
   parameters:
-    hp: 1000
+    hp: 400
     speed: 3.8
-    damage: 1
+    damage: 15
     attackRate: 1.1
     attackDelay: 1.8
-    chanceToDodge: 0.3
-    chanceToBlock: 0.9
+    chanceToDodge: 0.1
+    chanceToBlock: 0.2
   skinColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
   eyesColor: {r: 1, g: 1, b: 1, a: 1}
   hairColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
@@ -29,7 +29,7 @@ MonoBehaviour:
   shirtColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
   turtleneckColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
   pantsColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
-  shoesColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
+  shoesColor: {r: 0.12028301, g: 0.37058264, b: 0.5, a: 1}
   bootsColor: {r: 0.12028301, g: 0.37058264, b: 0.5, a: 1}
   glovesColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}
   fingersColor: {r: 0.9056604, g: 0.7746397, b: 0.5596298, a: 1}

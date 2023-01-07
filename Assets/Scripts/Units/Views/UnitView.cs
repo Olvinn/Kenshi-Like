@@ -29,6 +29,7 @@ namespace Units.Views
         [SerializeField] private Ragdoll ragdoll;
         [SerializeField] private IKController ik;
         [SerializeField] private AnimationController anim;
+        [SerializeField] private ParticleSystem sparks, leak, splash;
         
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
@@ -283,6 +284,8 @@ namespace Units.Views
         public void GetDamage()
         {
             anim.PerformGetDamageAnimation(null);
+            splash.Play();
+            leak.Play();
         }
 
         public void Dodge()
@@ -303,6 +306,11 @@ namespace Units.Views
         public void SetPosition(Vector3 pos)
         {
             agent.Warp(pos);
+        }
+
+        public void SuccesfullBlock()
+        {
+            sparks.Play();
         }
 
         private void HitBasic()

@@ -1,5 +1,5 @@
 
-    // 51
+    // 53
 
     //TODO Scripts: 
     // 27) Squad logic and triggers optimization (Req: 22)
@@ -23,6 +23,7 @@
     // 47) Realize idea with bus-controller that executes queue of actions every frame partially
     // 51) Effects pool
     // 52) More precise arms IK
+    // 53) Culling by distance
     
     //TODO Models and animations:
     // 8) Unit sword fight with blocking (Done!)

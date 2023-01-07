@@ -119,6 +119,10 @@ namespace Units
                 if (_currentHP <= 0)
                     Die();
             }
+            else if (View.IsBlocking())
+            {
+                View.SuccesfullBlock();
+            }
 
             if (_currentCommand == null || _currentCommand.Type == CommandType.Attack)
             {

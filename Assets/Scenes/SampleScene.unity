@@ -1755,13 +1755,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnerRadius: 10
-  enemiesCountInCamp: 1
+  enemiesCountInCamp: 15
   playerPos: {fileID: 1271764037}
   enemyPos:
   - {fileID: 1861566037}
   - {fileID: 1471377564}
   playerSquad:
-  - {fileID: 11400000, guid: 277c04e558913604ab804926c72d926b, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
+  - {fileID: 11400000, guid: c584e6822024dc74d9c9996675aa3fc4, type: 2}
   enemies:
   - {fileID: 11400000, guid: 7b885410c60e1f24eb58273ad9c76873, type: 2}
   unitsController: {fileID: 559250844}
