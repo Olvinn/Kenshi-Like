@@ -28,6 +28,7 @@ namespace Units
         private bool _isBusy = false;
         private float _attackDelay = 0f;
         private float _savedTime;
+        private int _attackers;
 
         public List<string> GetListOfCommands()
         {
@@ -87,22 +88,24 @@ namespace Units
 
         public void DetectAttack(Unit attacker)
         {
-            if (attacker._data.GetParameter(ParametersType.AttackRate) > _data.GetParameter(ParametersType.AttackRate) || _attackDelay > 0)
+            _attackers++;
+            if (attacker._data.GetParameter(ParametersType.AttackRate) < _data.GetParameter(ParametersType.AttackRate) || _attackDelay > 0 || _attackers >= 3)
                 if (Random.Range(0f,1f) < _data.GetParameter(ParametersType.DodgeChance))
-                    View.PerformDodgeAnimation();
+                    View.Dodge();
         }
 
         public void GetDamage(Damage dmg)
         {
             if (IsDead)
                 return;
-                
+
+            _attackers = 0;
             if (dmg.source == this || dmg.source.Team == Team)
                 return;
             
             if (View.CanDodge())
             {
-                View.PerformGetDamageAnimation();
+                View.GetDamage();
                 _currentHP -= dmg.damage;
                 if (_currentHP <= 0)
                     Die();
@@ -125,7 +128,7 @@ namespace Units
 
             _attackDelay = _data.GetParameter(ParametersType.AttackDelay);
             View.RotateOn(target.View);
-            View.PerformAttackAnimation(_data.GetParameter(ParametersType.AttackRate));
+            View.Attack(_data.GetParameter(ParametersType.AttackRate));
             target.DetectAttack(this);
         }
         

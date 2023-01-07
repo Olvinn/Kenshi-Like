@@ -33,7 +33,6 @@ namespace Units.Views
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
         private float _stopDistance;
-        private bool _destinationSet;
 
         private void Awake()
         {
@@ -52,23 +51,22 @@ namespace Units.Views
 
             //Processing moving logic
             Position = transform.position;
-            bool stay = agent.isStopped;
-            if (!agent.pathPending && _destinationSet && anim.CanMove)
+            
+            bool stay = false;
+            if (anim.CanMove && !agent.pathPending && MovementStatus == MovementStatus.Moving)
             {
-                stay = false;
                 agent.SetDestination(_destinationTransform != null ? _destinationTransform.position : _destinationPos);
 
-                if (agent.remainingDistance <= _stopDistance)
+                if (agent.remainingDistance <= _stopDistance && MovementStatus == MovementStatus.Moving)
                 {
                     MovementStatus = MovementStatus.Waiting;
-                    stay = true;
                     _destinationTransform = null;
-                    _destinationSet = false;
+                    stay = true;
                 }
-                else
-                {
-                    MovementStatus = MovementStatus.Moving;
-                }
+            }
+            else
+            {
+                stay = true;
             }
             agent.isStopped = stay;
             agent.stoppingDistance = _stopDistance;
@@ -187,7 +185,7 @@ namespace Units.Views
             _destinationPos = destination;
             _destinationTransform = null;
             _stopDistance = stopDistance;
-            _destinationSet = true;
+            MovementStatus = MovementStatus.Moving;
         }
 
         /// <summary>
@@ -198,7 +196,7 @@ namespace Units.Views
         {
             _destinationTransform = destination;
             _stopDistance = stopDistance;
-            _destinationSet = true;
+            MovementStatus = MovementStatus.Moving;
         }
 
         /// <summary>
@@ -254,7 +252,7 @@ namespace Units.Views
         /// Multithreading safe
         /// </summary>
         /// <param name="callback">UnitViews that has been hit</param>
-        public void PerformAttackAnimation(float attackRate)
+        public void Attack(float attackRate)
         {
             anim.PerformAttackAnimation(null, attackRate);
         }
@@ -272,12 +270,12 @@ namespace Units.Views
         /// Play animation representing taking damage. It will interrupt any other animation
         /// Multithreading safe
         /// </summary>
-        public void PerformGetDamageAnimation()
+        public void GetDamage()
         {
             anim.PerformGetDamageAnimation(null);
         }
 
-        public void PerformDodgeAnimation()
+        public void Dodge()
         {
             anim.PerformDodgeAnimation(null);
         }

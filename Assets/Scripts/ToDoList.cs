@@ -1,7 +1,10 @@
 
+    // 48
+
     //TODO Scripts: 
     // 27) Squad logic and triggers optimization (Req: 22)
-    // 17) Units dodges
+    // 17) Units dodges (Done!)
+    // 48) Unit blocks (Req: 8)
     // 18) Unit defend another unit command
     // 10) Unit defend area command
     // 11) Inherit Player and AI from abstract player?
