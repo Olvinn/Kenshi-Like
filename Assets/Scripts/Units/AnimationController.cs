@@ -29,6 +29,14 @@ namespace Units
             newCatcher.OnDodgingComplete += DodgeComplete;
         }
 
+        private void Update()
+        {
+            if (State == AnimationControllerState.Blocking)
+                ik.armsPos = blockFront;
+            else
+                ik.armsPos = null;
+        }
+
         private void Start()
         {
             State = AnimationControllerState.Idle;
@@ -57,7 +65,6 @@ namespace Units
             newAnimator.SetTrigger("AttackBasic");
             newAnimator.speed = animationSpeed;
             State = AnimationControllerState.Attacking;
-            ik.armsPos = null;
 
             StopAllCoroutines();
             StartCoroutine(Saver(3f));
@@ -75,7 +82,6 @@ namespace Units
             oldAnimator.Play("GetDamage");
             newAnimator.speed = 1;
             State = AnimationControllerState.Damaging;
-            ik.armsPos = null;
 
             StopAllCoroutines();
             StartCoroutine(Saver(3f));
@@ -93,7 +99,6 @@ namespace Units
             newAnimator.SetTrigger("Dodge");
             newAnimator.speed = 1;
             State = AnimationControllerState.Dodging;
-            ik.armsPos = null;
 
             StopAllCoroutines();
             StartCoroutine(Saver(2f));
@@ -104,7 +109,6 @@ namespace Units
             if (!newAnimator.isActiveAndEnabled || State is AnimationControllerState.Attacking or AnimationControllerState.Damaging)
                 return;
             
-            ik.armsPos = blockFront;
             State = AnimationControllerState.Blocking;
             StopAllCoroutines();
             StartCoroutine(Saver(5f));
@@ -138,7 +142,6 @@ namespace Units
                 return;
 
             newAnimator.SetLayerWeight(1, 0);
-            ik.armsPos = null;
         }
 
         private void HitBasic()
@@ -149,7 +152,6 @@ namespace Units
         private void AttackComplete()
         {
             _onCompleteAnimation?.Invoke();
-            _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
             StopAllCoroutines();
         }
@@ -157,7 +159,6 @@ namespace Units
         private void GetDamageComplete()
         {
             _onCompleteAnimation?.Invoke();
-            _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
             StopAllCoroutines();
         }
@@ -165,7 +166,6 @@ namespace Units
         private void DodgeComplete()
         {
             _onCompleteAnimation?.Invoke();
-            _onCompleteAnimation = null;
             State = AnimationControllerState.Idle;
             StopAllCoroutines();
         }
@@ -175,7 +175,6 @@ namespace Units
             yield return new WaitForSeconds(time);
             _onCompleteAnimation?.Invoke();
             _onCompleteAnimation = null;
-            ik.armsPos = null;
             State = AnimationControllerState.Idle;
         }
     }

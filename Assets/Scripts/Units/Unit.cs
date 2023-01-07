@@ -92,15 +92,15 @@ namespace Units
             
             if (View.IsDodging() || View.IsBlocking())
                 return;
+
+            if (!(attacker._data.GetParameter(ParametersType.AttackRate) <
+                  _data.GetParameter(ParametersType.AttackRate)) && !(_attackDelay > 0) && _attackers < 3) 
+                return;
             
-            if (attacker._data.GetParameter(ParametersType.AttackRate) <
-                _data.GetParameter(ParametersType.AttackRate) || _attackDelay > 0 || _attackers >= 3)
-            {
-                if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
-                    View.Dodge();
-                else if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
-                    View.Block();
-            }
+            if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
+                View.Dodge();
+            else if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
+                View.Block();
         }
 
         public void GetDamage(Damage dmg)
