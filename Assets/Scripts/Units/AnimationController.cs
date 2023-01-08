@@ -8,13 +8,12 @@ namespace Units
     public class AnimationController : MonoBehaviour
     {
         public AnimationControllerState State { get; private set; }
+        public float attackSpeed;
         public Transform AnimatorTransform => newAnimator.transform;
         public bool CanMove => State is not (AnimationControllerState.Damaging or AnimationControllerState.Dodging);
         public event Action OnHitBasic;
         
-        [SerializeField] private Animator oldAnimator;
         [SerializeField] private Animator newAnimator;
-        [SerializeField] private UnitAnimationEventCatcher oldCatcher;
         [SerializeField] private UnitAnimationEventCatcher newCatcher;
         [SerializeField] private IKController ik;
         [SerializeField] private Transform blockFront;
@@ -24,7 +23,7 @@ namespace Units
         private void Awake()
         {
             newCatcher.OnHitBasic += HitBasic;
-            oldCatcher.OnGetDamageComplete += GetDamageComplete;
+            newCatcher.OnGetDamageComplete += GetDamageComplete;
             newCatcher.OnAttackComplete += AttackComplete;
             newCatcher.OnDodgingComplete += DodgeComplete;
         }
@@ -35,6 +34,11 @@ namespace Units
                 ik.armsPos = blockFront;
             else
                 ik.armsPos = null;
+
+            if (State == AnimationControllerState.Attacking)
+                newAnimator.speed = attackSpeed;
+            else
+                newAnimator.speed = 1;
         }
 
         private void Start()
@@ -55,7 +59,7 @@ namespace Units
 
         public void PerformAttackAnimation(Action callback, float animationSpeed = 1f)
         {
-            if (!oldAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
+            if (!newAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
             {
                 callback?.Invoke();
                 return;
@@ -63,7 +67,7 @@ namespace Units
             
             _onCompleteAnimation = callback;
             newAnimator.SetTrigger("AttackBasic");
-            newAnimator.speed = animationSpeed;
+            attackSpeed = animationSpeed;
             State = AnimationControllerState.Attacking;
 
             StopAllCoroutines();
@@ -72,15 +76,14 @@ namespace Units
 
         public void PerformGetDamageAnimation(Action callback)
         {
-            if (!oldAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
+            if (!newAnimator.isActiveAndEnabled)
             {
                 callback?.Invoke();
                 return;
             }
             
             _onCompleteAnimation = callback;
-            oldAnimator.Play("GetDamage");
-            newAnimator.speed = 1;
+            newAnimator.Play("Get damage");
             State = AnimationControllerState.Damaging;
 
             StopAllCoroutines();
@@ -97,7 +100,6 @@ namespace Units
 
             _onCompleteAnimation = callback;
             newAnimator.SetTrigger("Dodge");
-            newAnimator.speed = 1;
             State = AnimationControllerState.Dodging;
 
             StopAllCoroutines();
@@ -106,20 +108,17 @@ namespace Units
 
         public void PerformBlockAnimation()
         {
-            if (!newAnimator.isActiveAndEnabled || State is AnimationControllerState.Attacking or AnimationControllerState.Damaging)
+            if (!newAnimator.isActiveAndEnabled || State != AnimationControllerState.Idle)
                 return;
             
             State = AnimationControllerState.Blocking;
             StopAllCoroutines();
-            StartCoroutine(Saver(5f));
+            StartCoroutine(Saver(1f));
         }
 
         public void PerformDyingAnimation()
         {
-            if (!oldAnimator.isActiveAndEnabled)
-                return;
             
-            oldAnimator.Play("Die");
         }
 
         /// <summary>
@@ -127,7 +126,7 @@ namespace Units
         /// </summary>
         public void PerformFightReadyAnimation()
         {
-            if (!oldAnimator.isActiveAndEnabled)
+            if (!newAnimator.isActiveAndEnabled)
                 return;
 
             newAnimator.SetLayerWeight(1, 1);
@@ -138,7 +137,7 @@ namespace Units
         /// </summary>
         public void PerformIdleAnimation()
         {
-            if (!oldAnimator.isActiveAndEnabled)
+            if (!newAnimator.isActiveAndEnabled)
                 return;
 
             newAnimator.SetLayerWeight(1, 0);
@@ -168,6 +167,7 @@ namespace Units
             _onCompleteAnimation?.Invoke();
             State = AnimationControllerState.Idle;
             StopAllCoroutines();
+            AnimatorTransform.localPosition = Vector3.zero;
         }
 
         IEnumerator Saver(float time)

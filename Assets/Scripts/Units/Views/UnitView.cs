@@ -95,11 +95,11 @@ namespace Units.Views
             var v = transform.worldToLocalMatrix * agent.velocity;
             anim.UpdateMovingAnimation(v);
 
-            if (anim.State == AnimationControllerState.Dodging)
-            {
+            // if (anim.State == AnimationControllerState.Dodging)
+            // {
                 agent.nextPosition = anim.AnimatorTransform.position;
                 anim.AnimatorTransform.localPosition = Vector3.zero;
-            }
+            // }
         }
 
         private void OnDisable()

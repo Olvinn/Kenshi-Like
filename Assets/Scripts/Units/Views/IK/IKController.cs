@@ -69,13 +69,13 @@ namespace Units.Views.IK
                 if (_armsWeight == 0)
                     return;
                 
-                _armsWeight -= Time.deltaTime * 5;
+                _armsWeight -= Time.deltaTime * 10;
             }
             else
             {
                 _armsPos = armsPos.position;
                 _armsRot = armsPos.rotation;
-                _armsWeight += Time.deltaTime * 2;
+                _armsWeight += Time.deltaTime * 5;
             }
             
             _armsWeight = Mathf.Clamp01(_armsWeight);
