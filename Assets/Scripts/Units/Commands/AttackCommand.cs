@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Units.Commands
 {
     public class AttackCommand : Command
@@ -60,16 +62,26 @@ namespace Units.Commands
             {
                 GetCloser();
             }
+
+            UpdatePosition();
         }
 
         private void GetCloser()
         {
-            CommandOwner.MoveTo(Target.View.transform, 2f);
+            CommandOwner.MoveTo(Target.View.transform, 3f);
         }
 
         private void Attack()
         {
             CommandOwner.Attack(Target);
+        }
+
+        private void UpdatePosition()
+        {
+            if (Vector3.Distance(Target.Position, CommandOwner.Position) < 2f)
+            {
+                CommandOwner.MoveTo(Target.Position + (CommandOwner.Position - Target.Position).normalized * 2.5f, 0.1f);
+            }
         }
 
         public override bool Equals(object obj)

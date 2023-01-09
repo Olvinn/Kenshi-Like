@@ -206,6 +206,7 @@ namespace Units.Views
         public void Select()
         {
             selection.SetActive(true);
+            // appearance.gameObject.layer = 9;
         }
 
         /// <summary>
@@ -214,6 +215,7 @@ namespace Units.Views
         public void Deselect()
         {
             selection.SetActive(false);
+            // appearance.gameObject.layer = 3;
         }
 
         /// <summary>
@@ -240,7 +242,8 @@ namespace Units.Views
         /// <returns></returns>
         public bool CanAttack(UnitView target)
         {
-            return Vector3.Distance(target.Position, Position) < 2f && anim.State == AnimationControllerState.Idle;
+            return Vector3.Distance(target.Position, Position) < 3f && 
+                   anim.State is AnimationControllerState.Idle or AnimationControllerState.Blocking;
         }
 
         public bool IsDodging()

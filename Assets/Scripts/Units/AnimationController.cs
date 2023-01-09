@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Units.Views.IK;
 using UnityEngine;
 
@@ -10,7 +9,7 @@ namespace Units
         public AnimationControllerState State { get; private set; }
         public float attackSpeed;
         public Transform AnimatorTransform => newAnimator.transform;
-        public bool CanMove => State is not (AnimationControllerState.Damaging or AnimationControllerState.Dodging);
+        public bool CanMove => State is not (AnimationControllerState.Damaging or AnimationControllerState.Dodging or AnimationControllerState.Attacking);
         public event Action OnHitBasic;
         
         [SerializeField] private Animator newAnimator;
@@ -19,6 +18,7 @@ namespace Units
         [SerializeField] private Transform blockFront;
 
         private Action _onCompleteAnimation;
+        private Vector3 _mov, _movGoal;
 
         private void Awake()
         {
@@ -30,15 +30,22 @@ namespace Units
 
         private void Update()
         {
-            if (State == AnimationControllerState.Blocking)
-                ik.armsPos = blockFront;
-            else
-                ik.armsPos = null;
-
-            if (State == AnimationControllerState.Attacking)
-                newAnimator.speed = attackSpeed;
-            else
-                newAnimator.speed = 1;
+            newAnimator.speed = 1;
+            ik.armsPos = null;
+            switch (State)
+            {
+                case AnimationControllerState.Blocking:
+                    ik.armsPos = blockFront;
+                    break;
+                case AnimationControllerState.Attacking:
+                    newAnimator.speed = attackSpeed;
+                    break;
+            }
+            
+            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * 10f);
+                
+            newAnimator.SetFloat("Speed", _mov.z);
+            newAnimator.SetFloat("Strafe", _mov.x);
         }
 
         private void Start()
@@ -52,14 +59,14 @@ namespace Units
             {
                 return;
             }
-                
-            newAnimator.SetFloat("Speed", mov.z);
-            newAnimator.SetFloat("Strafe", mov.x);
+
+            _movGoal = mov;
         }
 
         public void PerformAttackAnimation(Action callback, float animationSpeed = 1f)
         {
-            if (!newAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
+            if (!newAnimator.isActiveAndEnabled || 
+                State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
             {
                 callback?.Invoke();
                 return;
@@ -70,8 +77,8 @@ namespace Units
             attackSpeed = animationSpeed;
             State = AnimationControllerState.Attacking;
 
-            StopAllCoroutines();
-            StartCoroutine(Saver(3f));
+            // StopAllCoroutines();
+            // StartCoroutine(Saver(attackSpeed * 1.5f));
         }
 
         public void PerformGetDamageAnimation(Action callback)
@@ -86,13 +93,14 @@ namespace Units
             newAnimator.Play("Get damage");
             State = AnimationControllerState.Damaging;
 
-            StopAllCoroutines();
-            StartCoroutine(Saver(3f));
+            // StopAllCoroutines();
+            // StartCoroutine(Saver(1.5f));
         }
 
         public void PerformDodgeAnimation(Action callback)
         {
-            if (!newAnimator.isActiveAndEnabled || State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking))
+            if (!newAnimator.isActiveAndEnabled || 
+                State is not (AnimationControllerState.Idle or AnimationControllerState.Blocking or AnimationControllerState.Damaging))
             {
                 callback?.Invoke();
                 return;
@@ -102,8 +110,8 @@ namespace Units
             newAnimator.SetTrigger("Dodge");
             State = AnimationControllerState.Dodging;
 
-            StopAllCoroutines();
-            StartCoroutine(Saver(2f));
+            // StopAllCoroutines();
+            // StartCoroutine(Saver(2f));
         }
 
         public void PerformBlockAnimation()
@@ -112,8 +120,8 @@ namespace Units
                 return;
             
             State = AnimationControllerState.Blocking;
-            StopAllCoroutines();
-            StartCoroutine(Saver(1f));
+            // StopAllCoroutines();
+            // StartCoroutine(Saver(1f));
         }
 
         public void PerformDyingAnimation()
@@ -151,32 +159,36 @@ namespace Units
         private void AttackComplete()
         {
             _onCompleteAnimation?.Invoke();
-            State = AnimationControllerState.Idle;
-            StopAllCoroutines();
+            if (State == AnimationControllerState.Attacking)
+                State = AnimationControllerState.Idle;
+            // StopAllCoroutines();
         }
 
         private void GetDamageComplete()
         {
             _onCompleteAnimation?.Invoke();
-            State = AnimationControllerState.Idle;
-            StopAllCoroutines();
+            if (State == AnimationControllerState.Damaging)
+                State = AnimationControllerState.Idle;
+            // StopAllCoroutines();
         }
 
         private void DodgeComplete()
         {
             _onCompleteAnimation?.Invoke();
-            State = AnimationControllerState.Idle;
+            if (State == AnimationControllerState.Dodging)
+                State = AnimationControllerState.Idle;
             StopAllCoroutines();
             AnimatorTransform.localPosition = Vector3.zero;
         }
+        
 
-        IEnumerator Saver(float time)
-        {
-            yield return new WaitForSeconds(time);
-            _onCompleteAnimation?.Invoke();
-            _onCompleteAnimation = null;
-            State = AnimationControllerState.Idle;
-        }
+        // IEnumerator Saver(float time)
+        // {
+        //     yield return new WaitForSeconds(time);
+        //     _onCompleteAnimation?.Invoke();
+        //     _onCompleteAnimation = null;
+        //     State = AnimationControllerState.Idle;
+        // }
     }
 
     public enum AnimationControllerState

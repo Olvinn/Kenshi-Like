@@ -28,8 +28,10 @@ namespace Units.Commands
                 return;
             
             base.Update();
-            if (CommandOwner.View.MovementStatus == MovementStatus.Waiting)
+            if (CommandOwner.View.MovementStatus == MovementStatus.Waiting && Vector3.Distance(CommandOwner.Position, _pos) < 2f)
                 Done();
+            else
+                CommandOwner.MoveTo(_pos, 1f);
         }
         
         public override bool Equals(object obj)

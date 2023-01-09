@@ -86,6 +86,17 @@ namespace Units
             OnDie?.Invoke(this);
         }
 
+        public void PrepareForGetDamage()
+        {
+            if (View.IsDodging() || View.IsBlocking())
+                return;
+
+            if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
+                View.Dodge();
+            else if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
+                View.Block();
+        }
+
         public void GetDamage(Damage dmg)
         {
             if (IsDead)
@@ -93,11 +104,6 @@ namespace Units
             
             if (dmg.source == this || dmg.source.Team == Team)
                 return;
-            
-            if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
-                View.Block();
-            else if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
-                View.Dodge();
             
             if (!View.IsDodging() && !View.IsBlocking())
             {
@@ -129,6 +135,7 @@ namespace Units
             _attackDelay = _data.GetParameter(ParametersType.AttackDelay);
             View.RotateOn(target.View);
             View.Attack(_data.GetParameter(ParametersType.AttackRate));
+            target.PrepareForGetDamage();
         }
         
         public void MoveTo(Transform destination, float stopDistance)
