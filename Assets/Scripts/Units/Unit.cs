@@ -76,6 +76,17 @@ namespace Units
             if (_commands.Count > 0 && !_isExecutingCommands)
                 ExecuteCommands();
 
+            if (View.GroundType == GroundType.Water)
+            {
+                View.SetMaxSpeed(2f);
+                View.Swim();
+            }
+            else
+            {
+                View.SetMaxSpeed(_data.GetParameter(ParametersType.Speed));
+                View.Run();
+            }
+
             _savedTime = Time.time;
         }
 
@@ -114,7 +125,7 @@ namespace Units
             }
             else if (View.IsBlocking())
             {
-                View.SuccesfullBlock();
+                View.SuccessfulBlock();
             }
 
             if (_currentCommand == null || _currentCommand.Type == CommandType.Attack)

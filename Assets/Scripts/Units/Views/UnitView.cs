@@ -18,6 +18,7 @@ namespace Units.Views
         public Vector3 Position { get; private set; }
         public UnitView Target;
         public Action<List<UnitView>> OnHit;
+        public GroundType GroundType { get; private set; }
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
         
@@ -45,7 +46,7 @@ namespace Units.Views
             anim.OnHitBasic += HitBasic;
         }
 
-        public void Update()
+        private void Update()
         {
             if (!agent.enabled)
                 return;
@@ -90,16 +91,26 @@ namespace Units.Views
                 dir.y = 0;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),Time.deltaTime * 120);
             }
+            
+            //Detecting ground type
+            Ray ray = new Ray(Position, Vector3.down);
+            RaycastHit[] hit = Physics.RaycastAll(ray, 2f, 1 | (1 << 4));
+            if (hit.Length == 1 && hit[0].collider.gameObject.layer == 4)
+            {
+                GroundType = GroundType.Water;
+            }
+            else
+            {
+                GroundType = GroundType.Ground;
+            }
+            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 1.5f);
 
             //Update animations
             var v = transform.worldToLocalMatrix * agent.velocity;
             anim.UpdateMovingAnimation(v);
 
-            // if (anim.State == AnimationControllerState.Dodging)
-            // {
-                agent.nextPosition = anim.AnimatorTransform.position;
-                anim.AnimatorTransform.localPosition = Vector3.zero;
-            // }
+            agent.nextPosition = anim.AnimatorTransform.position;
+            anim.AnimatorTransform.localPosition = Vector3.zero;
         }
 
         private void OnDisable()
@@ -246,11 +257,19 @@ namespace Units.Views
                    anim.State is AnimationControllerState.Idle or AnimationControllerState.Blocking;
         }
 
+        /// <summary>
+        /// Checking animation state
+        /// </summary>
+        /// <returns></returns>
         public bool IsDodging()
         {
             return anim.State == AnimationControllerState.Dodging;
         }
-
+        
+        /// <summary>
+        /// Checking animation state
+        /// </summary>
+        /// <returns></returns>
         public bool IsBlocking()
         {
             return anim.State == AnimationControllerState.Blocking;
@@ -266,6 +285,9 @@ namespace Units.Views
             anim.PerformAttackAnimation(null, attackRate);
         }
 
+        /// <summary>
+        /// Play animation blocking hits
+        /// </summary>
         public void Block()
         {
             anim.PerformBlockAnimation();
@@ -291,6 +313,9 @@ namespace Units.Views
             leak.Play();
         }
 
+        /// <summary>
+        /// Play dodging animation
+        /// </summary>
         public void Dodge()
         {
             anim.PerformDodgeAnimation(null);
@@ -306,14 +331,32 @@ namespace Units.Views
             this.Target = target;
         }
 
-        public void SetPosition(Vector3 pos)
+        /// <summary>
+        /// Teleports View on selected position
+        /// </summary>
+        /// <param name="pos"></param>
+        public void Warp(Vector3 pos)
         {
             agent.Warp(pos);
         }
 
-        public void SuccesfullBlock()
+        /// <summary>
+        /// Indicates of successful hit block
+        /// Plays special effects and animations
+        /// </summary>
+        public void SuccessfulBlock()
         {
             sparks.Play();
+        }
+
+        public void Swim()
+        {
+            anim.Swim();
+        }
+
+        public void Run()
+        {
+            anim.Run();
         }
 
         private void HitBasic()
@@ -326,5 +369,11 @@ namespace Units.Views
     {
         Waiting,
         Moving,
+    }
+
+    public enum GroundType
+    {
+        Ground,
+        Water
     }
 }

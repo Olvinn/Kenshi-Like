@@ -567,6 +567,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6973484766409984878}
     m_Modifications:
+    - target: {fileID: 1385737906680420376, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
+      propertyPath: pelvis
+      value: 
+      objectReference: {fileID: 6973484766409984878}
     - target: {fileID: 1592449354278565449, guid: 6079f31114b54f9479b44b47433856b1, type: 3}
       propertyPath: m_Name
       value: guy

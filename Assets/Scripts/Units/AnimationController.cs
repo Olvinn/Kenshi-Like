@@ -32,6 +32,7 @@ namespace Units
         {
             newAnimator.speed = 1;
             ik.armsPos = null;
+            ik.legsIKOn = true;
             switch (State)
             {
                 case AnimationControllerState.Blocking:
@@ -39,6 +40,9 @@ namespace Units
                     break;
                 case AnimationControllerState.Attacking:
                     newAnimator.speed = attackSpeed;
+                    break;
+                case AnimationControllerState.Swimming:
+                    ik.legsIKOn = false;
                     break;
             }
             
@@ -61,6 +65,19 @@ namespace Units
             }
 
             _movGoal = mov;
+        }
+
+        public void Run()
+        {
+            newAnimator.SetLayerWeight(2, 0);
+            if (State == AnimationControllerState.Swimming)
+                State = AnimationControllerState.Idle;
+        }
+
+        public void Swim()
+        {
+            newAnimator.SetLayerWeight(2, 1);
+            State = AnimationControllerState.Swimming;
         }
 
         public void PerformAttackAnimation(Action callback, float animationSpeed = 1f)
@@ -197,6 +214,7 @@ namespace Units
         Attacking,
         Damaging,
         Dodging,
-        Blocking
+        Blocking,
+        Swimming
     }
 }

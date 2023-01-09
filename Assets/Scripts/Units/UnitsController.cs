@@ -34,6 +34,8 @@ public class UnitsController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_units.Count == 0)
+            return;
         for (int i = 0; i < 25; i++)
         {
             _units[(i + _j) % _units.Count].Update();
@@ -64,7 +66,7 @@ public class UnitsController : MonoBehaviour
         Ray ray = new Ray(pos + Vector3.up * 1000, Vector3.down);
         if (Physics.Raycast(ray, out hit, 2000f, spawnMask))
         {
-            view.SetPosition(hit.point + Vector3.up);
+            view.Warp(hit.point + Vector3.up);
         }
         
         unit.InjectView(view);

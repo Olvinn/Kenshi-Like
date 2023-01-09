@@ -7,10 +7,11 @@ namespace Units.Views.IK
         public Transform target;
         public float transitionSpeed = 2f;
         public Transform armsPos;
+        public bool legsIKOn = true;
         
         [SerializeField] private Animator animator;
         [SerializeField] private UnitAppearance appearance;
-
+        [SerializeField] private Transform pelvis;
 
         private bool _isVisible;
         private Vector3 _lookPos, _armsPos;
@@ -31,6 +32,7 @@ namespace Units.Views.IK
             
             HeadIK();
             ArmsIK();
+            LegsIK();
         }
 
         private void OnBecameInvisible()
@@ -89,6 +91,52 @@ namespace Units.Views.IK
             animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, _armsWeight);
             animator.SetIKPosition(AvatarIKGoal.LeftHand, _armsPos);
             animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.Euler(180,180,180) * _armsRot);
+        }
+
+        private void LegsIK()
+        {
+            pelvis.localPosition = Vector3.down;
+            
+            if (!legsIKOn)
+                return;
+            
+            float l = LegIK(AvatarIKGoal.LeftFoot);
+            float r = LegIK(AvatarIKGoal.RightFoot);
+            r = r < l ? l : r;
+            pelvis.localPosition = Vector3.down + Vector3.down * r;
+        }
+
+        private float LegIK(AvatarIKGoal foot)
+        {
+            float diff = 0;
+            float weight = 0;
+            RaycastHit hit;
+            Vector3 animPos = Vector3.zero;
+            Quaternion animRot = animator.GetIKRotation(foot);
+            switch (foot)
+            {
+                case AvatarIKGoal.LeftFoot:
+                    animPos = animator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+                    break;
+                case AvatarIKGoal.RightFoot:
+                    animPos = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+                    break;
+            }
+            Ray ray = new Ray(animPos + Vector3.up * .5f, Vector3.down);
+            if (Physics.Raycast(ray, out hit, 2f, 1))
+            {
+                animPos -= transform.position;
+                weight = 1 - ((animPos.y - .1f) * 10f);
+                weight = Mathf.Clamp01(weight);
+                animRot = Quaternion.FromToRotation(Vector3.up, hit.normal) * animRot;
+                animPos = hit.point + Vector3.up * .1f;
+                diff = transform.position.y - animPos.y;
+            }
+            animator.SetIKPositionWeight(foot, weight);
+            animator.SetIKRotationWeight(foot, weight * .5f);
+            animator.SetIKPosition(foot, animPos);
+            animator.SetIKRotation(foot, animRot);
+            return diff;
         }
     }
 }
