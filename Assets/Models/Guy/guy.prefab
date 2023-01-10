@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 4292130647513824277}
   - component: {fileID: 6860960941896826511}
   - component: {fileID: 1227448012679267094}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -910,8 +910,10 @@ MonoBehaviour:
   target: {fileID: 0}
   transitionSpeed: 2
   armsPos: {fileID: 0}
+  legsIKOn: 1
   animator: {fileID: 5454554281608705673}
   appearance: {fileID: 1462648697920959424}
+  pelvis: {fileID: 0}
 --- !u!114 &3272484143947897206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2261,7 +2263,7 @@ GameObject:
   - component: {fileID: 3600815608067877449}
   - component: {fileID: 635241410663696524}
   - component: {fileID: 8170628747370629321}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plank (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2660,7 +2662,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5411999305165248526}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4194,6 +4196,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BloodSplash
       objectReference: {fileID: 0}
+    - target: {fileID: 8062600210171915379, guid: 8198fbee5c8dff84eb0c38f61240ab9a, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8198fbee5c8dff84eb0c38f61240ab9a, type: 3}
 --- !u!4 &2319612091208233009 stripped
@@ -4211,6 +4217,10 @@ PrefabInstance:
     - target: {fileID: 432046635393231944, guid: 854d379b13825f448bbba4cea74d06f5, type: 3}
       propertyPath: m_Name
       value: BloodLeak
+      objectReference: {fileID: 0}
+    - target: {fileID: 432046635393231944, guid: 854d379b13825f448bbba4cea74d06f5, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 432046635393231947, guid: 854d379b13825f448bbba4cea74d06f5, type: 3}
       propertyPath: m_RootOrder
@@ -4274,21 +4284,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: MetalImpact
       objectReference: {fileID: 0}
+    - target: {fileID: 7560354658217909989, guid: 38d9e59ca1fac6141a0eeb4e3655cc01, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7560354658217909990, guid: 38d9e59ca1fac6141a0eeb4e3655cc01, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7560354658217909990, guid: 38d9e59ca1fac6141a0eeb4e3655cc01, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7560354658217909990, guid: 38d9e59ca1fac6141a0eeb4e3655cc01, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7560354658217909990, guid: 38d9e59ca1fac6141a0eeb4e3655cc01, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 7560354658217909990, guid: 38d9e59ca1fac6141a0eeb4e3655cc01, type: 3}
       propertyPath: m_LocalRotation.w

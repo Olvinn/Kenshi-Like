@@ -53,6 +53,7 @@ public class UnitsController : MonoBehaviour
     public void CreateAIUnit(Character data, Vector3 pos)
     {
         data = ScriptableObject.Instantiate(data);
+        data.appearance = Appearance.GetRandomAppearance();
         var unit = CreateUnit(data, pos);
         bot.AddUnit(unit);
     }

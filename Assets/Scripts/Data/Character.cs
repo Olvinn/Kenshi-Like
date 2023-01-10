@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Data
 {
@@ -7,22 +8,10 @@ namespace Data
     public class Character : ScriptableObject
     {
         [Header("Attributes")]
-        [SerializeField] public Parameters parameters;
+        public Parameters parameters;
 
         [Header("Appearance")] 
-        [SerializeField] private Color skinColor;
-        [SerializeField] private Color eyesColor;
-        [SerializeField] private Color hairColor;
-        [SerializeField] private Color mustacheColor;
-        [SerializeField] private Color beardColor;
-        [SerializeField] private Color underwearColor;
-        [SerializeField] private Color shirtColor;
-        [SerializeField] private Color turtleneckColor;
-        [SerializeField] private Color pantsColor;
-        [SerializeField] private Color shoesColor;
-        [SerializeField] private Color bootsColor;
-        [SerializeField] private Color glovesColor;
-        [SerializeField] private Color fingersColor;
+        public Appearance appearance;
 
         public float GetParameter(ParametersType type)
         {
@@ -31,37 +20,7 @@ namespace Data
 
         public Color GetColor(UnitColorType type)
         {
-            switch (type)
-            {
-                case UnitColorType.Skin:
-                    return skinColor;
-                case UnitColorType.Eyes:
-                    return eyesColor;
-                case UnitColorType.Hair:
-                    return hairColor;
-                case UnitColorType.Mustache:
-                    return mustacheColor;
-                case UnitColorType.Beard:
-                    return beardColor;
-                case UnitColorType.Underwear:
-                    return underwearColor;
-                case UnitColorType.Shirt:
-                    return shirtColor;
-                case UnitColorType.Turtleneck:
-                    return turtleneckColor;
-                case UnitColorType.Pants:
-                    return pantsColor;
-                case UnitColorType.Shoes:
-                    return shoesColor;
-                case UnitColorType.Boots:
-                    return bootsColor;
-                case UnitColorType.Gloves:
-                    return glovesColor;
-                case UnitColorType.Fingers:
-                    return fingersColor;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            return appearance.GetColor(type);
         }
     }
 
@@ -122,6 +81,145 @@ namespace Data
                     return chanceToDodge;
                 case ParametersType.BlockChance:
                     return chanceToBlock;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+    }
+
+    [Serializable]
+    public struct Appearance
+    {
+        [SerializeField] private Color skinColor;
+        [SerializeField] private Color eyesColor;
+        [SerializeField] private Color hairColor;
+        [SerializeField] private Color mustacheColor;
+        [SerializeField] private Color beardColor;
+        [SerializeField] private Color underwearColor;
+        [SerializeField] private Color shirtColor;
+        [SerializeField] private Color turtleneckColor;
+        [SerializeField] private Color pantsColor;
+        [SerializeField] private Color shoesColor;
+        [SerializeField] private Color bootsColor;
+        [SerializeField] private Color glovesColor;
+        [SerializeField] private Color fingersColor;
+        
+        public static Appearance GetRandomAppearance()
+        {
+            Appearance result = new Appearance();
+
+            result.skinColor = ColorsPresets.instance.GetRandomSkinColor();
+
+            switch (Random.Range(0, 3)) //torso
+            {
+                case 0: //naked torso
+                    result.shirtColor = result.skinColor;
+                    result.turtleneckColor = result.skinColor;
+                    break;
+                case 1: //shirt
+                    result.shirtColor = ColorsPresets.instance.GetRandomClothesColor();
+                    result.turtleneckColor = result.turtleneckColor;
+                    break;
+                case 2: //turtleneck
+                    result.shirtColor = ColorsPresets.instance.GetRandomClothesColor();
+                    result.turtleneckColor = result.shirtColor;
+                    break;
+            }
+
+            switch (Random.Range(0, 2)) //legs
+            {
+                case 0: //only underwear
+                    result.underwearColor = ColorsPresets.instance.GetRandomClothesColor();
+                    result.pantsColor = result.skinColor;
+                    break;
+                case 1: //pants
+                    result.underwearColor = ColorsPresets.instance.GetRandomClothesColor();
+                    result.pantsColor = result.underwearColor;
+                    break;
+            }
+
+            switch (Random.Range(0, 3)) //feet
+            {
+                case 0: //no shoes
+                    result.bootsColor = result.skinColor;
+                    result.shoesColor = result.skinColor;
+                    break;
+                case 1: //shoes 
+                    result.bootsColor = result.pantsColor;
+                    result.shoesColor = ColorsPresets.instance.GetRandomBootsColor();
+                    break;
+                case 3: //boots
+                    result.bootsColor = ColorsPresets.instance.GetRandomBootsColor();
+                    result.shoesColor = result.bootsColor;
+                    break;
+            }
+
+            switch (Random.Range(0,3)) //arms
+            {
+                case 0: //no gloves
+                    result.glovesColor = result.skinColor;
+                    result.fingersColor = result.skinColor;
+                    break;
+                case 1: //short gloves 
+                    result.glovesColor = ColorsPresets.instance.GetRandomClothesColor();
+                    result.fingersColor = result.skinColor;
+                    break;
+                case 3: //gloves
+                    result.glovesColor = ColorsPresets.instance.GetRandomClothesColor();
+                    result.fingersColor = result.glovesColor;
+                    break;
+            }
+            
+            if (Random.Range(0,2) == 0)
+                result.hairColor = result.skinColor;
+            else
+                result.hairColor = ColorsPresets.instance.GetRandomHairColor();
+            
+            if (Random.Range(0,2) == 0)
+                result.mustacheColor = result.skinColor;
+            else
+                result.mustacheColor = result.hairColor;
+            
+            if (Random.Range(0,2) == 0)
+                result.beardColor = result.skinColor;
+            else
+                result.beardColor = result.hairColor;
+            
+            result.eyesColor = Color.white;
+            
+            return result;
+        }
+
+        public Color GetColor(UnitColorType type)
+        {
+            switch (type)
+            {
+                case UnitColorType.Skin:
+                    return skinColor;
+                case UnitColorType.Eyes:
+                    return eyesColor;
+                case UnitColorType.Hair:
+                    return hairColor;
+                case UnitColorType.Mustache:
+                    return mustacheColor;
+                case UnitColorType.Beard:
+                    return beardColor;
+                case UnitColorType.Underwear:
+                    return underwearColor;
+                case UnitColorType.Shirt:
+                    return shirtColor;
+                case UnitColorType.Turtleneck:
+                    return turtleneckColor;
+                case UnitColorType.Pants:
+                    return pantsColor;
+                case UnitColorType.Shoes:
+                    return shoesColor;
+                case UnitColorType.Boots:
+                    return bootsColor;
+                case UnitColorType.Gloves:
+                    return glovesColor;
+                case UnitColorType.Fingers:
+                    return fingersColor;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

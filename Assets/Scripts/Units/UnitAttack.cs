@@ -12,7 +12,7 @@ namespace Units
         
         public List<UnitView> GetUnitViewsFromBasicAttack()
         {
-            return front.views;
+            return front.Views;
         }
 
         public void OnDisable()

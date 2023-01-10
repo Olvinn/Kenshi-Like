@@ -1,15 +1,15 @@
 using System.Collections.Generic;
+using System.Linq;
 using Units.Views;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Units.Weapons
 {
     public class TriggerDetector : MonoBehaviour
     {
-        public List<UnitView> views
-        {
-            get { return new List<UnitView>(_views.ToArray()); }
-        }
+        public List<UnitView> Views => _views.ToList();
+        [FormerlySerializedAs("collider")] [SerializeField] private Collider col;
         private List<UnitView> _views;
 
         private void Awake()
@@ -55,6 +55,16 @@ namespace Units.Weapons
                     unit.OnDie -= RemoveUnit;
                 } 
             }
+        }
+
+        private void OnEnable()
+        {
+            col.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            col.enabled = false;
         }
     }
 }

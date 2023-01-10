@@ -14,7 +14,7 @@ namespace Units.Views
     public class UnitView : MonoBehaviour
     {
         public Unit Model { get; private set; }
-        public List<UnitView> Sensed => sense.views;
+        public List<UnitView> Sensed => sense.Views;
         public Vector3 Position { get; private set; }
         public UnitView Target;
         public Action<List<UnitView>> OnHit;
@@ -35,6 +35,7 @@ namespace Units.Views
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
         private float _stopDistance;
+        private float _cameraDistance;
 
         private void Awake()
         {
@@ -53,6 +54,7 @@ namespace Units.Views
 
             //Processing moving logic
             Position = transform.position;
+            _cameraDistance = Vector3.Distance(Camera.main.transform.position, Position);
             
             bool stay = false;
             if (anim.CanMove && !agent.pathPending && MovementStatus == MovementStatus.Moving)
@@ -93,6 +95,11 @@ namespace Units.Views
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),
                     Time.deltaTime * Constants.instance.AgentsAngularSpeed);
             }
+
+            if (anim.State == AnimationControllerState.Attacking)
+                attack.enabled = true;
+            else
+                attack.enabled = false;
             
             //Detecting ground type
             Ray ray = new Ray(Position, Vector3.down);
@@ -112,6 +119,15 @@ namespace Units.Views
 
             agent.nextPosition = anim.AnimatorTransform.position;
             anim.AnimatorTransform.localPosition = Vector3.zero;
+
+            if (_cameraDistance < Constants.instance.CameraDistanceCulling)
+            {
+                ik.enabled = true;
+            }
+            else
+            {
+                ik.enabled = false;
+            }
         }
 
         private void OnDisable()
@@ -142,6 +158,7 @@ namespace Units.Views
         {
             if (!Constants.instance.DebugGizmos)
                 return;
+            
             GUI.color = Color.black;
             GUI.backgroundColor = Color.white;
             if (Model != null)
@@ -312,8 +329,11 @@ namespace Units.Views
         public void GetDamage()
         {
             anim.PerformGetDamageAnimation(null);
-            splash.Play();
-            leak.Play();
+            if (_cameraDistance < Constants.instance.CameraDistanceCulling)
+            {
+                splash.Play();
+                leak.Play();
+            }
         }
 
         /// <summary>
@@ -349,7 +369,8 @@ namespace Units.Views
         /// </summary>
         public void SuccessfulBlock()
         {
-            sparks.Play();
+            if (_cameraDistance < Constants.instance.CameraDistanceCulling)
+                sparks.Play();
         }
 
         public void Swim()

@@ -61,7 +61,7 @@ namespace Cameras
         {
             _pos = pos;
             _pos.y = 0;
-            _pos.x = Mathf.Clamp(_pos.x, center.x - size.x, center.x + size.x);
+            ClampPos();
         }
 
         public void SetScroll(float scroll)
@@ -70,12 +70,18 @@ namespace Cameras
             _scroll = Mathf.Clamp(_scroll, 2, 80);
         }
 
+        private void ClampPos()
+        {
+            _pos.x = Mathf.Clamp(_pos.x, center.x - size.x + .1f, center.x + size.x - .1f);
+            _pos.z = Mathf.Clamp(_pos.z, center.z - size.z + .1f, center.z + size.z - .1f);
+        }
+
         private void MoveCamera(Vector2 mov)
         {
             mov.Normalize();
             mov *= Time.unscaledDeltaTime * speed * _scroll * .1f;
             _pos += (Vector3)(camera.transform.localToWorldMatrix * new Vector3(mov.x, 0, mov.y));
-            _pos.x = Mathf.Clamp(_pos.x, center.x - size.x, center.x + size.x);
+            ClampPos();
         }
 
         private void ScrollCamera(float delta)

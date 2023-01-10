@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e51e3d3b48ea8f4b95bd0305fe83b95, type: 3}
+  m_Name: DebugConstantPreset
+  m_EditorClassIdentifier: 
+  <DebugLog>k__BackingField: 1
+  <DebugGizmos>k__BackingField: 1
+  <AgentsAngularSpeed>k__BackingField: 120
+  <DetectingGroundRayLength>k__BackingField: 2
+  <DetectingGroundLayerMask>k__BackingField:
+    serializedVersion: 2
+    m_Bits: 17
+  <LegsIKRayLength>k__BackingField: 10
+  <LegsIKRayCastHeight>k__BackingField: 5
+  <AttackDistance>k__BackingField: 3
+  <AnimationLerpSpeed>k__BackingField: 10
+  <AnimationLayerTransitionSpeed>k__BackingField: 5
+  <RayCastHeight>k__BackingField: 1000
+  <RayLength>k__BackingField: 1500
+  <CameraCenterHeight>k__BackingField: 1
+  <MovingStopDistance>k__BackingField: 2
+  <AttackMinDistanceKeeping>k__BackingField: 2
+  <AttackMaxDistanceKeeping>k__BackingField: 2.5

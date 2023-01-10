@@ -32,9 +32,15 @@ namespace Units
 
         private void Update()
         {
+            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * Constants.instance.AnimationLerpSpeed);
+                
+            newAnimator.SetFloat("Speed", _mov.z);
+            newAnimator.SetFloat("Strafe", _mov.x);
+            
             newAnimator.speed = 1;
             ik.armsPos = null;
             ik.legsIKOn = true;
+            
             switch (State)
             {
                 case AnimationControllerState.Blocking:
@@ -55,11 +61,6 @@ namespace Units
             }
             _swimmingLayerWeight = Mathf.Clamp01(_swimmingLayerWeight);
             newAnimator.SetLayerWeight(2, _swimmingLayerWeight);
-            
-            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * Constants.instance.AnimationLerpSpeed);
-                
-            newAnimator.SetFloat("Speed", _mov.z);
-            newAnimator.SetFloat("Strafe", _mov.x);
         }
 
         private void Start()
