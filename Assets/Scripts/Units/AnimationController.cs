@@ -1,4 +1,5 @@
 using System;
+using Data;
 using Units.Views.IK;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ namespace Units
 
         private Action _onCompleteAnimation;
         private Vector3 _mov, _movGoal;
+        private float _swimmingLayerWeight;
 
         private void Awake()
         {
@@ -37,16 +39,24 @@ namespace Units
             {
                 case AnimationControllerState.Blocking:
                     ik.armsPos = blockFront;
+                    _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
                     break;
                 case AnimationControllerState.Attacking:
                     newAnimator.speed = attackSpeed;
+                    _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
                     break;
                 case AnimationControllerState.Swimming:
                     ik.legsIKOn = false;
+                    _swimmingLayerWeight += Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
+                    break;
+                default:
+                    _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
                     break;
             }
+            _swimmingLayerWeight = Mathf.Clamp01(_swimmingLayerWeight);
+            newAnimator.SetLayerWeight(2, _swimmingLayerWeight);
             
-            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * 10f);
+            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * Constants.instance.AnimationLerpSpeed);
                 
             newAnimator.SetFloat("Speed", _mov.z);
             newAnimator.SetFloat("Strafe", _mov.x);
@@ -69,14 +79,12 @@ namespace Units
 
         public void Run()
         {
-            newAnimator.SetLayerWeight(2, 0);
             if (State == AnimationControllerState.Swimming)
                 State = AnimationControllerState.Idle;
         }
 
         public void Swim()
         {
-            newAnimator.SetLayerWeight(2, 1);
             State = AnimationControllerState.Swimming;
         }
 

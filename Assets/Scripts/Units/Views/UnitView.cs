@@ -78,7 +78,8 @@ namespace Units.Views
             {
                 Vector3 dir = Target.transform.position - Position;
                 dir.y = 0;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),Time.deltaTime * 120);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),
+                    Time.deltaTime * Constants.instance.AgentsAngularSpeed);
                 ik.target = Target.transform;
 
                 if (Target.Model.IsDead)
@@ -89,12 +90,13 @@ namespace Units.Views
                 ik.target = null;
                 Vector3 dir = agent.velocity;
                 dir.y = 0;
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),Time.deltaTime * 120);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),
+                    Time.deltaTime * Constants.instance.AgentsAngularSpeed);
             }
             
             //Detecting ground type
             Ray ray = new Ray(Position, Vector3.down);
-            RaycastHit[] hit = Physics.RaycastAll(ray, 2f, 1 | (1 << 4));
+            RaycastHit[] hit = Physics.RaycastAll(ray, Constants.instance.DetectingGroundRayLength, Constants.instance.DetectingGroundLayerMask);
             if (hit.Length == 1 && hit[0].collider.gameObject.layer == 4)
             {
                 GroundType = GroundType.Water;
@@ -103,7 +105,6 @@ namespace Units.Views
             {
                 GroundType = GroundType.Ground;
             }
-            Debug.DrawLine(ray.origin, ray.origin + ray.direction * 1.5f);
 
             //Update animations
             var v = transform.worldToLocalMatrix * agent.velocity;
@@ -139,6 +140,8 @@ namespace Units.Views
 
         private void OnDrawGizmos()
         {
+            if (!Constants.instance.DebugGizmos)
+                return;
             GUI.color = Color.black;
             GUI.backgroundColor = Color.white;
             if (Model != null)
@@ -253,7 +256,7 @@ namespace Units.Views
         /// <returns></returns>
         public bool CanAttack(UnitView target)
         {
-            return Vector3.Distance(target.Position, Position) < 3f && 
+            return Vector3.Distance(target.Position, Position) < Constants.instance.AttackDistance && 
                    anim.State is AnimationControllerState.Idle or AnimationControllerState.Blocking;
         }
 

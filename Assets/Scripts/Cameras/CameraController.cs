@@ -1,3 +1,4 @@
+using Data;
 using Inputs;
 using UnityEngine;
 
@@ -37,9 +38,9 @@ namespace Cameras
             _pos.y = 0;
             
             RaycastHit hit;
-            Ray ray = new Ray(_pos + Vector3.up * 1000, Vector3.down);
-            if (Physics.Raycast(ray, out hit, 1500, raycastMask))
-                _center = hit.point + Vector3.up * 1.5f;
+            Ray ray = new Ray(_pos + Vector3.up * Constants.instance.RayCastHeight, Vector3.down);
+            if (Physics.Raycast(ray, out hit, Constants.instance.RayLength, raycastMask))
+                _center = hit.point + Vector3.up * Constants.instance.CameraCenterHeight;
             else
                 _center = _pos;
             
@@ -48,7 +49,7 @@ namespace Cameras
             ray = new Ray(_center, _camPos - _center);
             if (Physics.SphereCast(ray, camera.nearClipPlane + .1f, out hit, _scroll, raycastMask))
             {
-                float dist = Vector3.Distance(_center, hit.point) - 1;
+                float dist = Vector3.Distance(_center, hit.point) * .9f;
                 _camPos = _center + ray.direction * dist;
             }
 

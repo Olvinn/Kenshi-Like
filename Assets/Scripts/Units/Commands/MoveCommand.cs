@@ -1,3 +1,4 @@
+using Data;
 using Units.Views;
 using UnityEngine;
 
@@ -28,10 +29,11 @@ namespace Units.Commands
                 return;
             
             base.Update();
-            if (CommandOwner.View.MovementStatus == MovementStatus.Waiting && Vector3.Distance(CommandOwner.Position, _pos) < 2f)
+            if (CommandOwner.View.MovementStatus == MovementStatus.Waiting && 
+                Vector3.Distance(CommandOwner.Position, _pos) < Constants.instance.MovingStopDistance)
                 Done();
             else
-                CommandOwner.MoveTo(_pos, 1f);
+                CommandOwner.MoveTo(_pos, Constants.instance.MovingStopDistance);
         }
         
         public override bool Equals(object obj)

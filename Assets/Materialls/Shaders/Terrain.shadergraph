@@ -3064,9 +3064,9 @@
             "a": 0.0
         },
         "ctime0": 0,
-        "ctime1": 950,
-        "ctime2": 1628,
-        "ctime3": 4545,
+        "ctime1": 543,
+        "ctime2": 2714,
+        "ctime3": 6852,
         "ctime4": 12347,
         "ctime5": 18046,
         "ctime6": 40094,
@@ -4021,7 +4021,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Scale",
     "m_StageCapability": 3,
-    "m_Value": 100.0,
+    "m_Value": 20.0,
     "m_DefaultValue": 10.0,
     "m_Labels": []
 }
@@ -4085,7 +4085,7 @@
     "m_ShaderOutputName": "B",
     "m_StageCapability": 3,
     "m_Value": {
-        "e00": 0.009999999776482582,
+        "e00": 0.05000000074505806,
         "e01": 2.0,
         "e02": 2.0,
         "e03": 2.0,
@@ -4972,7 +4972,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Scale",
     "m_StageCapability": 3,
-    "m_Value": 500.0,
+    "m_Value": 150.0,
     "m_DefaultValue": 10.0,
     "m_Labels": []
 }

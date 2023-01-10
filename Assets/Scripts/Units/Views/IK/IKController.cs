@@ -1,3 +1,4 @@
+using Data;
 using UnityEngine;
 
 namespace Units.Views.IK
@@ -122,8 +123,8 @@ namespace Units.Views.IK
                     animPos = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
                     break;
             }
-            Ray ray = new Ray(animPos + Vector3.up * .5f, Vector3.down);
-            if (Physics.Raycast(ray, out hit, 2f, 1))
+            Ray ray = new Ray(animPos + Vector3.up * Constants.instance.LegsIKRayCastHeight, Vector3.down);
+            if (Physics.Raycast(ray, out hit, Constants.instance.LegsIKRayLength, 1))
             {
                 animPos -= transform.position;
                 weight = 1 - ((animPos.y - .1f) * 10f);

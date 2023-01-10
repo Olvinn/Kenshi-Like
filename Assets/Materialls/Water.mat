@@ -80,7 +80,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.2
+    - _Alpha: 0.5
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -101,7 +101,7 @@ Material:
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _PatternPower: 5.98
+    - _PatternPower: 6
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
@@ -110,7 +110,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 5
     - _Surface: 1
-    - _Waves: 0
+    - _Waves: 0.1
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0

@@ -1,3 +1,4 @@
+using Data;
 using UnityEngine;
 
 namespace Units.Commands
@@ -68,7 +69,7 @@ namespace Units.Commands
 
         private void GetCloser()
         {
-            CommandOwner.MoveTo(Target.View.transform, 3f);
+            CommandOwner.MoveTo(Target.View.transform, Constants.instance.AttackMaxDistanceKeeping);
         }
 
         private void Attack()
@@ -78,9 +79,10 @@ namespace Units.Commands
 
         private void UpdatePosition()
         {
-            if (Vector3.Distance(Target.Position, CommandOwner.Position) < 2f)
+            if (Vector3.Distance(Target.Position, CommandOwner.Position) < Constants.instance.AttackMinDistanceKeeping)
             {
-                CommandOwner.MoveTo(Target.Position + (CommandOwner.Position - Target.Position).normalized * 2.5f, 0.1f);
+                CommandOwner.MoveTo(Target.Position + (CommandOwner.Position - Target.Position).normalized * Constants.instance.AttackMaxDistanceKeeping, 
+                    0.1f);
             }
         }
 
