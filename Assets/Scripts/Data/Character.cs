@@ -108,7 +108,7 @@ namespace Data
         {
             Appearance result = new Appearance();
 
-            result.skinColor = ColorsPresets.instance.SkinColors[Random.Range(0, ColorsPresets.instance.SkinColors.Count)];
+            result.skinColor = Constants.instance.Colors.SkinColors[Random.Range(0, Constants.instance.Colors.SkinColors.Count)];
 
             switch (Random.Range(0, 3)) //torso
             {
@@ -117,11 +117,11 @@ namespace Data
                     result.turtleneckColor = result.skinColor;
                     break;
                 case 1: //shirt
-                    result.shirtColor = ColorsPresets.instance.ClothesColors[Random.Range(0, ColorsPresets.instance.ClothesColors.Count)];
+                    result.shirtColor = Constants.instance.Colors.ClothesColors[Random.Range(0, Constants.instance.Colors.ClothesColors.Count)];
                     result.turtleneckColor = result.turtleneckColor;
                     break;
                 case 2: //turtleneck
-                    result.shirtColor = ColorsPresets.instance.ClothesColors[Random.Range(0, ColorsPresets.instance.ClothesColors.Count)];
+                    result.shirtColor = Constants.instance.Colors.ClothesColors[Random.Range(0, Constants.instance.Colors.ClothesColors.Count)];
                     result.turtleneckColor = result.shirtColor;
                     break;
             }
@@ -129,11 +129,11 @@ namespace Data
             switch (Random.Range(0, 2)) //legs
             {
                 case 0: //only underwear
-                    result.underwearColor = ColorsPresets.instance.ClothesColors[Random.Range(0, ColorsPresets.instance.ClothesColors.Count)];
+                    result.underwearColor = Constants.instance.Colors.ClothesColors[Random.Range(0, Constants.instance.Colors.ClothesColors.Count)];
                     result.pantsColor = result.skinColor;
                     break;
                 case 1: //pants
-                    result.underwearColor = ColorsPresets.instance.ClothesColors[Random.Range(0, ColorsPresets.instance.ClothesColors.Count)];
+                    result.underwearColor = Constants.instance.Colors.ClothesColors[Random.Range(0, Constants.instance.Colors.ClothesColors.Count)];
                     result.pantsColor = result.underwearColor;
                     break;
             }
@@ -146,10 +146,10 @@ namespace Data
                     break;
                 case 1: //shoes 
                     result.bootsColor = result.pantsColor;
-                    result.shoesColor = ColorsPresets.instance.BootsColors[Random.Range(0, ColorsPresets.instance.BootsColors.Count)];
+                    result.shoesColor = Constants.instance.Colors.BootsColors[Random.Range(0, Constants.instance.Colors.BootsColors.Count)];
                     break;
                 case 3: //boots
-                    result.bootsColor = ColorsPresets.instance.BootsColors[Random.Range(0, ColorsPresets.instance.BootsColors.Count)];
+                    result.bootsColor = Constants.instance.Colors.BootsColors[Random.Range(0, Constants.instance.Colors.BootsColors.Count)];
                     result.shoesColor = result.bootsColor;
                     break;
             }
@@ -161,11 +161,11 @@ namespace Data
                     result.fingersColor = result.skinColor;
                     break;
                 case 1: //short gloves 
-                    result.glovesColor = ColorsPresets.instance.ClothesColors[Random.Range(0, ColorsPresets.instance.ClothesColors.Count)];
+                    result.glovesColor = Constants.instance.Colors.ClothesColors[Random.Range(0, Constants.instance.Colors.ClothesColors.Count)];
                     result.fingersColor = result.skinColor;
                     break;
                 case 3: //gloves
-                    result.glovesColor = ColorsPresets.instance.ClothesColors[Random.Range(0, ColorsPresets.instance.ClothesColors.Count)];
+                    result.glovesColor = Constants.instance.Colors.ClothesColors[Random.Range(0, Constants.instance.Colors.ClothesColors.Count)];
                     result.fingersColor = result.glovesColor;
                     break;
             }
@@ -173,7 +173,7 @@ namespace Data
             if (Random.Range(0,2) == 0)
                 result.hairColor = result.skinColor;
             else
-                result.hairColor = ColorsPresets.instance.HairColors[Random.Range(0, ColorsPresets.instance.HairColors.Count)];
+                result.hairColor = Constants.instance.Colors.HairColors[Random.Range(0, Constants.instance.Colors.HairColors.Count)];
             
             if (Random.Range(0,2) == 0)
                 result.mustacheColor = result.skinColor;

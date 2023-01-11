@@ -24,9 +24,11 @@ MonoBehaviour:
   <AttackDistance>k__BackingField: 3
   <AnimationLerpSpeed>k__BackingField: 10
   <AnimationLayerTransitionSpeed>k__BackingField: 5
+  <CameraDistanceCulling>k__BackingField: 25
   <RayCastHeight>k__BackingField: 1000
   <RayLength>k__BackingField: 1500
   <CameraCenterHeight>k__BackingField: 1
   <MovingStopDistance>k__BackingField: 2
   <AttackMinDistanceKeeping>k__BackingField: 2
   <AttackMaxDistanceKeeping>k__BackingField: 2.5
+  Colors: {fileID: 11400000, guid: 65cf60ddbd43d144282b8d58435e3c58, type: 2}

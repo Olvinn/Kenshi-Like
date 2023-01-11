@@ -16,6 +16,8 @@ namespace Data.Editor
             base.OnInspectorGUI();
             if (GUILayout.Button("Create random appearance"))
             {
+                // DestroyImmediate(Constants.instance);
+                Debug.Log(Constants.instance.Colors.name);
                 inst.appearance = Appearance.GetRandomAppearance();
             }
             EditorUtility.SetDirty(inst);

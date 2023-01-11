@@ -45,15 +45,15 @@ public class UnitsController : MonoBehaviour
 
     public void CreatePlayerUnit(Character data, Vector3 pos)
     {
-        data = ScriptableObject.Instantiate(data);
+        data = Instantiate(data);
         var unit = CreateUnit(data, pos);
         player.AddUnit(unit);
     }
 
     public void CreateAIUnit(Character data, Vector3 pos)
     {
-        data = ScriptableObject.Instantiate(data);
-        data.appearance = Appearance.GetRandomAppearance();
+        data = Instantiate(data);
+        // data.appearance = Appearance.GetRandomAppearance();
         var unit = CreateUnit(data, pos);
         bot.AddUnit(unit);
     }
