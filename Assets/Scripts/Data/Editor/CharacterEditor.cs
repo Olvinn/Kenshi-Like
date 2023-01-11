@@ -1,4 +1,3 @@
-using System;
 using UnityEditor;
 using UnityEngine;
 
@@ -19,6 +18,7 @@ namespace Data.Editor
             {
                 inst.appearance = Appearance.GetRandomAppearance();
             }
+            EditorUtility.SetDirty(inst);
         }
     }
 }

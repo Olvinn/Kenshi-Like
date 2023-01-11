@@ -65,6 +65,7 @@ namespace Units.Weapons
         private void OnDisable()
         {
             col.enabled = false;
+            _views.Clear();
         }
     }
 }
