@@ -106,10 +106,7 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
-                        offset.z = offset.y;
-                        offset.y = 0;
-                        unit.AddCommand(new MoveCommand(hit.point, offset, Constants.instance.MovingStopDistance, true));
+                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, Constants.instance.MovingStopDistance, true));
                     }
                 }
             }
@@ -166,10 +163,7 @@ namespace Players
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
-                        offset.z = offset.y;
-                        offset.y = 0;
-                        unit.AddCommand(new MoveCommand(hit.point, offset, Constants.instance.MovingStopDistance, true));
+                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, Constants.instance.MovingStopDistance, true));
                     }
                 }
             }

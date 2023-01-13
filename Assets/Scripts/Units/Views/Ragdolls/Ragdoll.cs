@@ -8,35 +8,8 @@ namespace Units.Views.Ragdolls
     {
         [SerializeField] private List<RagdollPart> parts;
         [SerializeField] private Animator animator;
-        [SerializeField] private UnitAppearance appearance;
 
-        private bool _isVisible;
         private bool _isRagdolled;
-
-        private void Start()
-        {
-            appearance.OnVisible += OnBecameVisible;
-            appearance.OnInvisible += OnBecameInvisible;
-        }
-
-        private void FixedUpdate()
-        {
-            if (_isVisible && !_isRagdolled)
-                foreach (var part in parts)
-                {
-                    part.UpdateVelocity();
-                }
-        }
-
-        private void OnBecameVisible()
-        {
-            _isVisible = true;
-        }
-
-        private void OnBecameInvisible()
-        {
-            _isVisible = false;
-        }
 
         public void StartRagdoll()
         {

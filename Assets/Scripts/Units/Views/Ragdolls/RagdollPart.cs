@@ -14,27 +14,35 @@ namespace Units.Views.Ragdolls
         {
             rb.isKinematic = true;
             rb.detectCollisions = false;
+            rb.drag = .8f;
         }
 
-        public void UpdateVelocity()
+        public void FixedUpdate()
         {
-            if (_velocity.magnitude < .1f && _ragdolled)
+            // if (_velocity.magnitude < .1f && _ragdolled)
+            // {
+            //     rb.detectCollisions = false;
+            //     rb.isKinematic = true;
+            //     return;
+            // }
+
+            if (!_ragdolled)
             {
-                rb.detectCollisions = false;
-                rb.isKinematic = true;
+                float delta = Time.time - _prevUpdate;
+                if (delta < 1f)
+                    _velocity = (transform.position - _savedPos) / delta;
+                else
+                    _velocity = Vector3.zero;
+                _savedPos = transform.position;
+                _prevUpdate = Time.time;
+                
                 return;
             }
             
-            if (transform.position.y < 0 && _ragdolled)
-                rb.AddForce(Vector3.up * (10 * -transform.position.y));
-
-            float delta = Time.time - _prevUpdate;
-            if (delta < 1f)
-                _velocity = (transform.position - _savedPos) / delta;
-            else
-                _velocity = Vector3.zero;
-            _savedPos = transform.position;
-            _prevUpdate = Time.time;
+            if (transform.position.y < 0)
+            {
+                rb.AddForce(Vector3.up * (- transform.position.y * rb.mass * 2), ForceMode.Acceleration);
+            } 
         }
 
         public void DoRagdoll()
