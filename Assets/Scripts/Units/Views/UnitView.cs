@@ -16,9 +16,11 @@ namespace Units.Views
         public Unit Model { get; private set; }
         public List<UnitView> Sensed => sense.Views;
         public Vector3 Position { get; private set; }
-        public UnitView Target;
+        public Transform Target;
         public Action<List<UnitView>> OnHit;
         public GroundType GroundType { get; private set; }
+
+        public Transform ViewTransform => transform;
 
         [field:SerializeField] public MovementStatus MovementStatus { get; private set; }
         
@@ -83,9 +85,6 @@ namespace Units.Views
                 transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),
                     Time.deltaTime * Constants.instance.AgentsAngularSpeed);
                 ik.target = Target.transform;
-
-                if (Target.Model.IsDead)
-                    Target = null;
             }
             else if (MovementStatus == MovementStatus.Moving)
             {
@@ -110,7 +109,7 @@ namespace Units.Views
             }
             else
             {
-                GroundType = GroundType.Ground;
+                GroundType = GroundType.Land;
             }
 
             //Update animations
@@ -271,9 +270,9 @@ namespace Units.Views
         /// </summary>
         /// <param name="target">Target which want to attack</param>
         /// <returns></returns>
-        public bool CanAttack(UnitView target)
+        public bool CanAttack(Transform target)
         {
-            return Vector3.Distance(target.Position, Position) < Constants.instance.AttackDistance && 
+            return Vector3.Distance(target.position, Position) < Constants.instance.AttackDistance && 
                    anim.State is AnimationControllerState.Idle or AnimationControllerState.Blocking;
         }
 
@@ -294,15 +293,24 @@ namespace Units.Views
         {
             return anim.State == AnimationControllerState.Blocking;
         }
+        
+        /// <summary>
+        /// Checking animation state
+        /// </summary>
+        /// <returns></returns>
+        public bool IsAttacking()
+        {
+            return anim.State == AnimationControllerState.Attacking;
+        }
 
         /// <summary>
         /// Play animation to hit enemy. If hit will successful, the callback will called.
         /// Multithreading safe
         /// </summary>
         /// <param name="callback">UnitViews that has been hit</param>
-        public void Attack(float attackRate)
+        public void StartHit(float attackRate, Action callback)
         {
-            anim.PerformAttackAnimation(null, attackRate);
+            anim.PerformAttackAnimation(callback, attackRate);
         }
 
         /// <summary>
@@ -349,7 +357,7 @@ namespace Units.Views
         /// Multithreading safe
         /// </summary>
         /// <param name="target"></param>
-        public void RotateOn(UnitView target)
+        public void RotateOn(Transform target)
         {
             this.Target = target;
         }
@@ -367,7 +375,7 @@ namespace Units.Views
         /// Indicates of successful hit block
         /// Plays special effects and animations
         /// </summary>
-        public void SuccessfulBlock()
+        public void BlockComplete()
         {
             if (_cameraDistance < Constants.instance.CameraDistanceCulling)
                 sparks.Play();
@@ -397,7 +405,7 @@ namespace Units.Views
 
     public enum GroundType
     {
-        Ground,
+        Land,
         Water
     }
 }

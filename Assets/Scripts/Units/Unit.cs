@@ -5,16 +5,19 @@ using Units.Commands;
 using UnityEngine;
 using Damages;
 using Data;
+using Units.Commands.ComplexCommands;
 using Units.Views;
 using Random = UnityEngine.Random;
 
 namespace Units
 {
-    public class Unit
+    public class Unit: IDamageable
     {
-        public event Action<Unit> OnDie; 
+        public event Action<Unit> OnDie;
+        public bool IsDestroyed => IsDead;
         public bool IsDead => _currentHP <= 0;
         public Vector3 Position => View.Position;
+        public Transform ViewTransform => View.transform;
         public UnitView View { get; private set; }
         public TeamEnum Team { get; private set; }
         public float HPPercentage => _currentHP / _data.GetParameter(ParametersType.HealthPoints);
@@ -22,13 +25,13 @@ namespace Units
         private Character _data;
         private LinkedList<Command> _commands;
         private Command _currentCommand;
+        private List<Unit> _noticedAttackers;
         private bool _isExecutingCommands = false;
 
         private float _currentHP;
         private bool _isBusy = false;
         private float _attackDelay = 0f;
         private float _savedTime;
-        private int _attackers;
 
         public List<string> GetListOfCommands()
         {
@@ -44,6 +47,7 @@ namespace Units
         {
             _data = data;
             _commands = new LinkedList<Command>();
+            _noticedAttackers = new List<Unit>();
             _currentHP = _data.GetParameter(ParametersType.HealthPoints);
         }
         
@@ -65,10 +69,17 @@ namespace Units
             if (_attackDelay > 0)
                 _attackDelay -= delta;
 
-            if (!_isExecutingCommands && !_isBusy)
+            foreach (var attacker in _noticedAttackers)
             {
-                ProcessSense();
+                if (attacker.IsDead)
+                {
+                    _noticedAttackers.Remove(attacker);
+                    break;
+                }
             }
+            
+            if (!_isExecutingCommands && !_isBusy)
+                ProcessSense();
 
             if (_currentCommand != null)
                 _currentCommand.Update();
@@ -97,18 +108,46 @@ namespace Units
             OnDie?.Invoke(this);
         }
 
-        public void PrepareForGetDamage()
+        /// <summary>
+        /// Enlist attacker to proceed later
+        /// </summary>
+        /// <param name="attacker"></param>
+        public void OnPreAttackBy(Unit attacker)
+        {
+            if (!_noticedAttackers.Contains(attacker))
+                _noticedAttackers.Add(attacker);
+        }
+
+        /// <summary>
+        /// Remove attacker from noticed attackers
+        /// </summary>
+        /// <param name="attacker"></param>
+        public void OnPostAttackBy(Unit attacker)
+        {
+            if (!_noticedAttackers.Contains(attacker))
+                _noticedAttackers.Remove(attacker);
+        }
+
+        /// <summary>
+        /// Detect attackers desire to hit
+        /// </summary>
+        public void OnPreHitBy(Unit attacker)
         {
             if (View.IsDodging() || View.IsBlocking())
                 return;
 
             if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
                 View.Dodge();
-            else if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
+            else 
+            if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
                 View.Block();
         }
 
-        public void GetDamage(Damage dmg)
+        /// <summary>
+        /// Proceed hit and pass damage if unit doesn't blocking or dodging 
+        /// </summary>
+        /// <param name="dmg"></param>
+        public void OnHitWith(Damage dmg)
         {
             if (IsDead)
                 return;
@@ -123,30 +162,26 @@ namespace Units
                 if (_currentHP <= 0)
                     Die();
             }
-            else if (View.IsBlocking())
-            {
-                View.SuccessfulBlock();
-            }
 
             if (_currentCommand == null || _currentCommand.Type == CommandType.Attack)
             {
-                var c = _currentCommand as AttackCommand;
+                var c = _currentCommand as FightCommand;
                 if (c == null)
                     return;
-                if (Vector3.Distance(c.Target.Position, Position) > Vector3.Distance(dmg.source.Position, Position))
-                    AddReactionCommand(new AttackCommand(dmg.source, false));
+                
+                if (Vector3.Distance(c.Target.ViewTransform.position, Position) > Vector3.Distance(dmg.source.Position, Position))
+                    AddReactionCommand(new FightCommand(dmg.source, false));
             }
         }
 
-        public void Attack(Unit target)
+        public void Attack(IDamageable target, Action callback = null)
         {
-            if (IsDead || !CanAttack(target))
+            if (IsDead || !CanHit(target))
                 return;
 
             _attackDelay = _data.GetParameter(ParametersType.AttackDelay);
-            View.RotateOn(target.View);
-            View.Attack(_data.GetParameter(ParametersType.AttackRate));
-            target.PrepareForGetDamage();
+            View.RotateOn(target.ViewTransform);
+            View.StartHit(_data.GetParameter(ParametersType.AttackRate), callback);
         }
         
         public void MoveTo(Transform destination, float stopDistance)
@@ -186,13 +221,13 @@ namespace Units
             {
                 _currentCommand = command;
                 _currentCommand.OnDone += ContinueCommands;
-                _currentCommand.Do(this);
+                _currentCommand.ExecuteBy(this);
             }
         }
 
-        public bool CanAttack(Unit unit)
+        public bool CanHit(IDamageable unit)
         {
-            return _attackDelay <= 0 && View.CanAttack(unit.View);
+            return _attackDelay <= 0 && View.CanAttack(unit.ViewTransform);
         }
         
         private void OnHit(List<UnitView> units)
@@ -201,7 +236,7 @@ namespace Units
             {
                 foreach (var unit in units)
                 {
-                    unit.Model.GetDamage(new Damage()
+                    unit.Model.OnHitWith(new Damage()
                         { source = this, damage = _data.GetParameter(ParametersType.Damage) });
                 }
             }
@@ -283,7 +318,7 @@ namespace Units
                 _currentCommand = _commands.First.Value;
                 _commands.RemoveFirst();
                 _currentCommand.OnDone += ContinueCommands;
-                _currentCommand.Do(this);
+                _currentCommand.ExecuteBy(this);
             }
         }
 
@@ -293,14 +328,21 @@ namespace Units
             
             float d = float.MaxValue;
             Unit enemy = null;
-            foreach (var view in View.Sensed)
+
+            List<Unit> list = null;
+            if (_noticedAttackers.Count > 0)
+                list = _noticedAttackers;
+            else
+                list = View.Sensed.Select(x => x.Model).ToList();
+            
+            foreach (var view in list)
             {
-                if (view.Model != this && !view.Model.IsDead && view.Model.Team != Team)
+                if (view != this && !view.IsDead && view.Team != Team)
                 {
-                    float temp = Vector3.Distance(Position, view.Model.Position);
+                    float temp = Vector3.Distance(Position, view.Position);
                     if (temp < d)
                     {
-                        enemy = view.Model;
+                        enemy = view;
                         d = temp;
                     }
                 }
@@ -308,7 +350,7 @@ namespace Units
 
             if (enemy != null)
             {
-                AddReactionCommand(new AttackCommand(enemy, false));
+                AddReactionCommand(new FightCommand(enemy, false));
             }
 
             _isBusy = false;
@@ -319,5 +361,15 @@ namespace Units
     {
         Player,
         EnemyAI
+    }
+
+    public interface IDamageable
+    {
+        bool IsDestroyed { get; }
+        Transform ViewTransform { get; }
+        void OnPreAttackBy(Unit attacker);
+        void OnPreHitBy(Unit attacker);
+        void OnHitWith(Damage damage);
+        void OnPostAttackBy(Unit attacker);
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8062600210171915376}
   - component: {fileID: 8062600210171915377}
   - component: {fileID: 8062600210171915378}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BloodSplash
   m_TagString: Untagged
   m_Icon: {fileID: 0}

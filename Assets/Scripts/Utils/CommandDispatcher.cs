@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Logic.Utils
+namespace Utils
 {
 	public delegate void CommandHandler<T>(T command) where T : struct;
 

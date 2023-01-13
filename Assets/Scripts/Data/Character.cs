@@ -59,7 +59,7 @@ namespace Data
         [SerializeField, Range(1f, 10f)] private float speed;
         [SerializeField, Range(1f, 200f)] private float damage;
         [SerializeField, Range(.1f, 1.5f)] private float attackRate;
-        [SerializeField, Range(.5f, 5f)] private float attackDelay;
+        [SerializeField, Range(2f, 6f)] private float attackDelay;
         [SerializeField, Range(0, 1f)] private float chanceToDodge;
         [SerializeField, Range(0, 1f)] private float chanceToBlock;
 

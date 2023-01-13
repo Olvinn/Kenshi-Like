@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+using Data;
 using Inputs;
 using Units;
 using Units.Commands;
+using Units.Commands.ComplexCommands;
+using Units.Commands.SimpleCommands;
 using Units.Views;
 using UnityEngine;
 
@@ -85,14 +88,17 @@ namespace Players
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new FollowCommand(view.Model, true));
+                            Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
+                            offset.z = offset.y;
+                            offset.y = 0;
+                            unit.AddCommand(new FollowCommand(view.Model, offset, true));
                         }
                     }
                     else
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new AttackCommand(view.Model, true));
+                            unit.AddCommand(new FightCommand(view.Model, true));
                         }
                     }
                 }
@@ -100,7 +106,10 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.AddCommand(new MoveCommand(hit.point, true));
+                        Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
+                        offset.z = offset.y;
+                        offset.y = 0;
+                        unit.AddCommand(new MoveCommand(hit.point, offset, Constants.instance.MovingStopDistance, true));
                     }
                 }
             }
@@ -135,7 +144,10 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
-                            unit.AddCommand(new FollowCommand(view.Model, true));
+                            Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
+                            offset.z = offset.y;
+                            offset.y = 0;
+                            unit.AddCommand(new FollowCommand(view.Model, offset,true));
                         }
                     }
                     else
@@ -144,7 +156,7 @@ namespace Players
                         foreach (var unit in _selected)
                         {
                             unit.ClearCommands();
-                            unit.AddCommand(new AttackCommand(view.Model,true));
+                            unit.AddCommand(new FightCommand(view.Model,true));
                         }
                     }
                 }
@@ -154,7 +166,10 @@ namespace Players
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        unit.AddCommand(new MoveCommand(hit.point,true));
+                        Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
+                        offset.z = offset.y;
+                        offset.y = 0;
+                        unit.AddCommand(new MoveCommand(hit.point, offset, Constants.instance.MovingStopDistance, true));
                     }
                 }
             }

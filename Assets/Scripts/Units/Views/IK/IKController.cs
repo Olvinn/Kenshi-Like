@@ -7,7 +7,7 @@ namespace Units.Views.IK
     {
         public Transform target;
         public float transitionSpeed = 2f;
-        public Transform armsPos;
+        public Transform leftArmPos;
         public bool legsIKOn = true;
         
         [SerializeField] private Animator animator;
@@ -15,8 +15,8 @@ namespace Units.Views.IK
         [SerializeField] private Transform pelvis;
 
         private bool _isVisible;
-        private Vector3 _lookPos, _armsPos;
-        private Quaternion _armsRot;
+        private Vector3 _lookPos, _leftArmPos;
+        private Quaternion _leftArmRot;
         private float _lookWeight, _armsWeight;
         private Transform _curTarget;
 
@@ -67,31 +67,31 @@ namespace Units.Views.IK
 
         private void ArmsIK()
         {
-            if (armsPos == null)
+            if (leftArmPos == null)
             {
                 if (_armsWeight == 0)
                     return;
                 
-                _armsWeight -= Time.deltaTime * 3;
+                _armsWeight -= Time.deltaTime * 2;
             }
             else
             {
-                _armsPos = armsPos.position;
-                _armsRot = armsPos.rotation;
-                _armsWeight += Time.deltaTime * 2;
+                _leftArmPos = leftArmPos.position;
+                _leftArmRot = leftArmPos.rotation;
+                _armsWeight += Time.deltaTime;
             }
             
             _armsWeight = Mathf.Clamp01(_armsWeight);
 
             animator.SetIKPositionWeight(AvatarIKGoal.RightHand, _armsWeight);
             animator.SetIKRotationWeight(AvatarIKGoal.RightHand, _armsWeight);
-            animator.SetIKPosition(AvatarIKGoal.RightHand, _armsPos);
-            animator.SetIKRotation(AvatarIKGoal.RightHand, _armsRot);
+            animator.SetIKPosition(AvatarIKGoal.RightHand, _leftArmPos);
+            animator.SetIKRotation(AvatarIKGoal.RightHand, _leftArmRot);
             
             animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, _armsWeight);
             animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, _armsWeight);
-            animator.SetIKPosition(AvatarIKGoal.LeftHand, _armsPos);
-            animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.Euler(180,180,180) * _armsRot);
+            animator.SetIKPosition(AvatarIKGoal.LeftHand, _leftArmPos);
+            animator.SetIKRotation(AvatarIKGoal.LeftHand, Quaternion.Euler(180,180,180) * _leftArmRot);
         }
 
         private void LegsIK()

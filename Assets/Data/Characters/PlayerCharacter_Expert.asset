@@ -18,7 +18,7 @@ MonoBehaviour:
     damage: 200
     attackRate: 1.5
     attackDelay: 0.5
-    chanceToDodge: 0.9
+    chanceToDodge: 0.7
     chanceToBlock: 1
   appearance:
     skinColor: {r: 1, g: 0.6932768, b: 0.5330188, a: 0}

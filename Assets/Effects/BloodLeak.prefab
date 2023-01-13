@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 432046635393231947}
   - component: {fileID: 432046635393231946}
   - component: {fileID: 432046635393231945}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BloodLeak
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -24,6 +24,9 @@ namespace Units.Views.Ragdolls
                 rb.isKinematic = true;
                 return;
             }
+            
+            if (transform.position.y < 0 && _ragdolled)
+                rb.AddForce(Vector3.up * (10 * -transform.position.y));
 
             float delta = Time.time - _prevUpdate;
             if (delta < 1f)

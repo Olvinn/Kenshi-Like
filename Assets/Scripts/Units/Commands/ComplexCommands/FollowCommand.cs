@@ -1,38 +1,37 @@
-using Units.Views;
+using Units.Commands.SimpleCommands;
+using UnityEngine;
 
-namespace Units.Commands
+namespace Units.Commands.ComplexCommands
 {
-    public class FollowCommand : Command
+    public class FollowCommand : ComplexCommand
     {
         public override CommandType Type => CommandType.Follow;
         public override string CommandName => "Follow"; 
         
         private Unit _unitToFollow;
+        private Vector3 _offset;
 
-        public FollowCommand(Unit unitToFollow, bool isDirectCommand)
+        public FollowCommand(Unit unitToFollow, Vector3 offset, bool isDirectCommand)
         {
+            _commandQueue.Enqueue(new MoveCommand(unitToFollow.ViewTransform, offset, .1f, isDirectCommand));
+            _repeat = true;
+            
             IsDirectCommand = isDirectCommand;
             _unitToFollow = unitToFollow;
+            _offset = offset;
         }
 
-        public override void Do(Unit owner)
+        public override void ExecuteBy(Unit executor)
         {
-            base.Do(owner);
-            if (owner.Equals(_unitToFollow))
-            {
+            base.ExecuteBy(executor);
+            if (executor.Equals(_unitToFollow))
                 Done();
-                return;
-            }
-            owner.MoveTo(_unitToFollow.View.transform, 3f);
         }
 
         public override void Update()
         {
             if (!IsRunning)
                 return;
-            
-            if (_unitToFollow.View.MovementStatus != MovementStatus.Waiting)
-                CommandOwner.MoveTo(_unitToFollow.View.transform, 3f);
             
             base.Update();
         }
@@ -48,7 +47,7 @@ namespace Units.Commands
             var c = obj as FollowCommand;
             if (c == null)
                 return false;
-            if (CommandOwner != null && CommandOwner.Equals(c.CommandOwner) &&
+            if (Executor != null && Executor.Equals(c.Executor) &&
                 _unitToFollow != null && _unitToFollow.Equals(c._unitToFollow))
                 return true;
             return false;

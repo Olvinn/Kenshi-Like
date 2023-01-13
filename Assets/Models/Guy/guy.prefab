@@ -4196,10 +4196,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BloodSplash
       objectReference: {fileID: 0}
-    - target: {fileID: 8062600210171915379, guid: 8198fbee5c8dff84eb0c38f61240ab9a, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8198fbee5c8dff84eb0c38f61240ab9a, type: 3}
 --- !u!4 &2319612091208233009 stripped
@@ -4217,10 +4213,6 @@ PrefabInstance:
     - target: {fileID: 432046635393231944, guid: 854d379b13825f448bbba4cea74d06f5, type: 3}
       propertyPath: m_Name
       value: BloodLeak
-      objectReference: {fileID: 0}
-    - target: {fileID: 432046635393231944, guid: 854d379b13825f448bbba4cea74d06f5, type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 432046635393231947, guid: 854d379b13825f448bbba4cea74d06f5, type: 3}
       propertyPath: m_RootOrder

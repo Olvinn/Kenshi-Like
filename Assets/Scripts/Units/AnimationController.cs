@@ -16,9 +16,7 @@ namespace Units
         [SerializeField] private Animator newAnimator;
         [SerializeField] private UnitAnimationEventCatcher newCatcher;
         [SerializeField] private IKController ik;
-        [SerializeField] private Transform blockFront;
 
-        private Action _onCompleteAnimation;
         private Vector3 _mov, _movGoal;
         private float _swimmingLayerWeight;
 
@@ -38,13 +36,12 @@ namespace Units
             newAnimator.SetFloat("Strafe", _mov.x);
             
             newAnimator.speed = 1;
-            ik.armsPos = null;
+            ik.leftArmPos = null;
             ik.legsIKOn = true;
             
             switch (State)
             {
                 case AnimationControllerState.Blocking:
-                    ik.armsPos = blockFront;
                     _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
                     break;
                 case AnimationControllerState.Attacking:
@@ -98,13 +95,10 @@ namespace Units
                 return;
             }
             
-            _onCompleteAnimation = callback;
+            newAnimator.SetBool("Block", false);
             newAnimator.SetTrigger("AttackBasic");
             attackSpeed = animationSpeed;
             State = AnimationControllerState.Attacking;
-
-            // StopAllCoroutines();
-            // StartCoroutine(Saver(attackSpeed * 1.5f));
         }
 
         public void PerformGetDamageAnimation(Action callback)
@@ -115,12 +109,9 @@ namespace Units
                 return;
             }
             
-            _onCompleteAnimation = callback;
+            newAnimator.SetBool("Block", false);
             newAnimator.Play("Get damage");
             State = AnimationControllerState.Damaging;
-
-            // StopAllCoroutines();
-            // StartCoroutine(Saver(1.5f));
         }
 
         public void PerformDodgeAnimation(Action callback)
@@ -132,12 +123,9 @@ namespace Units
                 return;
             }
 
-            _onCompleteAnimation = callback;
+            newAnimator.SetBool("Block", false);
             newAnimator.SetTrigger("Dodge");
             State = AnimationControllerState.Dodging;
-
-            // StopAllCoroutines();
-            // StartCoroutine(Saver(2f));
         }
 
         public void PerformBlockAnimation()
@@ -145,9 +133,8 @@ namespace Units
             if (!newAnimator.isActiveAndEnabled || State != AnimationControllerState.Idle)
                 return;
             
+            newAnimator.SetBool("Block", true);
             State = AnimationControllerState.Blocking;
-            // StopAllCoroutines();
-            // StartCoroutine(Saver(1f));
         }
 
         public void PerformDyingAnimation()
@@ -184,37 +171,22 @@ namespace Units
 
         private void AttackComplete()
         {
-            _onCompleteAnimation?.Invoke();
             if (State == AnimationControllerState.Attacking)
                 State = AnimationControllerState.Idle;
-            // StopAllCoroutines();
         }
 
         private void GetDamageComplete()
         {
-            _onCompleteAnimation?.Invoke();
             if (State == AnimationControllerState.Damaging)
                 State = AnimationControllerState.Idle;
-            // StopAllCoroutines();
         }
 
         private void DodgeComplete()
         {
-            _onCompleteAnimation?.Invoke();
             if (State == AnimationControllerState.Dodging)
                 State = AnimationControllerState.Idle;
-            StopAllCoroutines();
             AnimatorTransform.localPosition = Vector3.zero;
         }
-        
-
-        // IEnumerator Saver(float time)
-        // {
-        //     yield return new WaitForSeconds(time);
-        //     _onCompleteAnimation?.Invoke();
-        //     _onCompleteAnimation = null;
-        //     State = AnimationControllerState.Idle;
-        // }
     }
 
     public enum AnimationControllerState
