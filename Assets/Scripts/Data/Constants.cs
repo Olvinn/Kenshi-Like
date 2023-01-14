@@ -30,7 +30,5 @@ namespace Data
         [field: SerializeField] public float MovingStopDistance { get; private set; } = 2f;
         [field: SerializeField] public float AttackMinDistanceKeeping { get; private set; } = 2f;
         [field: SerializeField] public float AttackMaxDistanceKeeping { get; private set; } = 2.5f;
-
-        [Header("Colors")] [SerializeField] public ColorsPresets Colors;
     }
 }

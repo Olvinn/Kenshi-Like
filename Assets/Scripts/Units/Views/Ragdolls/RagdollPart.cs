@@ -19,13 +19,6 @@ namespace Units.Views.Ragdolls
 
         public void FixedUpdate()
         {
-            // if (_velocity.magnitude < .1f && _ragdolled)
-            // {
-            //     rb.detectCollisions = false;
-            //     rb.isKinematic = true;
-            //     return;
-            // }
-
             if (!_ragdolled)
             {
                 float delta = Time.time - _prevUpdate;

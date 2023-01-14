@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Data
 { 
     [CreateAssetMenu(menuName = "Game/Colors preset")]
-    public class ColorsPresets : ScriptableObject
+    public class ColorsPreset : ScriptableObject
     {
         [field: Header("Characters")]
         [field: SerializeField] public List<Color> SkinColors { get; private set; }

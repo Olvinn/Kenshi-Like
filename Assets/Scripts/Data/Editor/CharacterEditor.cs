@@ -7,6 +7,7 @@ namespace Data.Editor
     public class CharacterEditor : UnityEditor.Editor
     {
         private Character inst;
+        ColorsPreset _preset;
         private void OnEnable()
         {
             inst = serializedObject.targetObject as Character;
@@ -14,11 +15,12 @@ namespace Data.Editor
 
         public override void OnInspectorGUI() {
             base.OnInspectorGUI();
-            if (GUILayout.Button("Create random appearance"))
+            
+            GUILayout.Label("Update via preset");
+            _preset = EditorGUILayout.ObjectField(_preset, typeof(ColorsPreset)) as ColorsPreset;
+            if (_preset != null && GUILayout.Button("Create random appearance"))
             {
-                // DestroyImmediate(Constants.instance);
-                Debug.Log(Constants.instance.Colors.name);
-                inst.appearance = Appearance.GetRandomAppearance();
+                inst.appearance = Appearance.GetRandomAppearance(_preset);
             }
             EditorUtility.SetDirty(inst);
         }

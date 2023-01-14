@@ -1,3 +1,4 @@
+using System;
 using Data;
 using Inputs;
 using UnityEngine;
@@ -25,12 +26,20 @@ namespace Cameras
                 camera = GetComponent<Camera>();
         }
 
-        private void Start()
+        private void OnEnable()
         {
             InputController.Instance.OnTouchScreenCorners += MoveCamera;
             InputController.Instance.OnMove += MoveCamera;
             InputController.Instance.OnScroll += ScrollCamera;
             InputController.Instance.OnMMBDrag += Rotate;
+        }
+
+        private void OnDisable()
+        {
+            InputController.Instance.OnTouchScreenCorners -= MoveCamera;
+            InputController.Instance.OnMove -= MoveCamera;
+            InputController.Instance.OnScroll -= ScrollCamera;
+            InputController.Instance.OnMMBDrag -= Rotate;
         }
 
         private void LateUpdate()
