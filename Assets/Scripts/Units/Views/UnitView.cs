@@ -51,8 +51,10 @@ namespace Units.Views
 
         private void Update()
         {
-            if (!agent.enabled)
+            if (Model == null || !agent.enabled)
                 return;
+
+            var constants = GameContext.Instance.Constants;
 
             //Processing moving logic
             Position = transform.position;
@@ -83,7 +85,7 @@ namespace Units.Views
                 Vector3 dir = Target.transform.position - Position;
                 dir.y = 0;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),
-                    Time.deltaTime * Constants.instance.AgentsAngularSpeed);
+                    Time.deltaTime * constants.AgentsAngularSpeed);
                 ik.target = Target.transform;
             }
             else if (MovementStatus == MovementStatus.Moving)
@@ -92,7 +94,7 @@ namespace Units.Views
                 Vector3 dir = agent.velocity;
                 dir.y = 0;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(dir),
-                    Time.deltaTime * Constants.instance.AgentsAngularSpeed);
+                    Time.deltaTime * constants.AgentsAngularSpeed);
             }
 
             if (anim.State == AnimationControllerState.Attacking)
@@ -102,7 +104,7 @@ namespace Units.Views
             
             //Detecting ground type
             Ray ray = new Ray(Position, Vector3.down);
-            RaycastHit[] hit = Physics.RaycastAll(ray, Constants.instance.DetectingGroundRayLength, Constants.instance.DetectingGroundLayerMask);
+            RaycastHit[] hit = Physics.RaycastAll(ray, constants.DetectingGroundRayLength, constants.DetectingGroundLayerMask);
             if (hit.Length == 1 && hit[0].collider.gameObject.layer == 4)
             {
                 GroundType = GroundType.Water;
@@ -119,7 +121,7 @@ namespace Units.Views
             agent.nextPosition = anim.AnimatorTransform.position;
             anim.AnimatorTransform.localPosition = Vector3.zero;
 
-            if (_cameraDistance < Constants.instance.CameraDistanceCulling)
+            if (_cameraDistance < constants.CameraDistanceCulling)
             {
                 ik.enabled = true;
             }
@@ -133,10 +135,16 @@ namespace Units.Views
         {
             ik.enabled = false;
             ragdoll.StartRagdoll();
-            agent.enabled = false;
-            sense.enabled = false;
-            attack.enabled = false;
+            if (agent != null)
+            {
+                agent.enabled = false;
+                sense.enabled = false;
+                attack.enabled = false;
+            }
+
             var c = GetComponent<CapsuleCollider>();
+            if (c == null)
+                return;
             c.radius = 0f;
             c.enabled = false;
         }
@@ -145,17 +153,23 @@ namespace Units.Views
         {
             ik.enabled = true;
             ragdoll.StopRagdoll();
-            agent.enabled = true;
-            sense.enabled = true;
-            attack.enabled = true;
+            if (agent != null)
+            {
+                agent.enabled = true;
+                sense.enabled = true;
+                attack.enabled = true;
+            }
             var c = GetComponent<CapsuleCollider>();
+            if (c == null)
+                return;
             c.radius = .5f;
             c.enabled = true;
         }
 
+        #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            if (!Constants.instance.DebugGizmos)
+            if (!GameContext.Instance.Constants.DebugGizmos)
                 return;
             
             GUI.color = Color.black;
@@ -172,6 +186,7 @@ namespace Units.Views
                 }
             }
         }
+        #endif
 
         public void InjectModel(Unit model)
         {
@@ -181,10 +196,9 @@ namespace Units.Views
 
         /// <summary>
         /// Set the units appearance
-        /// TODO: separate appearance data from Character
         /// </summary>
         /// <param name="appearance"></param>
-        public void SetAppearance(Character appearance)
+        public void SetAppearance(Appearance appearance)
         {
             var arr = Enum.GetValues(typeof(UnitColorType)).Cast<UnitColorType>().ToList();
             foreach (var color in arr)
@@ -272,7 +286,7 @@ namespace Units.Views
         /// <returns></returns>
         public bool CanAttack(Transform target)
         {
-            return Vector3.Distance(target.position, Position) < Constants.instance.AttackDistance && 
+            return Vector3.Distance(target.position, Position) < GameContext.Instance.Constants.AttackDistance && 
                    anim.State is AnimationControllerState.Idle or AnimationControllerState.Blocking;
         }
 
@@ -337,7 +351,7 @@ namespace Units.Views
         public void GetDamage()
         {
             anim.PerformGetDamageAnimation(null);
-            if (_cameraDistance < Constants.instance.CameraDistanceCulling)
+            if (_cameraDistance < GameContext.Instance.Constants.CameraDistanceCulling)
             {
                 splash.Play();
                 leak.Play();
@@ -377,7 +391,7 @@ namespace Units.Views
         /// </summary>
         public void BlockComplete()
         {
-            if (_cameraDistance < Constants.instance.CameraDistanceCulling)
+            if (_cameraDistance < GameContext.Instance.Constants.CameraDistanceCulling)
                 sparks.Play();
         }
 

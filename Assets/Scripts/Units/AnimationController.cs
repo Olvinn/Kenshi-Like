@@ -30,7 +30,9 @@ namespace Units
 
         private void Update()
         {
-            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * Constants.instance.AnimationLerpSpeed);
+            var constants = GameContext.Instance.Constants;
+            
+            _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * constants.AnimationLerpSpeed);
                 
             newAnimator.SetFloat("Speed", _mov.z);
             newAnimator.SetFloat("Strafe", _mov.x);
@@ -42,18 +44,18 @@ namespace Units
             switch (State)
             {
                 case AnimationControllerState.Blocking:
-                    _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
+                    _swimmingLayerWeight -= Time.deltaTime * constants.AnimationLayerTransitionSpeed;
                     break;
                 case AnimationControllerState.Attacking:
                     newAnimator.speed = attackSpeed;
-                    _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
+                    _swimmingLayerWeight -= Time.deltaTime * constants.AnimationLayerTransitionSpeed;
                     break;
                 case AnimationControllerState.Swimming:
                     ik.legsIKOn = false;
-                    _swimmingLayerWeight += Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
+                    _swimmingLayerWeight += Time.deltaTime * constants.AnimationLayerTransitionSpeed;
                     break;
                 default:
-                    _swimmingLayerWeight -= Time.deltaTime * Constants.instance.AnimationLayerTransitionSpeed;
+                    _swimmingLayerWeight -= Time.deltaTime * constants.AnimationLayerTransitionSpeed;
                     break;
             }
             _swimmingLayerWeight = Mathf.Clamp01(_swimmingLayerWeight);

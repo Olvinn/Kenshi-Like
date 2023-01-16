@@ -12,7 +12,7 @@ namespace Units.Commands.ComplexCommands
         
         public FightCommand(IDamageable target, bool isDirectCommand)
         {
-            _commandQueue.Enqueue(new MoveCommand(target.ViewTransform, Vector3.zero, Constants.instance.AttackDistance, isDirectCommand));
+            _commandQueue.Enqueue(new MoveCommand(target.ViewTransform, Vector3.zero, GameContext.Instance.Constants.AttackDistance, isDirectCommand));
             _commandQueue.Enqueue(new AttackCommand(target, isDirectCommand));
             _repeat = true;
             

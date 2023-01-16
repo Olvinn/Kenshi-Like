@@ -106,7 +106,7 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, Constants.instance.MovingStopDistance, true));
+                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, GameContext.Instance.Constants.MovingStopDistance, true));
                     }
                 }
             }
@@ -163,7 +163,7 @@ namespace Players
                     foreach (var unit in _selected)
                     {
                         unit.ClearCommands();
-                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, Constants.instance.MovingStopDistance, true));
+                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, GameContext.Instance.Constants.MovingStopDistance, true));
                     }
                 }
             }

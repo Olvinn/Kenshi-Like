@@ -44,12 +44,14 @@ namespace Cameras
 
         private void LateUpdate()
         {
+            var constants = GameContext.Instance.Constants;
+            
             _pos.y = 0;
             
             RaycastHit hit;
-            Ray ray = new Ray(_pos + Vector3.up * Constants.instance.RayCastHeight, Vector3.down);
-            if (Physics.Raycast(ray, out hit, Constants.instance.RayLength, raycastMask))
-                _center = hit.point + Vector3.up * Constants.instance.CameraCenterHeight;
+            Ray ray = new Ray(_pos + Vector3.up * constants.RayCastHeight, Vector3.down);
+            if (Physics.Raycast(ray, out hit, constants.RayLength, raycastMask))
+                _center = hit.point + Vector3.up * constants.CameraCenterHeight;
             else
                 _center = _pos;
             

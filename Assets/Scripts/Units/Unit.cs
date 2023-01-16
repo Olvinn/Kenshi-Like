@@ -55,7 +55,7 @@ namespace Units
         {
             View = view;
             view.SetMaxSpeed(_data.GetParameter(ParametersType.Speed));
-            view.SetAppearance(_data);
+            view.SetAppearance(_data.appearance);
             view.OnHit = OnHit;
         }
 

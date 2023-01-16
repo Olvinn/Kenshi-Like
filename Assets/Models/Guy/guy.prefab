@@ -894,7 +894,6 @@ MonoBehaviour:
   - {fileID: 3810063265241305906}
   - {fileID: 8290366276678529508}
   animator: {fileID: 5454554281608705673}
-  appearance: {fileID: 1462648697920959424}
 --- !u!114 &1385737906680420376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,7 +908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   transitionSpeed: 2
-  armsPos: {fileID: 0}
+  leftArmPos: {fileID: 0}
   legsIKOn: 1
   animator: {fileID: 5454554281608705673}
   appearance: {fileID: 1462648697920959424}

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Data
 {
     [CreateAssetMenu(menuName = "Game/Constants")]
-    public class Constants : ScriptableSingleton<Constants>
+    public class Constants : ScriptableObject
     {
         [field: Header("Development")]
         [field: SerializeField] public bool DebugLog { get; private set; } = true;
