@@ -34,3 +34,9 @@ MonoBehaviour:
   - {r: 0.103773594, g: 0.050030082, b: 0.006363478, a: 1}
   - {r: 0.2735849, g: 0.15028901, b: 0.045167312, a: 1}
   - {r: 0.13207549, g: 0.12646851, b: 0.12646851, a: 1}
+  <CommonColor>k__BackingField: {r: 0.7247686, g: 0.77099514, b: 0.8396226, a: 1}
+  <AccentColor>k__BackingField: {r: 0.6392157, g: 0.9921569, b: 0.9215687, a: 1}
+  <AcceptColor>k__BackingField: {r: 0.5568628, g: 0.9607844, b: 0.7411765, a: 1}
+  <DeclineColor>k__BackingField: {r: 0.9607843, g: 0.6498978, b: 0.5568628, a: 1}
+  <AmbientColor>k__BackingField: {r: 0.3506586, g: 0.36162227, b: 0.3773585, a: 0.72156864}
+  <BackgroundColor>k__BackingField: {r: 0, g: 0, b: 0, a: 0.8}

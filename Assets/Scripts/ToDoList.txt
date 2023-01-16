@@ -3,16 +3,11 @@
 
     //TODO Scripts: 
     // 27) Squad logic and triggers optimization (Req: 22)
-    // 17) Units dodges (Done!)
-    // 48) Unit blocks (Done!)
-    // 31) Foot IK for unit (Done!)
-    // 49) Water and swimming with animation and ground detection (Done!)
     // 18) Unit defend another unit command
     // 10) Unit defend area command
     // 11) Inherit Player and AI from abstract player?
     // 29) Unit autonomy with locating campfire and sitting around
     // 30) Hide UnitView in Unit?
-    // 32) Bootstrap scene
     // 38) Spawn units to special parent
     // 40) Fix camera jitter
     // 41) Unit patrolling command and command repeat system
@@ -22,21 +17,14 @@
     // 45) Clearing cash and replay
     // 47) Realize idea with bus-controller that executes queue of actions every frame partially
     // 51) Effects pool
-    // 52) More precise arms IK
-    // 53) Culling by distance
     // 54) Bake textures from shaders
     // 55) Time acceleration and slo-mo
-    // 56) Ragdoll flowing on water (Req: 43)
     
     //TODO Models and animations:
-    // 8) Unit sword fight with blocking (Done!)
-    // 37) Swimming animation (Done!)
-    // 39) Fix models butt, underwear, UV and weights, especially on chest (Done!)
     // 28) Campfire model and sit around animation
     // 50) Add customisation bones to guy model
     
     //TODO Graphics, effects and UI:
-    // 33) URP and Terrain shader (Done!)
     // 22) Simple UI with unit icons
     // 21) Damage labels
     // 34) Fire effect for campfire
