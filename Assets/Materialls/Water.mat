@@ -93,7 +93,7 @@ Material:
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
-    - _EffectDensity: 200
+    - _EffectDensity: 8000
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -110,7 +110,7 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 5
     - _Surface: 1
-    - _Waves: 0.3
+    - _Waves: 0.05
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 0

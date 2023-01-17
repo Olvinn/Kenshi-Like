@@ -54,7 +54,7 @@ namespace Units
         public void CreateAIUnit(Character data, Vector3 pos)
         {
             data = Instantiate(data);
-            // data.appearance = Appearance.GetRandomAppearance();
+            data.appearance = Appearance.GetRandomAppearance(GameContext.Instance.Colors);
             var unit = CreateUnit(data, pos);
             bot.AddUnit(unit);
         }

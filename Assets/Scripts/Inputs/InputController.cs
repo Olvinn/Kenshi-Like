@@ -1,4 +1,5 @@
 using System;
+using Connections;
 using UnityEngine;
 
 namespace Inputs
@@ -6,12 +7,13 @@ namespace Inputs
     public class InputController : MonoBehaviour
     {
         public static InputController Instance { get; private set; }
-        
-        public event Action<Ray> OnRMB, OnLMB, OnShiftRMB, OnShiftLMB;
-        public event Action<Vector2> OnTouchScreenCorners, OnMove;
-        public event Action<Vector2, Vector2> OnDrawBox, OnBoxSelect, OnShiftBoxSelect;
-        public event Action<float> OnScroll;
-        public event Action<Vector2> OnMMBDrag;
+
+        public Action OnEscape;
+        public Action<Ray> OnRMB, OnLMB, OnShiftRMB, OnShiftLMB;
+        public Action<Vector2> OnTouchScreenCorners, OnMove;
+        public Action<Vector2, Vector2> OnDrawBox, OnBoxSelect, OnShiftBoxSelect;
+        public Action<float> OnScroll;
+        public Action<Vector2> OnMMBDrag;
 
         [SerializeField] private Camera playCamera;
 
@@ -31,6 +33,13 @@ namespace Inputs
             BoxSelectionInput();
             CameraMovementInput();
             KeyboardMovementInput();
+            KeyboardActionsInput();
+        }
+
+        void KeyboardActionsInput()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                OnEscape?.Invoke();
         }
 
         void MouseClickInput()

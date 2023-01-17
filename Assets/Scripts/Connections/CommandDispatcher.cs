@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Utils
+namespace Connections
 {
 	public delegate void CommandHandler<T>(T command) where T : struct;
 
@@ -13,7 +13,7 @@ namespace Utils
 		{
 			get
 			{
-				return _instance ?? (_instance = new CommandDispatcher());
+				return _instance ??= new CommandDispatcher();
 			}
 		}
 

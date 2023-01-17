@@ -28,15 +28,19 @@
     // 22) Simple UI with unit icons
     // 21) Damage labels
     // 34) Fire effect for campfire
-    // 36) Water effect
     // 46) Render paths and destination points
     
     //Bugs:
+    
+    //Local goals v0.0.3:
+    // - 27
+    // - 44
+    // - Grass on terrain
 
     //Goals v0.1:
     // - UI, show player units
     // - Map with enemy and player units marks
-    // - Level loading, main menu
+    // - Level loading, main menu (Done!)
     // - Effects, blood
     // - Animations, attack animations (Done!)
     // - Simple sounds
