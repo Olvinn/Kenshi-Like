@@ -30,7 +30,9 @@ namespace Units
 
         private void Update()
         {
-            var constants = GameContext.Instance.Constants;
+            var constants = GameContext.Instance?.Constants;
+            if (constants == null)
+                return;
             
             _mov = Vector3.Lerp(_mov, _movGoal, Time.deltaTime * constants.AnimationLerpSpeed);
                 

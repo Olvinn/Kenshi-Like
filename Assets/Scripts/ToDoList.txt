@@ -1,5 +1,5 @@
 
-    // 56
+    // 57
 
     //TODO Scripts: 
     // 27) Squad logic and triggers optimization (Req: 22)
@@ -19,6 +19,7 @@
     // 51) Effects pool
     // 54) Bake textures from shaders
     // 55) Time acceleration and slo-mo
+    // 57) Tool for dynamic terrain generation with height map and grass
     
     //TODO Models and animations:
     // 28) Campfire model and sit around animation
@@ -35,7 +36,7 @@
     //Local goals v0.0.3:
     // - 27
     // - 44
-    // - Grass on terrain
+    // - Grass on terrain (Done!)
 
     //Goals v0.1:
     // - UI, show player units

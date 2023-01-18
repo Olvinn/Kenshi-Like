@@ -13,7 +13,11 @@ namespace Scenes
 
         private void Start()
         {
-            mainMenuUnit.SetAppearance(Appearance.GetRandomAppearance(GameContext.Instance.Colors));
+            var colors = GameContext.Instance?.Colors;
+            if (colors == null)
+                return;
+            
+            mainMenuUnit.SetAppearance(Appearance.GetRandomAppearance(colors));
             version.text = $"v. {Application.version}";
         }
 

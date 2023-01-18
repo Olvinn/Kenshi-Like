@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e51e3d3b48ea8f4b95bd0305fe83b95, type: 3}
-  m_Name: DebugConstantPreset
+  m_Name: DebugConstant
   m_EditorClassIdentifier: 
   <DebugLog>k__BackingField: 1
   <DebugGizmos>k__BackingField: 1
@@ -29,6 +29,5 @@ MonoBehaviour:
   <RayLength>k__BackingField: 1500
   <CameraCenterHeight>k__BackingField: 1
   <MovingStopDistance>k__BackingField: 2
-  <AttackMinDistanceKeeping>k__BackingField: 2
-  <AttackMaxDistanceKeeping>k__BackingField: 2.5
-  Colors: {fileID: 11400000, guid: 65cf60ddbd43d144282b8d58435e3c58, type: 2}
+  <AttackMinDistanceKeeping>k__BackingField: 1.5
+  <AttackMaxDistanceKeeping>k__BackingField: 2
