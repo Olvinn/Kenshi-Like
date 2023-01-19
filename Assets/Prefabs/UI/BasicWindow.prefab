@@ -172,8 +172,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 375, y: 0}
-  m_SizeDelta: {x: 630, y: 0}
+  m_AnchoredPosition: {x: 559.3257, y: 0}
+  m_SizeDelta: {x: 998.65137, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6247986945473497301
 MonoBehaviour:
@@ -1024,7 +1024,7 @@ GameObject:
   m_Component:
   - component: {fileID: 301409389268551279}
   - component: {fileID: 8811805743006431498}
-  - component: {fileID: 5781500250493054845}
+  - component: {fileID: 340647951699096235}
   - component: {fileID: 4240183441716982761}
   m_Layer: 0
   m_Name: BasicWindow
@@ -1065,11 +1065,11 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5113372036679822180}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &5781500250493054845
+--- !u!114 &340647951699096235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1078,12 +1078,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 5113372036679822180}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ab403ff40e821247bbdf4baa84f8429, type: 3}
+  m_Script: {fileID: 11500000, guid: f6368e3d331574c42916866f6b3c3f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isRaycastable: 1
   cg: {fileID: 8811805743006431498}
-  <isShown>k__BackingField: 1
+  <isShown>k__BackingField: 0
 --- !u!114 &4240183441716982761
 MonoBehaviour:
   m_ObjectHideFlags: 0

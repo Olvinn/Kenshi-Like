@@ -83,6 +83,10 @@ Material:
     - _Alpha: 0.2
     - _AlphaClip: 0
     - _Blend: 0
+    - _BorderNoise: 3
+    - _BorderOffset: -16.35
+    - _BorderPower: 6.36
+    - _BorderWavePower: 1.1
     - _BumpScale: 1
     - _CastShadows: 0
     - _ClearCoatMask: 0
@@ -92,7 +96,7 @@ Material:
     - _Cutoff: 0.5
     - _Depth: 1
     - _DepthEffectPower: 0.05
-    - _DepthThreshold: 8.58
+    - _DepthThreshold: 4.26
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
@@ -105,18 +109,19 @@ Material:
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
-    - _PatternPower: 0
-    - _PatternSize: 3646.4
+    - _PatternPower: 8.2
+    - _PatternSize: 2620.99
     - _PatternThreashold: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 0
-    - _SealOffset: 0.58
+    - _SealOffset: -19.4
     - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
     - _Surface: 1
+    - _Transparency: 5.76
     - _WaterSpeed: 0.0001
     - _Waves: 0.001
     - _WorkflowMode: 1
@@ -126,10 +131,10 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.2593894, g: 0.7670293, b: 0.8207547, a: 0.5882353}
     - _Color: {r: 0.2793699, g: 0.8113208, b: 0.7769343, a: 1}
-    - _DeepColor: {r: 0, g: 0.132934, b: 1, a: 1}
+    - _DeepColor: {r: 0, g: 0.44690275, b: 0.89411765, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SurfaceColor: {r: 0, g: 0.97979015, b: 1, a: 0.89411765}
+    - _SurfaceColor: {r: 0, g: 1, b: 0.9647059, a: 0.77254903}
   m_BuildTextureStacks: []
 --- !u!114 &3056371516639690291
 MonoBehaviour:

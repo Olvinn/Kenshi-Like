@@ -32,9 +32,20 @@ public class GameController : MonoBehaviour
     void LoadScene(LoadSceneCommand data)
     {
         if (data.isAsync)
-            SceneManager.LoadSceneAsync(data.scene);
+        {
+            var j = SceneManager.LoadSceneAsync(data.scene);
+            j.completed += (x) => OnSceneLoaded();
+        }
         else
+        {
             SceneManager.LoadScene(data.scene);
+        }
+    }
+
+    void OnSceneLoaded()
+    {
+        Debug.Log("Loaded");
+        LightProbes.TetrahedralizeAsync();
     }
 
     void QuitGame(QuitGameCommand data)

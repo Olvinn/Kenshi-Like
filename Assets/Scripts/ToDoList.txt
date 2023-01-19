@@ -32,6 +32,10 @@
     // 46) Render paths and destination points
     
     //Bugs:
+    // units attacks too far from being able to hit someone
+    // units unable to block attacks
+    // units animation can stuck in blocking pose
+    // units attack back if only detect a desire to attack them
     
     //Local goals v0.0.3:
     // - 27

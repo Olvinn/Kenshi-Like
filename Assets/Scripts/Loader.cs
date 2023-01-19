@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Connections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Loader : MonoBehaviour
 {
@@ -16,6 +16,6 @@ public class Loader : MonoBehaviour
             DontDestroyOnLoad(go);
         }
         
-        SceneManager.LoadSceneAsync(1);
+        CommandDispatcher.Instance.Handle(new LoadSceneCommand() { isAsync = true, scene = 1});
     }
 }
