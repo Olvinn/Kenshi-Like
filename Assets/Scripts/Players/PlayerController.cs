@@ -14,14 +14,14 @@ namespace Players
     {
         [SerializeField] private LayerMask workWithMask;
         
-        private List<Unit> _units;
+        public List<Unit> units;
         private List<Unit> _selected;
 
         private TeamEnum _team;
 
         private void Awake()
         {
-            _units = new List<Unit>();
+            units = new List<Unit>();
             _selected = new List<Unit>();
         }
 
@@ -37,13 +37,13 @@ namespace Players
 
         public void AddUnit(Unit unit)
         {
-            _units.Add(unit);
+            units.Add(unit);
             unit.SetTeam(_team);
         }
 
         public void SelectUnit(Unit unit)
         {
-            if (_units.Contains(unit) && !_selected.Contains(unit) && !unit.IsDead)
+            if (units.Contains(unit) && !_selected.Contains(unit) && !unit.IsDead)
             {
                 unit.View.Select();
                 _selected.Add(unit);
@@ -70,7 +70,7 @@ namespace Players
         public void SetTeam(TeamEnum team)
         {
             _team = team;
-            foreach (var unit in _units)
+            foreach (var unit in units)
             {
                 unit.SetTeam(team);
             }
@@ -118,7 +118,7 @@ namespace Players
             if (Physics.Raycast(ray, out hit, 1000f, workWithMask))
             {
                 var view = hit.collider.GetComponent<UnitView>();
-                if (view != null && _units.Contains(view.Model))
+                if (view != null && units.Contains(view.Model))
                     SelectUnit(view.Model);
             }
         }
@@ -176,7 +176,7 @@ namespace Players
             if (Physics.Raycast(ray, out hit, 1000f, workWithMask.value))
             {
                 var view = hit.collider.GetComponent<UnitView>();
-                if (view != null && _units.Contains(view.Model))
+                if (view != null && units.Contains(view.Model))
                     SelectUnit(view.Model);
             }
         }
@@ -184,7 +184,7 @@ namespace Players
         private void BoxSelect(Vector2 pos, Vector2 size)
         {
             DeselectAll();
-            foreach (var unit in _units)
+            foreach (var unit in units)
             {
                 Vector3 screen = Camera.main.WorldToScreenPoint(unit.Position);
                 if (screen.x > pos.x && screen.y > pos.y && screen.x < pos.x + size.x && screen.y < pos.y + size.y)
@@ -194,7 +194,7 @@ namespace Players
 
         private void ShiftBoxSelect(Vector2 pos, Vector2 size)
         {
-            foreach (var unit in _units)
+            foreach (var unit in units)
             {
                 Vector3 screen = Camera.main.WorldToScreenPoint(unit.Position);
                 if (screen.x > pos.x && screen.y > pos.y && screen.x < pos.x + size.x && screen.y < pos.y + size.y)

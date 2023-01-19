@@ -6,7 +6,7 @@ namespace Stages
 {
     public class RTSStage : Stage
     {
-        [SerializeField] private Widget squadsView;
+        [SerializeField] private SquadView squadsView;
 
         [SerializeField] private PlayerController player;
 
@@ -14,14 +14,16 @@ namespace Stages
         {
             base.Open();
             
-            // squadsView.Show();
+            squadsView.Show();
+            squadsView.AddUnits(player.units);
         }
 
         public override void Close()
         {
             base.Close();
             
-            // squadsView.Hide();
+            squadsView.Hide();
+            squadsView.ClearUnits();
         }
     }
 }
