@@ -28,7 +28,7 @@ namespace UI
             var p = _portraits[unit];
             p.transform.SetParent(viewParent);
             p.transform.localScale = Vector3.one;
-            p.SetImage(portraitMaker.GetPortrait(unit.data.appearance));
+            portraitMaker.GetPortrait(unit.data.appearance, p.SetImage);
             p.onClick += () => { onClicked?.Invoke(unit); };
         }
 
