@@ -1,5 +1,6 @@
 using Players;
 using UI;
+using Units;
 using UnityEngine;
 
 namespace Stages
@@ -16,6 +17,8 @@ namespace Stages
             
             squadsView.Show();
             squadsView.AddUnits(player.units);
+            foreach (var unit in player.units)
+                unit.OnDie += OnUnitDie;
         }
 
         public override void Close()
@@ -24,6 +27,13 @@ namespace Stages
             
             squadsView.Hide();
             squadsView.ClearUnits();
+            foreach (var unit in player.units)
+                unit.OnDie -= OnUnitDie;
+        }
+
+        public void OnUnitDie(Unit unit)
+        {
+            squadsView.RemoveUnit(unit);
         }
     }
 }

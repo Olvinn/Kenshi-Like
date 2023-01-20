@@ -41,12 +41,14 @@ namespace Units.Views
 
         private void Awake()
         {
-            selection.SetActive(false);
+            if (selection != null)
+                selection.SetActive(false);
         }
 
         private void Start()
         {
-            anim.OnHitBasic += HitBasic;
+            if (anim != null)
+                anim.OnHitBasic += HitBasic;
         }
 
         private void Update()

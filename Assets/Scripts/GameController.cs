@@ -38,13 +38,14 @@ public class GameController : MonoBehaviour
         else
         {
             SceneManager.LoadScene(data.scene);
+            OnSceneLoaded();
         }
     }
 
     void OnSceneLoaded()
     {
-        Debug.Log("Loaded");
         LightProbes.TetrahedralizeAsync();
+        SetTimeScale(new SetTimeScaleCommand() { timeScale = 1 });
     }
 
     void QuitGame(QuitGameCommand data)

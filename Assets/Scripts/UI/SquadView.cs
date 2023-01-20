@@ -8,6 +8,7 @@ namespace UI
     public class SquadView : Widget
     {
         [SerializeField] private Transform viewParent;
+        [SerializeField] private PortraitMaker portraitMaker;
 
         private Dictionary<Unit, Portrait> _portraits;
 
@@ -25,7 +26,17 @@ namespace UI
             var p = _portraits[unit];
             p.transform.SetParent(viewParent);
             p.transform.localScale = Vector3.one;
+            p.SetImage(portraitMaker.GetPortrait(unit.data.appearance));
             p.onClick += () => { Debug.Log(unit);};
+        }
+
+        public void RemoveUnit(Unit unit)
+        {
+            if (!_portraits.ContainsKey(unit))
+                return;
+            
+            _portraits[unit].Unload();
+            _portraits.Remove(unit);
         }
         
         public void AddUnits(List<Unit> units)

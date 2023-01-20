@@ -20,9 +20,9 @@ namespace Units
         public Transform ViewTransform => View.transform;
         public UnitView View { get; private set; }
         public TeamEnum Team { get; private set; }
-        public float HPPercentage => _currentHP / _data.GetParameter(ParametersType.HealthPoints);
+        public float HPPercentage => _currentHP / data.GetParameter(ParametersType.HealthPoints);
 
-        private Character _data;
+        public Character data;
         private LinkedList<Command> _commands;
         private Command _currentCommand;
         private List<Unit> _noticedAttackers;
@@ -45,17 +45,17 @@ namespace Units
 
         public Unit(Character data)
         {
-            _data = data;
+            this.data = data;
             _commands = new LinkedList<Command>();
             _noticedAttackers = new List<Unit>();
-            _currentHP = _data.GetParameter(ParametersType.HealthPoints);
+            _currentHP = this.data.GetParameter(ParametersType.HealthPoints);
         }
         
         public void InjectView(UnitView view)
         {
             View = view;
-            view.SetMaxSpeed(_data.GetParameter(ParametersType.Speed));
-            view.SetAppearance(_data.appearance);
+            view.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
+            view.SetAppearance(data.appearance);
             view.OnHit = OnHit;
         }
 
@@ -94,7 +94,7 @@ namespace Units
             }
             else
             {
-                View.SetMaxSpeed(_data.GetParameter(ParametersType.Speed));
+                View.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
                 View.Run();
             }
 
@@ -136,10 +136,10 @@ namespace Units
             if (View.IsDodging() || View.IsBlocking())
                 return;
 
-            if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.DodgeChance))
+            if (Random.Range(0f, 1f) < data.GetParameter(ParametersType.DodgeChance))
                 View.Dodge();
             else 
-            if (Random.Range(0f, 1f) < _data.GetParameter(ParametersType.BlockChance))
+            if (Random.Range(0f, 1f) < data.GetParameter(ParametersType.BlockChance))
                 View.Block();
         }
 
@@ -179,9 +179,9 @@ namespace Units
             if (IsDead || !CanHit(target))
                 return;
 
-            _attackDelay = _data.GetParameter(ParametersType.AttackDelay);
+            _attackDelay = data.GetParameter(ParametersType.AttackDelay);
             View.RotateOn(target.ViewTransform);
-            View.StartHit(_data.GetParameter(ParametersType.AttackRate), callback);
+            View.StartHit(data.GetParameter(ParametersType.AttackRate), callback);
         }
         
         public void MoveTo(Transform destination, float stopDistance)
@@ -237,7 +237,7 @@ namespace Units
                 foreach (var unit in units)
                 {
                     unit.Model.OnHitWith(new Damage()
-                        { source = this, damage = _data.GetParameter(ParametersType.Damage) });
+                        { source = this, damage = data.GetParameter(ParametersType.Damage) });
                 }
             }
         }
