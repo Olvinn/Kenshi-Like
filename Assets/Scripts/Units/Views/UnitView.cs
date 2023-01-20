@@ -171,7 +171,7 @@ namespace Units.Views
         #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            if (!GameContext.Instance.Constants.DebugGizmos)
+            if (GameContext.Instance != null && !GameContext.Instance.Constants.DebugGizmos)
                 return;
             
             GUI.color = Color.black;

@@ -14,7 +14,7 @@ namespace UI
 
         private Dictionary<Unit, Portrait> _portraits;
 
-        private void Start()
+        private void Awake()
         {
             _portraits = new Dictionary<Unit, Portrait>();
         }
@@ -29,8 +29,7 @@ namespace UI
             p.transform.SetParent(viewParent);
             p.transform.localScale = Vector3.one;
             p.SetImage(portraitMaker.GetPortrait(unit.data.appearance));
-            var u = unit;
-            p.onClick += () => { onClicked?.Invoke(u); };
+            p.onClick += () => { onClicked?.Invoke(unit); };
         }
 
         public void RemoveUnit(Unit unit)
@@ -53,6 +52,24 @@ namespace UI
             foreach (var portrait in _portraits.Values)
                 portrait.Unload();
             _portraits.Clear();
+        }
+
+        public void SelectUnit(Unit unit)
+        {
+            _portraits[unit].Select();
+        }
+
+        public void DeselectUnit(Unit unit)
+        {
+            _portraits[unit].Deselect();
+        }
+
+        public void DeselectAll()
+        {
+            foreach (var p in _portraits.Values)
+            {
+                p.Deselect();
+            }
         }
     }
 }

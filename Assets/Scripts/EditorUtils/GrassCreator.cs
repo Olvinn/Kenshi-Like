@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace EditorUtils
 {
+    #if UNITY_EDITOR
     public class GrassCreator : ScriptableWizard  {
  
         public Terrain terrain;
@@ -85,4 +86,5 @@ namespace EditorUtils
             helpString = "Ready";
         }
     }
+    #endif
 }

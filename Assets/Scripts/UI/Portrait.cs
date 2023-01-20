@@ -10,6 +10,7 @@ namespace UI
         public event Action onClick; 
         public event Action<IPoolable> onUnload;
         [SerializeField] private Image image;
+        [SerializeField] private Image frame;
 
         public void SetImage(Sprite sprite)
         {
@@ -30,12 +31,12 @@ namespace UI
 
         public void Select()
         {
-            
+            frame.color = Color.green;
         }
 
         public void Deselect()
         {
-            
+            frame.color = Color.black;
         }
         
         public void OnPointerClick(PointerEventData eventData)

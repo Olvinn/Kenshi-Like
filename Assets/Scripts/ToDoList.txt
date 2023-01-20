@@ -5,10 +5,8 @@
     // 27) Squad logic and triggers optimization (Req: 22)
     // 18) Unit defend another unit command
     // 10) Unit defend area command
-    // 11) Inherit Player and AI from abstract player?
-    // 29) Unit autonomy with locating campfire and sitting around
-    // 30) Hide UnitView in Unit?
-    // 38) Spawn units to special parent
+    // 29) Unit autonomy with locating campfire and sitting around (Req: 28)
+    // 38) Spawn units via pool
     // 40) Fix camera jitter
     // 41) Unit patrolling command and command repeat system
     // 42) AI encounters and patrolling
@@ -26,7 +24,6 @@
     // 50) Add customisation bones to guy model
     
     //TODO Graphics, effects and UI:
-    // 22) Simple UI with unit icons (Done!)
     // 21) Damage labels
     // 34) Fire effect for campfire
     // 46) Render paths and destination points
@@ -35,14 +32,18 @@
     // 58) units unable to block attacks
     // 59) units animation can stuck in blocking pose
     // 60) units attack back if only detect a desire to attack them
+    // 61) Portrait maker makes the same portrait of bald man
     
     //Local goals v0.0.3:
     // - Grass on terrain (Done!)
     // - Rocks (Done!)
     // - Squad View (Done!)
+    // - 38
     //Local goals v0.0.4:
     // - 27
     // - 44
+    // - 58
+    // - 59
 
     //Goals v0.1:
     // - UI, show player units
