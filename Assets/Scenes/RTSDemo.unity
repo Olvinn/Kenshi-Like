@@ -2144,6 +2144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b203b43cdd2d6814598026227b07f7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAdditiveModifierApplied: 0
   playCamera: {fileID: 963194227}
 --- !u!1001 &916171263
 PrefabInstance:
@@ -3355,7 +3356,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.35506406, g: 0.9528302, b: 0.5503353, a: 0.2901961}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

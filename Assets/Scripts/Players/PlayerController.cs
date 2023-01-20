@@ -176,7 +176,11 @@ namespace Players
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && units.Contains(view.Model))
                     SelectUnit(view.Model, InputController.Instance.isAdditiveModifierApplied);
+                else
+                    DeselectAll();
             }
+            else
+                DeselectAll();
         }
 
         private void BoxSelect(Vector2 pos, Vector2 size)

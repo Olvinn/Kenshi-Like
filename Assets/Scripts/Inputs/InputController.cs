@@ -38,7 +38,6 @@ namespace Inputs
             MouseClickInput();
             CameraMovementInput();
             BoxSelectionInput();
-            _isDrawingBox = _isDrawingStarted && Vector3.Distance(_startBox, Input.mousePosition) >= 3;
         }
 
         void KeyboardActionsInput()
@@ -54,35 +53,42 @@ namespace Inputs
                 return;
 
             if (Input.GetButtonUp("Fire1") && !_isDrawingBox)
+            {
                 OnLMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                _isDrawingStarted = false;
+            }
             else if (Input.GetButtonUp("Fire2"))
+            {
                 OnRMB?.Invoke(playCamera.ScreenPointToRay(Input.mousePosition));
+                _isDrawingStarted = false;
+            }
         }
         
         void BoxSelectionInput()
         {
+            _isDrawingBox = _isDrawingStarted && Vector3.Distance(_startBox, Input.mousePosition) >= 3;
+            
             if (Input.GetButtonDown("Fire1") && !_isOverUI)
             {
                 _startBox = Input.mousePosition;
                 _isDrawingStarted = true;
+                return;
             }
-                
-            if (Input.GetButton("Fire1") && _isDrawingBox)
-                if (Vector3.Distance(_startBox, Input.mousePosition) >= 3)
-                {
-                    var end = Input.mousePosition;
-                    Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
-                    Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
-                    OnDrawBox?.Invoke(pos, size);
-                }
-
-            if (Input.GetButtonUp("Fire1") && _isDrawingBox)
+            
+            var end = Input.mousePosition;
+            Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
+            Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
+            
+            if (Input.GetButtonUp("Fire1") && _isDrawingBox && _isDrawingStarted)
             {
-                var end = Input.mousePosition;
-                Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
-                Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
                 OnBoxSelect?.Invoke(pos, size);
                 _isDrawingStarted = false;
+                return;
+            }
+            
+            if (Input.GetButton("Fire1") && _isDrawingBox && _isDrawingStarted)
+            {
+                OnDrawBox?.Invoke(pos, size);
             }
         }
 
