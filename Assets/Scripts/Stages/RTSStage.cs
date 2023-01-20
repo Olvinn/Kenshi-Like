@@ -17,6 +17,7 @@ namespace Stages
             
             squadsView.Show();
             squadsView.AddUnits(player.units);
+            squadsView.onClicked += player.SelectUnit;
             foreach (var unit in player.units)
                 unit.OnDie += OnUnitDie;
         }
@@ -27,6 +28,7 @@ namespace Stages
             
             squadsView.Hide();
             squadsView.ClearUnits();
+            squadsView.onClicked -= player.SelectUnit;
             foreach (var unit in player.units)
                 unit.OnDie -= OnUnitDie;
         }

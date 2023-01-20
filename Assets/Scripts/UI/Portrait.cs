@@ -1,10 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Image = UnityEngine.UI.Image;
 
 namespace UI
 {
-    public class Portrait : MonoBehaviour, IPoolable
+    public class Portrait : MonoBehaviour, IPoolable, IPointerClickHandler
     {
         public event Action onClick; 
         public event Action<IPoolable> onUnload;
@@ -36,8 +37,8 @@ namespace UI
         {
             
         }
-
-        public void Click()
+        
+        public void OnPointerClick(PointerEventData eventData)
         {
             onClick?.Invoke();
         }

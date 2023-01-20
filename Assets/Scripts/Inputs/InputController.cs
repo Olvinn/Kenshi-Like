@@ -1,6 +1,7 @@
 using System;
 using Connections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Inputs
 {
@@ -20,6 +21,7 @@ namespace Inputs
         private Vector2 _startBox;
         private bool _isDrawingBox;
         private Vector3 _savedMMB;
+        private bool _isOverUI;
 
         private void Awake()
         {
@@ -29,11 +31,12 @@ namespace Inputs
 
         private void Update()
         {
-            MouseClickInput();
-            BoxSelectionInput();
-            CameraMovementInput();
+            _isOverUI = EventSystem.current.IsPointerOverGameObject();
             KeyboardMovementInput();
             KeyboardActionsInput();
+            MouseClickInput();
+            CameraMovementInput();
+            BoxSelectionInput();
         }
 
         void KeyboardActionsInput()
@@ -44,7 +47,7 @@ namespace Inputs
 
         void MouseClickInput()
         {
-            if (_isDrawingBox)
+            if (_isDrawingBox || _isOverUI)
                 return;
 
             if (Input.GetKey(KeyCode.LeftShift))
@@ -65,19 +68,19 @@ namespace Inputs
         
         void BoxSelectionInput()
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && !_isOverUI)
             {
                 _startBox = Input.mousePosition;
+                _isDrawingBox = true;
             }
                 
-            if (Input.GetButton("Fire1"))
+            if (Input.GetButton("Fire1") && _isDrawingBox)
                 if (Vector3.Distance(_startBox, Input.mousePosition) >= 3)
                 {
                     var end = Input.mousePosition;
                     Vector2 pos = new Vector2(end.x < _startBox.x ? end.x : _startBox.x, end.y < _startBox.y ? end.y : _startBox.y);
                     Vector2 size = new Vector2(Mathf.Abs(end.x - _startBox.x), Mathf.Abs(end.y - _startBox.y));
                     OnDrawBox?.Invoke(pos, size);
-                    _isDrawingBox = true;
                 }
 
             if (Input.GetButtonUp("Fire1") && _isDrawingBox)
@@ -95,6 +98,8 @@ namespace Inputs
 
         void CameraMovementInput()
         {
+            if (_isOverUI)
+                return;
             if (Input.GetButtonDown("Fire3"))
             {
                 _savedMMB = Input.mousePosition;

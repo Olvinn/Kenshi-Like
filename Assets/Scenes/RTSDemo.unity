@@ -1499,7 +1499,6 @@ GameObject:
   m_Component:
   - component: {fileID: 695686174}
   - component: {fileID: 695686177}
-  - component: {fileID: 695686176}
   - component: {fileID: 695686175}
   m_Layer: 0
   m_Name: Camera
@@ -1546,7 +1545,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 1
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -1556,14 +1555,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!81 &695686176
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 695686173}
-  m_Enabled: 1
 --- !u!20 &695686177
 Camera:
   m_ObjectHideFlags: 0
@@ -4220,15 +4211,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571514689}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 489.5, y: 4.8, z: -1010.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1546960037}
   - {fileID: 695686174}
-  m_Father: {fileID: 2075867618}
-  m_RootOrder: 2
+  m_Father: {fileID: 1996599552}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1571514691
 MonoBehaviour:
@@ -4702,6 +4693,7 @@ Transform:
   - {fileID: 1364101733}
   - {fileID: 856256143}
   - {fileID: 1483306327}
+  - {fileID: 1571514690}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4836,7 +4828,6 @@ Transform:
   m_Children:
   - {fileID: 963194228}
   - {fileID: 444144085}
-  - {fileID: 1571514690}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

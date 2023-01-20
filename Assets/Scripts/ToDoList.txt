@@ -1,5 +1,5 @@
 
-    // 57
+    // 61
 
     //TODO Scripts: 
     // 27) Squad logic and triggers optimization (Req: 22)
@@ -26,21 +26,23 @@
     // 50) Add customisation bones to guy model
     
     //TODO Graphics, effects and UI:
-    // 22) Simple UI with unit icons
+    // 22) Simple UI with unit icons (Done!)
     // 21) Damage labels
     // 34) Fire effect for campfire
     // 46) Render paths and destination points
     
     //Bugs:
-    // units attacks too far from being able to hit someone
-    // units unable to block attacks
-    // units animation can stuck in blocking pose
-    // units attack back if only detect a desire to attack them
+    // 58) units unable to block attacks
+    // 59) units animation can stuck in blocking pose
+    // 60) units attack back if only detect a desire to attack them
     
     //Local goals v0.0.3:
+    // - Grass on terrain (Done!)
+    // - Rocks (Done!)
+    // - Squad View (Done!)
+    //Local goals v0.0.4:
     // - 27
     // - 44
-    // - Grass on terrain (Done!)
 
     //Goals v0.1:
     // - UI, show player units

@@ -7,6 +7,8 @@ namespace UI
 {
     public class SquadView : Widget
     {
+        public Action<Unit> onClicked;
+        
         [SerializeField] private Transform viewParent;
         [SerializeField] private PortraitMaker portraitMaker;
 
@@ -27,7 +29,8 @@ namespace UI
             p.transform.SetParent(viewParent);
             p.transform.localScale = Vector3.one;
             p.SetImage(portraitMaker.GetPortrait(unit.data.appearance));
-            p.onClick += () => { Debug.Log(unit);};
+            var u = unit;
+            p.onClick += () => { onClicked?.Invoke(u); };
         }
 
         public void RemoveUnit(Unit unit)
