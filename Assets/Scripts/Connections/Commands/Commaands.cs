@@ -13,3 +13,8 @@ struct SetTimeScaleCommand
 {
     public float timeScale;
 }
+
+struct ClearCache
+{
+    
+}

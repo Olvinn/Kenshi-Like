@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Connections;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,7 +12,7 @@ public class Pool
     private List<IPoolable> _prefabs;
     private int _maxCount;
 
-    public Pool(List<IPoolable> prefabs, Transform parent, int initPoolSize = 0, int maxCount = 10)
+    public Pool(List<IPoolable> prefabs, Transform parent, int initPoolSize = 0, int maxCount = 1000)
     {
         _prefabs = prefabs ?? throw new ArgumentException("Pool: prefabs list cannot be null");
         _pool = new Queue<IPoolable>();
@@ -26,6 +27,8 @@ public class Pool
             obj.gameObject.transform.SetParent(_parent);
             _pool.Enqueue(obj);
         }
+
+        CommandDispatcher.Instance.RegisterHandler<ClearCache>(Clear);
     }
 
     public IPoolable GetObject()
@@ -52,6 +55,21 @@ public class Pool
         obj.gameObject.transform.SetParent(_parent);
         _workers.Remove(obj);
         _pool.Enqueue(obj);
+    }
+
+    private void Clear(ClearCache command)
+    {
+        while (_workers.Count > 0)
+        {
+            var t = _workers.First.Value;
+            _workers.RemoveFirst();
+            GameObject.Destroy(t.gameObject);
+        }
+
+        while (_pool.Count > 0)
+        {
+            GameObject.Destroy(_pool.Dequeue().gameObject);
+        }
     }
 }
 

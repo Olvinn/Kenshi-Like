@@ -297,6 +297,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   portraitPrefab: {fileID: -1129533166808568831, guid: 9c52c41f85f8a964cb865959e0bc8edc, type: 3}
+  unitView: {fileID: 2277092710586213329, guid: af6a566f914a99640a1e019183e771a0, type: 3}
 --- !u!1 &1153333264
 GameObject:
   m_ObjectHideFlags: 0

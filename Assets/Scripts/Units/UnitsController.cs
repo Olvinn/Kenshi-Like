@@ -12,7 +12,6 @@ namespace Units
 {
     public class UnitsController : MonoBehaviour
     {
-        [SerializeField] private UnitView prefab;
         [SerializeField] private PlayerController player;
         [SerializeField] private AIController bot;
 
@@ -62,7 +61,7 @@ namespace Units
         Unit CreateUnit(Character data, Vector3 pos)
         {
             var unit = new Unit(data);
-            var view = Instantiate(prefab);
+            var view = ObjectLoader.Instance.GetObject(ObjectTypes.UnitView) as UnitView;
         
             RaycastHit hit;
             Ray ray = new Ray(pos + Vector3.up * 1000, Vector3.down);

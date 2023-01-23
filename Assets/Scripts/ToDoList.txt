@@ -6,13 +6,11 @@
     // 18) Unit defend another unit command
     // 10) Unit defend area command
     // 29) Unit autonomy with locating campfire and sitting around (Req: 28)
-    // 38) Spawn units via pool
     // 40) Fix camera jitter
     // 41) Unit patrolling command and command repeat system
     // 42) AI encounters and patrolling
     // 43) Ragdoll freezing
     // 44) Console and simple console commands
-    // 45) Clearing cash and replay
     // 47) Realize idea with bus-controller that executes queue of actions every frame partially
     // 51) Effects pool
     // 54) Bake textures from shaders
@@ -32,13 +30,7 @@
     // 58) units unable to block attacks
     // 59) units animation can stuck in blocking pose
     // 60) units attack back if only detect a desire to attack them
-    // 61) Portrait maker makes the same portrait of bald man
     
-    //Local goals v0.0.3:
-    // - Grass on terrain (Done!)
-    // - Rocks (Done!)
-    // - Squad View (Done!)
-    // - 38
     //Local goals v0.0.4:
     // - 27
     // - 44

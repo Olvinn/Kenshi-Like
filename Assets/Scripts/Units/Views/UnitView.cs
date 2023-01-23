@@ -11,8 +11,9 @@ using UnityEngine.AI;
 
 namespace Units.Views
 {
-    public class UnitView : MonoBehaviour
+    public class UnitView : MonoBehaviour, IPoolable
     {
+        public event Action<IPoolable> onUnload;
         public Unit Model { get; private set; }
         public List<UnitView> Sensed => sense.Views;
         public Vector3 Position { get; private set; }
@@ -135,6 +136,7 @@ namespace Units.Views
 
         private void OnDisable()
         {
+            Unload();
             ik.enabled = false;
             ragdoll.StartRagdoll();
             if (agent != null)
@@ -143,12 +145,6 @@ namespace Units.Views
                 sense.enabled = false;
                 attack.enabled = false;
             }
-
-            var c = GetComponent<CapsuleCollider>();
-            if (c == null)
-                return;
-            c.radius = 0f;
-            c.enabled = false;
         }
 
         private void OnEnable()
@@ -161,11 +157,6 @@ namespace Units.Views
                 sense.enabled = true;
                 attack.enabled = true;
             }
-            var c = GetComponent<CapsuleCollider>();
-            if (c == null)
-                return;
-            c.radius = .5f;
-            c.enabled = true;
         }
 
         #if UNITY_EDITOR
@@ -410,6 +401,16 @@ namespace Units.Views
         private void HitBasic()
         {
             OnHit?.Invoke(attack.GetUnitViewsFromBasicAttack());
+        }
+
+        public void Unload()
+        {
+            onUnload?.Invoke(this);
+        }
+
+        public void Load()
+        {
+            
         }
     }
 

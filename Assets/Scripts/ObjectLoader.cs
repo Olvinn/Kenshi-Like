@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UI;
+using Units.Views;
 using UnityEngine;
 
 public class ObjectLoader : MonoBehaviour
@@ -8,6 +8,7 @@ public class ObjectLoader : MonoBehaviour
     public static ObjectLoader Instance { get; private set; }
 
     [Header("UI"), SerializeField] private Portrait portraitPrefab;
+    [Header("Units"), SerializeField] private UnitView unitView;
 
     private Dictionary<ObjectTypes, Pool> _pools;
 
@@ -26,18 +27,25 @@ public class ObjectLoader : MonoBehaviour
         var poolsGO = new GameObject("--- Pools ---");
         DontDestroyOnLoad(poolsGO);
         
-        var temp = new GameObject("Portraits");
-        temp.transform.SetParent(poolsGO.transform);
-        _pools.Add(ObjectTypes.UIPortrait, new Pool(new List<IPoolable>() { portraitPrefab }, temp.transform, maxCount: 32));
+        CreatePool(ObjectTypes.UIPortrait, portraitPrefab, 32, poolsGO.transform);
+        CreatePool(ObjectTypes.UnitView, unitView, 1000, poolsGO.transform);
     }
 
     public IPoolable GetObject(ObjectTypes objType)
     {
         return _pools[objType].GetObject();
     }
+
+    private void CreatePool(ObjectTypes type, IPoolable prefab, int maxCount, Transform parent)
+    {
+        var temp = new GameObject(type.ToString());
+        temp.transform.SetParent(parent);
+        _pools.Add(type, new Pool(new List<IPoolable>() { prefab }, temp.transform, maxCount: maxCount));
+    }
 }
 
 public enum ObjectTypes
 {
-    UIPortrait
+    UIPortrait,
+    UnitView
 }

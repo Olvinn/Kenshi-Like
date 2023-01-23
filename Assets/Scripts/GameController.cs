@@ -30,6 +30,7 @@ public class GameController : MonoBehaviour
 
     void LoadScene(LoadSceneCommand data)
     {
+        CommandDispatcher.Instance.Handle(new ClearCache());
         if (data.isAsync)
         {
             var j = SceneManager.LoadSceneAsync(data.scene);
