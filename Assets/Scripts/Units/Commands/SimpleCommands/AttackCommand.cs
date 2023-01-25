@@ -1,12 +1,14 @@
+using Interfaces;
+
 namespace Units.Commands.SimpleCommands
 {
     public class AttackCommand : Command
     {
         public override CommandType Type => CommandType.Attack;
         public override string CommandName => "Hitting";
-        public IDamageable Target;
+        public IKillable Target;
         
-        public AttackCommand(IDamageable target, bool isDirectCommand)
+        public AttackCommand(IKillable target, bool isDirectCommand)
         {
             IsDirectCommand = isDirectCommand;
             Target = target;
@@ -16,13 +18,13 @@ namespace Units.Commands.SimpleCommands
         {
             base.ExecuteBy(executor);
 
-            if (!Executor.CanHit(Target))
+            if (!Executor.CanAttack(Target))
             {
                 Done();
                 return;
             }
             
-            Target.OnPreHitBy(Executor);
+            Target.PreGetDamage(Executor);
             Executor.Attack(Target);
         }
 
@@ -30,7 +32,7 @@ namespace Units.Commands.SimpleCommands
         {
             base.Update();
 
-            if (!Executor.View.IsAttacking())
+            if (!Executor.view.IsAttacking())
                 Done();
         }
 

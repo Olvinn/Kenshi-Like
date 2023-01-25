@@ -13,7 +13,7 @@ namespace Units.Commands.ComplexCommands
 
         public FollowCommand(Unit unitToFollow, Vector3 offset, bool isDirectCommand)
         {
-            _commandQueue.Enqueue(new MoveCommand(unitToFollow.ViewTransform, offset, .1f, isDirectCommand));
+            _commandQueue.Enqueue(new MoveCommand(unitToFollow.transform, offset, .1f, isDirectCommand));
             _repeat = true;
             
             IsDirectCommand = isDirectCommand;

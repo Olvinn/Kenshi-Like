@@ -73,7 +73,7 @@ namespace Units
             unit.InjectView(view);
             view.InjectModel(unit);
             _units.Add(unit);
-            unit.OnDie += RemoveUnit;
+            unit.onDie += RemoveUnit;
         
             return unit;
         }

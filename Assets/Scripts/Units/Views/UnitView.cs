@@ -16,7 +16,7 @@ namespace Units.Views
         public event Action<IPoolable> onUnload;
         public Unit Model { get; private set; }
         public List<UnitView> Sensed => sense.Views;
-        public Vector3 Position { get; private set; }
+        public Vector3 position { get; private set; }
         public Transform Target;
         public Action<List<UnitView>> OnHit;
         public GroundType GroundType { get; private set; }
@@ -38,7 +38,6 @@ namespace Units.Views
         private Transform _destinationTransform;
         private Vector3 _destinationPos;
         private float _stopDistance;
-        private float _cameraDistance;
 
         private void Awake()
         {
@@ -60,8 +59,7 @@ namespace Units.Views
             var constants = GameContext.Instance.Constants;
 
             //Processing moving logic
-            Position = transform.position;
-            _cameraDistance = Vector3.Distance(Camera.main.transform.position, Position);
+            position = transform.position;
             
             bool stay = false;
             if (anim.CanMove && !agent.pathPending && MovementStatus == MovementStatus.Moving)
@@ -85,7 +83,7 @@ namespace Units.Views
             //Rotating unit on specific target
             if (Target != null)
             {
-                Vector3 dir = Target.transform.position - Position;
+                Vector3 dir = Target.transform.position - position;
                 dir.y = 0;
                 transform.rotation = Quaternion.RotateTowards(transform.rotation,Quaternion.LookRotation(dir),
                     Time.deltaTime * constants.AgentsAngularSpeed);
@@ -106,7 +104,7 @@ namespace Units.Views
                 attack.enabled = false;
             
             //Detecting ground type
-            Ray ray = new Ray(Position, Vector3.down);
+            Ray ray = new Ray(position, Vector3.down);
             RaycastHit[] hit = Physics.RaycastAll(ray, constants.DetectingGroundRayLength, constants.DetectingGroundLayerMask);
             if (hit.Length == 1 && hit[0].collider.gameObject.layer == 4)
             {
@@ -123,15 +121,6 @@ namespace Units.Views
 
             agent.nextPosition = anim.AnimatorTransform.position;
             anim.AnimatorTransform.localPosition = Vector3.zero;
-
-            if (_cameraDistance < constants.CameraDistanceCulling)
-            {
-                ik.enabled = true;
-            }
-            else
-            {
-                ik.enabled = false;
-            }
         }
 
         private void OnDisable()
@@ -279,7 +268,7 @@ namespace Units.Views
         /// <returns></returns>
         public bool CanAttack(Transform target)
         {
-            return Vector3.Distance(target.position, Position) < GameContext.Instance.Constants.AttackDistance && 
+            return Vector3.Distance(target.position, position) < GameContext.Instance.Constants.AttackDistance && 
                    anim.State is AnimationControllerState.Idle or AnimationControllerState.Blocking;
         }
 
@@ -344,11 +333,8 @@ namespace Units.Views
         public void GetDamage()
         {
             anim.PerformGetDamageAnimation(null);
-            if (_cameraDistance < GameContext.Instance.Constants.CameraDistanceCulling)
-            {
-                splash.Play();
-                leak.Play();
-            }
+            splash.Play();
+            leak.Play();
         }
 
         /// <summary>
@@ -384,8 +370,7 @@ namespace Units.Views
         /// </summary>
         public void BlockComplete()
         {
-            if (_cameraDistance < GameContext.Instance.Constants.CameraDistanceCulling)
-                sparks.Play();
+            sparks.Play();
         }
 
         public void Swim()

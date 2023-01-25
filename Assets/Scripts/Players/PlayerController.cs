@@ -53,7 +53,7 @@ namespace Players
             
             if (units.Contains(unit) && !unit.IsDead)
             {
-                unit.View.Select();
+                unit.view.Select();
                 _selected.Add(unit);
                 onSelect?.Invoke(unit);
             }
@@ -63,7 +63,7 @@ namespace Players
         {
             if (_selected.Contains(unit))
             {
-                unit.View.Deselect();
+                unit.view.Deselect();
                 _selected.Remove(unit);
                 onDeselect?.Invoke(unit);
             }
@@ -72,7 +72,7 @@ namespace Players
         public void DeselectAll()
         {
             foreach (var unit in _selected)
-                unit.View.Deselect();
+                unit.view.Deselect();
 
             _selected.Clear();
             onClearSelection?.Invoke();
@@ -101,23 +101,23 @@ namespace Players
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && !view.Model.IsDead)
                 {
-                    if (view.Model.Team == TeamEnum.Player)
+                    if (view.Model.team == TeamEnum.Player)
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.ClearCommands();
+                            unit.ClearCommandQueue();
                             Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
                             offset.z = offset.y;
                             offset.y = 0;
-                            unit.AddCommand(new FollowCommand(view.Model, offset,true));
+                            unit.EnqueueCommand(new FollowCommand(view.Model, offset,true));
                         }
                     }
                     else
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.ClearCommands();
-                            unit.AddCommand(new FightCommand(view.Model,true));
+                            unit.ClearCommandQueue();
+                            unit.EnqueueCommand(new FightCommand(view.Model,true));
                         }
                     }
                 }
@@ -125,8 +125,8 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.ClearCommands();
-                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, GameContext.Instance.Constants.MovingStopDistance, true));
+                        unit.ClearCommandQueue();
+                        unit.EnqueueCommand(new MoveCommand(hit.point, Vector3.zero, GameContext.Instance.Constants.MovingStopDistance, true));
                     }
                 }
             }
@@ -140,21 +140,21 @@ namespace Players
                 var view = hit.collider.GetComponent<UnitView>();
                 if (view != null && !view.Model.IsDead)
                 {
-                    if (view.Model.Team == TeamEnum.Player)
+                    if (view.Model.team == TeamEnum.Player)
                     {
                         foreach (var unit in _selected)
                         {
                             Vector3 offset = Random.insideUnitCircle * (_selected.Count * .25f);
                             offset.z = offset.y;
                             offset.y = 0;
-                            unit.AddCommand(new FollowCommand(view.Model, offset, true));
+                            unit.EnqueueCommand(new FollowCommand(view.Model, offset, true));
                         }
                     }
                     else
                     {
                         foreach (var unit in _selected)
                         {
-                            unit.AddCommand(new FightCommand(view.Model, true));
+                            unit.EnqueueCommand(new FightCommand(view.Model, true));
                         }
                     }
                 }
@@ -162,7 +162,7 @@ namespace Players
                 {
                     foreach (var unit in _selected)
                     {
-                        unit.AddCommand(new MoveCommand(hit.point, Vector3.zero, GameContext.Instance.Constants.MovingStopDistance, true));
+                        unit.EnqueueCommand(new MoveCommand(hit.point, Vector3.zero, GameContext.Instance.Constants.MovingStopDistance, true));
                     }
                 }
             }

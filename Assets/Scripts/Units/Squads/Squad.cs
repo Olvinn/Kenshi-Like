@@ -1,15 +1,23 @@
 using System.Collections.Generic;
+using Damages;
+using Interfaces;
+using Units.Commands;
+using Units.Views;
 using UnityEngine;
 
 namespace Units.Squads
 {
-    public class Squad
+    public class Squad : IMoving, ICommandExecutor
     {
-        private List<Unit> _units;
+        private Unit _leader;
+        private List<Unit> _followers;
+        public Transform ViewTransform => _leader.transform;
+        public UnitView View => _leader.view;
+        public bool IsDead => false;
 
         public Squad()
         {
-            _units = new List<Unit>();
+            _followers = new List<Unit>();
         }
 
         public void AddUnits(List<Unit> units)
@@ -22,19 +30,83 @@ namespace Units.Squads
 
         public void AddUnit(Unit unit)
         {
-            if (!_units.Contains(unit))
-                _units.Add(unit);
+            if (unit == null)
+                return;
+            if (_leader == null)
+                _leader = unit;
+            else if (!_followers.Contains(unit))
+                _followers.Add(unit);
         }
 
         public void RemoveUnit(Unit unit)
         {
-            if (_units.Contains(unit))
-                _units.Remove(unit);
+            if (_followers.Contains(unit))
+                _followers.Remove(unit);
+            if (_leader == unit)
+            {
+                _leader = null;
+                ReAssignLeader();
+            }
         }
 
         public bool HasUnit(Unit unit)
         {
-            return _units.Contains(unit);
+            return _followers.Contains(unit);
+        }
+
+        public void SetLeader(Unit unit)
+        {
+            AddUnit(_leader);
+            _leader = unit;
+        }
+
+        private void ReAssignLeader()
+        {
+            if (_followers.Count > 0)
+            {
+                _leader = _followers[0];
+                _followers.Remove(_leader);
+            }
+        }
+
+        public void PreGetDamage(IUnit attacker)
+        {
+            
+        }
+
+        public void GetDamage(Damage damage)
+        {
+            
+        }
+        
+        public void Move(Vector3 pos)
+        {
+            
+        }
+
+        public void Follow(Transform target)
+        {
+            
+        }
+
+        public void Attack(IKillable target)
+        {
+            
+        }
+
+        public void EnqueueCommand(Command command)
+        {
+            
+        }
+
+        public void ExecuteCommands()
+        {
+            
+        }
+
+        public void ClearCommandQueue()
+        {
+            
         }
     }
 }

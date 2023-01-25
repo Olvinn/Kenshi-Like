@@ -1,4 +1,5 @@
 using Data;
+using Interfaces;
 using Units.Commands.SimpleCommands;
 using UnityEngine;
 
@@ -8,11 +9,11 @@ namespace Units.Commands.ComplexCommands
     {
         public override CommandType Type => CommandType.Attack;
         public override string CommandName => $"Attacking: {_currentCommand.CommandName}";
-        public IDamageable Target;
+        public IKillable Target;
         
-        public FightCommand(IDamageable target, bool isDirectCommand)
+        public FightCommand(IKillable target, bool isDirectCommand)
         {
-            _commandQueue.Enqueue(new MoveCommand(target.ViewTransform, Vector3.zero, GameContext.Instance.Constants.AttackDistance, isDirectCommand));
+            _commandQueue.Enqueue(new MoveCommand(target.transform, Vector3.zero, GameContext.Instance.Constants.AttackDistance, isDirectCommand));
             _commandQueue.Enqueue(new AttackCommand(target, isDirectCommand));
             _repeat = true;
             
@@ -24,26 +25,23 @@ namespace Units.Commands.ComplexCommands
         {
             base.ExecuteBy(executor);
             
-            if (executor == null || Target == null || Target.IsDestroyed)
+            if (executor == null || Target == null || Target.IsDead)
             {
                 Done();
                 return;
             }
             
-            executor.View.PerformFightReadyAnimation();
-            Target.OnPreAttackBy(executor);
+            executor.view.PerformFightReadyAnimation();
+            Target.PreGetDamage(executor);
         }
 
         public override void Dispose()
         {
             if (Executor != null)
             {
-                Executor.View.Target = null;
-                Executor.View.PerformIdleAnimation();
+                Executor.view.Target = null;
+                Executor.view.PerformIdleAnimation();
             }
-            
-            if (Target != null)
-                Target.OnPostAttackBy(Executor);
             
             Target = null;
             base.Dispose();
@@ -51,7 +49,7 @@ namespace Units.Commands.ComplexCommands
 
         public override void Update()
         {
-            if (Target == null || Target.IsDestroyed)
+            if (Target == null || Target.IsDead)
             {
                 Done();
                 return;

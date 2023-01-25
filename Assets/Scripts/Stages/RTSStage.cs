@@ -23,7 +23,7 @@ namespace Stages
             player.onDeselect += squadsView.DeselectUnit;
             player.onClearSelection += squadsView.DeselectAll;
             foreach (var unit in player.units)
-                unit.OnDie += OnUnitDie;
+                unit.onDie += OnUnitDie;
         }
 
         public override void Close()
@@ -37,7 +37,7 @@ namespace Stages
             player.onDeselect -= squadsView.DeselectUnit;
             player.onClearSelection -= squadsView.DeselectAll;
             foreach (var unit in player.units)
-                unit.OnDie -= OnUnitDie;
+                unit.onDie -= OnUnitDie;
         }
 
         private void OnUnitDie(Unit unit)

@@ -49,7 +49,7 @@ namespace Units.Commands.SimpleCommands
             if (Vector3.Distance(Executor.Position, temp) < _stopDist)
                 Done();
             else
-                Executor.MoveTo(temp, _stopDist);
+                Executor.Move(temp);
         }
         
         public override bool Equals(object obj)

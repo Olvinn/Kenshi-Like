@@ -5,33 +5,79 @@ using Units.Commands;
 using UnityEngine;
 using Damages;
 using Data;
+using Interfaces;
 using Units.Commands.ComplexCommands;
 using Units.Views;
 using Random = UnityEngine.Random;
 
 namespace Units
 {
-    public class Unit: IDamageable
+    public class Unit: IUnit
     {
-        public event Action<Unit> OnDie;
-        public bool IsDestroyed => IsDead;
+        public event Action<Unit> onDie;
         public bool IsDead => _currentHP <= 0;
-        public Vector3 Position => View.Position;
-        public Transform ViewTransform => View.transform;
-        public UnitView View { get; private set; }
-        public TeamEnum Team { get; private set; }
+        public Vector3 Position => view.position;
+        public Transform transform => view.transform;
+        public UnitView view { get; private set; }
+        public TeamEnum team { get; private set; }
         public float HPPercentage => _currentHP / data.GetParameter(ParametersType.HealthPoints);
-
         public Character data;
+        
         private LinkedList<Command> _commands;
         private Command _currentCommand;
-        private List<Unit> _noticedAttackers;
         private bool _isExecutingCommands = false;
-
         private float _currentHP;
         private bool _isBusy = false;
         private float _attackDelay = 0f;
         private float _savedTime;
+
+        public Unit(Character data)
+        {
+            this.data = data;
+            _commands = new LinkedList<Command>();
+            _currentHP = this.data.GetParameter(ParametersType.HealthPoints);
+        }
+        
+        public void Update()
+        {
+            if (IsDead)
+                return;
+
+            float delta = Time.time - _savedTime;
+
+            if (_attackDelay > 0)
+                _attackDelay -= delta;
+            
+            if (!_isExecutingCommands && !_isBusy)
+                ProcessSense();
+
+            if (_currentCommand != null)
+                _currentCommand.Update();
+            
+            if (_commands.Count > 0 && !_isExecutingCommands)
+                ExecuteCommands();
+
+            if (view.GroundType == GroundType.Water)
+            {
+                view.SetMaxSpeed(2f);
+                view.Swim();
+            }
+            else
+            {
+                view.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
+                view.Run();
+            }
+
+            _savedTime = Time.time;
+        }
+        
+        public void InjectView(UnitView view)
+        {
+            this.view = view;
+            view.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
+            view.SetAppearance(data.appearance);
+            view.OnHit = OnCompleteAttack;
+        }
 
         public List<string> GetListOfCommands()
         {
@@ -43,124 +89,61 @@ namespace Units
             return result;
         }
 
-        public Unit(Character data)
-        {
-            this.data = data;
-            _commands = new LinkedList<Command>();
-            _noticedAttackers = new List<Unit>();
-            _currentHP = this.data.GetParameter(ParametersType.HealthPoints);
-        }
-        
-        public void InjectView(UnitView view)
-        {
-            View = view;
-            view.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
-            view.SetAppearance(data.appearance);
-            view.OnHit = OnHit;
-        }
-
-        public void Update()
-        {
-            if (IsDead)
-                return;
-
-            float delta = Time.time - _savedTime;
-
-            if (_attackDelay > 0)
-                _attackDelay -= delta;
-
-            foreach (var attacker in _noticedAttackers)
-            {
-                if (attacker.IsDead)
-                {
-                    _noticedAttackers.Remove(attacker);
-                    break;
-                }
-            }
-            
-            if (!_isExecutingCommands && !_isBusy)
-                ProcessSense();
-
-            if (_currentCommand != null)
-                _currentCommand.Update();
-            
-            if (_commands.Count > 0 && !_isExecutingCommands)
-                ExecuteCommands();
-
-            if (View.GroundType == GroundType.Water)
-            {
-                View.SetMaxSpeed(2f);
-                View.Swim();
-            }
-            else
-            {
-                View.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
-                View.Run();
-            }
-
-            _savedTime = Time.time;
-        }
-
         public void Die()
         {
-            View.Die();
-            ClearCommands();
-            OnDie?.Invoke(this);
-        }
-
-        /// <summary>
-        /// Enlist attacker to proceed later
-        /// </summary>
-        /// <param name="attacker"></param>
-        public void OnPreAttackBy(Unit attacker)
-        {
-            if (!_noticedAttackers.Contains(attacker))
-                _noticedAttackers.Add(attacker);
-        }
-
-        /// <summary>
-        /// Remove attacker from noticed attackers
-        /// </summary>
-        /// <param name="attacker"></param>
-        public void OnPostAttackBy(Unit attacker)
-        {
-            if (!_noticedAttackers.Contains(attacker))
-                _noticedAttackers.Remove(attacker);
+            view.Die();
+            ClearCommandQueue();
+            onDie?.Invoke(this);
         }
 
         /// <summary>
         /// Detect attackers desire to hit
         /// </summary>
-        public void OnPreHitBy(Unit attacker)
+        public void PreGetDamage(IUnit attacker)
         {
-            if (View.IsDodging() || View.IsBlocking())
+            if (view.IsDodging() || view.IsBlocking())
                 return;
 
             if (Random.Range(0f, 1f) < data.GetParameter(ParametersType.DodgeChance))
-                View.Dodge();
+                view.Dodge();
             else 
             if (Random.Range(0f, 1f) < data.GetParameter(ParametersType.BlockChance))
-                View.Block();
+                view.Block();
+        }
+
+        public void Attack(IKillable target)
+        {
+            if (IsDead || !CanAttack(target))
+                return;
+
+            _attackDelay = data.GetParameter(ParametersType.AttackDelay);
+            view.RotateOn(target.transform);
+            view.StartHit(data.GetParameter(ParametersType.AttackRate), null);
         }
 
         /// <summary>
         /// Proceed hit and pass damage if unit doesn't blocking or dodging 
         /// </summary>
         /// <param name="dmg"></param>
-        public void OnHitWith(Damage dmg)
+        public void GetDamage(Damage dmg)
         {
             if (IsDead)
                 return;
             
-            if (dmg.source == this || dmg.source.Team == Team)
+            if (dmg.source == this || dmg.source.team == team)
                 return;
             
-            if (!View.IsDodging() && !View.IsBlocking())
+            if (!view.IsDodging() && !view.IsBlocking())
             {
-                View.GetDamage();
+                view.GetDamage();
                 _currentHP -= dmg.damage;
                 if (_currentHP <= 0)
                     Die();
+            }
+
+            if (view.IsBlocking())
+            {
+                view.BlockComplete();
             }
 
             if (_currentCommand == null || _currentCommand.Type == CommandType.Attack)
@@ -169,36 +152,26 @@ namespace Units
                 if (c == null)
                     return;
                 
-                if (Vector3.Distance(c.Target.ViewTransform.position, Position) > Vector3.Distance(dmg.source.Position, Position))
+                if (Vector3.Distance(c.Target.transform.position, Position) > Vector3.Distance(dmg.source.Position, Position))
                     AddReactionCommand(new FightCommand(dmg.source, false));
             }
         }
-
-        public void Attack(IDamageable target, Action callback = null)
-        {
-            if (IsDead || !CanHit(target))
-                return;
-
-            _attackDelay = data.GetParameter(ParametersType.AttackDelay);
-            View.RotateOn(target.ViewTransform);
-            View.StartHit(data.GetParameter(ParametersType.AttackRate), callback);
-        }
         
-        public void MoveTo(Transform destination, float stopDistance)
+        public void Follow(Transform destination)
         {
             if (IsDead)
                 return;
-            View.MoveTo(destination, stopDistance);
+            view.MoveTo(destination, 1);
         }
 
-        public void MoveTo(Vector3 destination, float stopDistance)
+        public void Move(Vector3 destination)
         {
             if (IsDead)
                 return;
-            View.MoveTo(destination, stopDistance);
+            view.MoveTo(destination, 1);
         }
 
-        public void AddCommand(Command command)
+        public void EnqueueCommand(Command command)
         {
             if (IsDead)
                 return;
@@ -213,7 +186,7 @@ namespace Units
                 if (_currentCommand.IsDirectCommand && !command.IsDirectCommand)
                     return;
                 if (!_currentCommand.IsDirectCommand && command.IsDirectCommand)
-                    ClearCommands();
+                    ClearCommandQueue();
 
                 _commands.AddLast(command);
             }
@@ -225,18 +198,18 @@ namespace Units
             }
         }
 
-        public bool CanHit(IDamageable unit)
+        public bool CanAttack(IKillable unit)
         {
-            return _attackDelay <= 0 && View.CanAttack(unit.ViewTransform);
+            return _attackDelay <= 0 && view.CanAttack(unit.transform);
         }
         
-        private void OnHit(List<UnitView> units)
+        private void OnCompleteAttack(List<UnitView> units)
         {
             if (units != null)
             {
                 foreach (var unit in units)
                 {
-                    unit.Model.OnHitWith(new Damage()
+                    unit.Model.GetDamage(new Damage()
                         { source = this, damage = data.GetParameter(ParametersType.Damage) });
                 }
             }
@@ -272,7 +245,7 @@ namespace Units
             ContinueCommands();
         }
 
-        public void ClearCommands()
+        public void ClearCommandQueue()
         {
             if (_currentCommand == null)
                 return;
@@ -287,10 +260,10 @@ namespace Units
 
         public void SetTeam(TeamEnum team)
         {
-            Team = team;
+            this.team = team;
         }
 
-        private void ExecuteCommands()
+        public void ExecuteCommands()
         {
             if (IsDead)
                 return;
@@ -328,16 +301,12 @@ namespace Units
             
             float d = float.MaxValue;
             Unit enemy = null;
-
-            List<Unit> list = null;
-            if (_noticedAttackers.Count > 0)
-                list = _noticedAttackers;
-            else
-                list = View.Sensed.Select(x => x.Model).ToList();
+            
+            var list = view.Sensed.Select(x => x.Model).ToList();
             
             foreach (var view in list)
             {
-                if (view != this && !view.IsDead && view.Team != Team)
+                if (view != this && !view.IsDead && view.team != team)
                 {
                     float temp = Vector3.Distance(Position, view.Position);
                     if (temp < d)
@@ -361,15 +330,5 @@ namespace Units
     {
         Player,
         EnemyAI
-    }
-
-    public interface IDamageable
-    {
-        bool IsDestroyed { get; }
-        Transform ViewTransform { get; }
-        void OnPreAttackBy(Unit attacker);
-        void OnPreHitBy(Unit attacker);
-        void OnHitWith(Damage damage);
-        void OnPostAttackBy(Unit attacker);
     }
 }

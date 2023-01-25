@@ -23,7 +23,7 @@ namespace Units.Weapons
             if (unit && unit.Model is { IsDead: false })
             {
                 _views.Add(unit);
-                unit.Model.OnDie += RemoveUnit;
+                unit.Model.onDie += RemoveUnit;
             }
         }
 
@@ -49,10 +49,10 @@ namespace Units.Weapons
             }
             else
             {
-                if (_views.Contains(unit.View))
+                if (_views.Contains(unit.view))
                 {
-                    _views.Remove(unit.View);
-                    unit.OnDie -= RemoveUnit;
+                    _views.Remove(unit.view);
+                    unit.onDie -= RemoveUnit;
                 } 
             }
         }

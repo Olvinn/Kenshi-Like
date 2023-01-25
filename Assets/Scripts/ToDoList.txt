@@ -16,6 +16,7 @@
     // 54) Bake textures from shaders
     // 55) Time acceleration and slo-mo
     // 57) Tool for dynamic terrain generation with height map and grass
+    // 61) UnitView states and AnimationController states
     
     //TODO Models and animations:
     // 28) Campfire model and sit around animation
