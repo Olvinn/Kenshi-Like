@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using Interfaces;
-using UnityEngine;
-
-public interface IAttacking
+namespace Interfaces
 {
-    bool CanAttack(IKillable target);
-    void Attack(IKillable target);
+    public interface IAttacking
+    {
+        bool CanAttack(IKillable target);
+        void Attack(IKillable target);
+    }
 }

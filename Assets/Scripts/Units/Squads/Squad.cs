@@ -1,34 +1,29 @@
 using System.Collections.Generic;
-using Damages;
 using Interfaces;
 using Units.Commands;
-using Units.Views;
 using UnityEngine;
 
 namespace Units.Squads
 {
-    public class Squad : IMoving, ICommandExecutor
+    public class Squad : ISquad
     {
-        private Unit _leader;
-        private List<Unit> _followers;
-        public Transform ViewTransform => _leader.transform;
-        public UnitView View => _leader.view;
-        public bool IsDead => false;
+        private ISquadMember _leader;
+        private List<ISquadMember> _followers;
 
         public Squad()
         {
-            _followers = new List<Unit>();
+            _followers = new List<ISquadMember>();
         }
 
-        public void AddUnits(List<Unit> units)
+        public void AddMembers(IEnumerable<ISquadMember> units)
         {
             foreach (var unit in units)
             {
-                AddUnit(unit);
+                AddMember(unit);
             }
         }
 
-        public void AddUnit(Unit unit)
+        public void AddMember(ISquadMember unit)
         {
             if (unit == null)
                 return;
@@ -38,7 +33,7 @@ namespace Units.Squads
                 _followers.Add(unit);
         }
 
-        public void RemoveUnit(Unit unit)
+        public void RemoveMember(ISquadMember unit)
         {
             if (_followers.Contains(unit))
                 _followers.Remove(unit);
@@ -49,14 +44,14 @@ namespace Units.Squads
             }
         }
 
-        public bool HasUnit(Unit unit)
+        public void RemoveAllMembers()
         {
-            return _followers.Contains(unit);
+            _leader = null;
+            _followers.Clear();
         }
 
-        public void SetLeader(Unit unit)
+        private void SetLeader(ISquadMember unit)
         {
-            AddUnit(_leader);
             _leader = unit;
         }
 
@@ -68,16 +63,6 @@ namespace Units.Squads
                 _followers.Remove(_leader);
             }
         }
-
-        public void PreGetDamage(IUnit attacker)
-        {
-            
-        }
-
-        public void GetDamage(Damage damage)
-        {
-            
-        }
         
         public void Move(Vector3 pos)
         {
@@ -87,6 +72,11 @@ namespace Units.Squads
         public void Follow(Transform target)
         {
             
+        }
+
+        public bool CanAttack(IKillable target)
+        {
+            return true;
         }
 
         public void Attack(IKillable target)

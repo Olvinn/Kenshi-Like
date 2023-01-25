@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public interface IMoving
+namespace Interfaces
 {
-    void Move(Vector3 pos);
-    void Follow(Transform target);
+    public interface IMoving
+    {
+        void Move(Vector3 pos);
+        void Follow(Transform target);
+    }
 }
