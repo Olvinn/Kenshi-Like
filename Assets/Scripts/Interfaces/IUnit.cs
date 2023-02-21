@@ -3,7 +3,7 @@ using Units.Views;
 
 namespace Interfaces
 {
-    public interface IUnit : IKillable, IMoving, ICommandExecutor, IAttacking
+    public interface IUnit : IKillable, IMoving, ICommandExecutor, IAttacking, ISquadMember
     {
         TeamEnum team { get; }
         UnitView view { get; }
