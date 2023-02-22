@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
-using Units.Views;
-using Units.Weapons;
+using OldUnits.Views;
+using OldUnits.Weapons;
 using UnityEngine;
 
-namespace Units
+namespace OldUnits
 {
     public class UnitAttack : MonoBehaviour
     {

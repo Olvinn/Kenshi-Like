@@ -2,7 +2,7 @@ using System;
 using Data;
 using UnityEngine;
 
-namespace Units.Views
+namespace OldUnits.Views
 {
     public class UnitAppearance : MonoBehaviour
     {

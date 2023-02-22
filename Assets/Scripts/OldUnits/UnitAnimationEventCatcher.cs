@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Units
+namespace OldUnits
 {
     public class UnitAnimationEventCatcher : MonoBehaviour
     {

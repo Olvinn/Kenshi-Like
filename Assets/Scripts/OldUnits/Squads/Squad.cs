@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Interfaces;
-using Units.Commands;
+using OldUnits.Commands;
 using UnityEngine;
 
-namespace Units.Squads
+namespace OldUnits.Squads
 {
     public class Squad : ISquad
     {

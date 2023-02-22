@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Units
+namespace OldUnits
 {
     public struct UnitData
     {

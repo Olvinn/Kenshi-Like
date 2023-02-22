@@ -1,7 +1,7 @@
-using Units.Commands.SimpleCommands;
+using OldUnits.Commands.SimpleCommands;
 using UnityEngine;
 
-namespace Units.Commands.ComplexCommands
+namespace OldUnits.Commands.ComplexCommands
 {
     public class FollowCommand : ComplexCommand
     {

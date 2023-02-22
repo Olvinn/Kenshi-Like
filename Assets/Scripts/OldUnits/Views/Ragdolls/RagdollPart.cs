@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Units.Views.Ragdolls
+namespace OldUnits.Views.Ragdolls
 {
     public class RagdollPart : MonoBehaviour
     {

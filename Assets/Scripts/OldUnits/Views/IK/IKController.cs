@@ -1,7 +1,7 @@
 using Data;
 using UnityEngine;
 
-namespace Units.Views.IK
+namespace OldUnits.Views.IK
 {
     public class IKController : MonoBehaviour
     {

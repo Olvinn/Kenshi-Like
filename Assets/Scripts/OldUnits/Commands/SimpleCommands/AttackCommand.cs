@@ -1,6 +1,6 @@
 using Interfaces;
 
-namespace Units.Commands.SimpleCommands
+namespace OldUnits.Commands.SimpleCommands
 {
     public class AttackCommand : Command
     {

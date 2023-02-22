@@ -1,20 +1,23 @@
-struct LoadSceneCommand
+namespace Connections.Commands
 {
-    public bool isAsync;
-    public int scene;
-}
+    struct LoadSceneCommand
+    {
+        public bool isAsync;
+        public int scene;
+    }
 
-struct QuitGameCommand
-{
+    struct QuitGameCommand
+    {
     
-}
+    }
 
-struct SetTimeScaleCommand
-{
-    public float timeScale;
-}
+    struct SetTimeScaleCommand
+    {
+        public float timeScale;
+    }
 
-struct ClearCache
-{
+    struct ClearCache
+    {
     
+    }
 }

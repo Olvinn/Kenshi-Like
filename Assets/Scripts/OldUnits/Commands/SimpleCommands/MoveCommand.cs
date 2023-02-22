@@ -1,7 +1,6 @@
-using Data;
 using UnityEngine;
 
-namespace Units.Commands.SimpleCommands
+namespace OldUnits.Commands.SimpleCommands
 {
     public class MoveCommand : Command
     {

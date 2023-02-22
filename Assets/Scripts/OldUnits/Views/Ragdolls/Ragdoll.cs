@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Units.Views.Ragdolls
+namespace OldUnits.Views.Ragdolls
 {
     public class Ragdoll : MonoBehaviour
     {

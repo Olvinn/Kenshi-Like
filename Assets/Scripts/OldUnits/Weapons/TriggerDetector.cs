@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Units.Views;
+using OldUnits.Views;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Units.Weapons
+namespace OldUnits.Weapons
 {
     public class TriggerDetector : MonoBehaviour
     {

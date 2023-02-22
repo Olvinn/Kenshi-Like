@@ -1,6 +1,6 @@
 using System;
 
-namespace Units.Commands
+namespace OldUnits.Commands
 {
     public class Command : IDisposable
     {
