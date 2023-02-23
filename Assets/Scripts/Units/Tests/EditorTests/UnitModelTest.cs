@@ -1,30 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Units.MVC.Model;
 using Units.Structures;
 using UnityEngine;
-using UnityEngine.TestTools;
 
-namespace Units.Tests
+namespace Units.Tests.EditorTests
 {
     public class UnitModelTest
     {
-        private UnitStats GetTestStats()
-        {
-            UnitStats stats = new UnitStats()
-            {
-                healthPoints = 100,
-                attackPower = 10,
-                speed = 5
-            };
-            return stats;
-        }
-        
         [Test]
         public void UnitStatsTests()
         {
-            UnitStats stats = GetTestStats();
+            UnitStats stats = TestUtils.GetTestStats();
             
             //just make sure it all of value types
             UnitStats copy = stats;
@@ -39,23 +26,11 @@ namespace Units.Tests
             Assert.AreEqual(4, copy.speed);
             Assert.AreEqual(5, stats.speed);
         }
-
-        private UnitAppearance GetTestAppearance()
-        {
-            UnitAppearance appearance = new UnitAppearance()
-            {
-                skinColor = Color.white,
-                baseColor = Color.red,
-                secondaryColor = Color.black,
-                accentColor = Color.cyan
-            };
-            return appearance;
-        }
         
         [Test]
         public void UnitAppearanceTests()
         {
-            UnitAppearance appearance = GetTestAppearance();
+            UnitAppearance appearance = TestUtils.GetTestAppearance();
             
             //just make sure it all of value types
             UnitAppearance copy = appearance;
@@ -77,8 +52,8 @@ namespace Units.Tests
         [Test]
         public void UnitModelSimpleTests()
         {
-            UnitStats stats = GetTestStats();
-            UnitAppearance appearance = GetTestAppearance();
+            UnitStats stats = TestUtils.GetTestStats();
+            UnitAppearance appearance = TestUtils.GetTestAppearance();
             UnitModel model = new UnitModel(stats, appearance);
             
             Assert.AreEqual(stats, model.GetStats());
@@ -89,8 +64,8 @@ namespace Units.Tests
         [Test]
         public void UnitModelDamageAndHealTests()
         {
-            UnitStats stats = GetTestStats();
-            UnitAppearance appearance = GetTestAppearance();
+            UnitStats stats = TestUtils.GetTestStats();
+            UnitAppearance appearance = TestUtils.GetTestAppearance();
             UnitModel model = new UnitModel(stats, appearance);
             
             Assert.AreEqual(false,model.isDead);
@@ -116,8 +91,8 @@ namespace Units.Tests
         [Test]
         public void UnitModelPositionTests()
         {
-            UnitStats stats = GetTestStats();
-            UnitAppearance appearance = GetTestAppearance();
+            UnitStats stats = TestUtils.GetTestStats();
+            UnitAppearance appearance = TestUtils.GetTestAppearance();
             UnitModel model = new UnitModel(stats, appearance);
 
             model.UpdatePosition(Vector3.one);
@@ -127,8 +102,8 @@ namespace Units.Tests
         [Test]
         public void UnitModelEventsTests()
         {
-            UnitStats stats = GetTestStats();
-            UnitAppearance appearance = GetTestAppearance();
+            UnitStats stats = TestUtils.GetTestStats();
+            UnitAppearance appearance = TestUtils.GetTestAppearance();
             UnitModel model = new UnitModel(stats, appearance);
 
             List<int> history = new List<int>();
@@ -152,16 +127,6 @@ namespace Units.Tests
             Assert.AreEqual(1, history[1]);
             Assert.AreEqual(99, history[2]);
             Assert.AreEqual(-50, history[3]);
-        }
-
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator UnitModelTestWithEnumeratorPasses()
-        {
-            // Use the Assert class to test conditions.
-            // Use yield to skip a frame.
-            yield return null;
         }
     }
 }
