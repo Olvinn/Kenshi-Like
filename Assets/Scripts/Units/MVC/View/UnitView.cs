@@ -36,7 +36,12 @@ namespace Units.MVC.View
             _agent.speed = stats.speed;
         }
 
-        public void MoveTo(Vector3 destination, float stoppingDistance = .5f)
+        public void MoveTo(Vector3 destination)
+        {
+            MoveTo(destination, .5f);
+        }
+
+        public void MoveTo(Vector3 destination, float stoppingDistance)
         {
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
@@ -49,6 +54,11 @@ namespace Units.MVC.View
             _agent.destination = destination;
             movingStatus = MovingStatus.Moving;
             _agent.isStopped = false;
+        }
+
+        public void WarpTo(Vector3 position)
+        {
+            _agent.Warp(position);
         }
     }
 }

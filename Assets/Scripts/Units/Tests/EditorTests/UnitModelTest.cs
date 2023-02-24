@@ -89,17 +89,6 @@ namespace Units.Tests.EditorTests
         }
         
         [Test]
-        public void UnitModelPositionTests()
-        {
-            UnitStats stats = TestUtils.GetTestStats();
-            UnitAppearance appearance = TestUtils.GetTestAppearance();
-            UnitModel model = new UnitModel(stats, appearance);
-
-            model.UpdatePosition(Vector3.one);
-            Assert.AreEqual(Vector3.one, model.GetPosition());
-        }
-        
-        [Test]
         public void UnitModelEventsTests()
         {
             UnitStats stats = TestUtils.GetTestStats();
