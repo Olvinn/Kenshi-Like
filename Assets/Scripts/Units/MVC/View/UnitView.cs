@@ -39,8 +39,12 @@ namespace Units.MVC.View
         public void MoveTo(Vector3 destination, float stoppingDistance = .5f)
         {
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
+            {
+                _agent.isStopped = true;
+                movingStatus = MovingStatus.Staying;
                 return;
-            
+            }
+
             _agent.stoppingDistance = stoppingDistance;
             _agent.destination = destination;
             movingStatus = MovingStatus.Moving;

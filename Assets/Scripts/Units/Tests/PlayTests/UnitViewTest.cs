@@ -55,6 +55,9 @@ namespace Units.Tests.PlayTests
             Assert.AreEqual(MovingStatus.Staying, _view.movingStatus);
             _view.MoveTo(destination);
             Assert.AreEqual(MovingStatus.Staying, _view.movingStatus);
+            _view.MoveTo(start);
+            _view.MoveTo(destination);
+            Assert.AreEqual(MovingStatus.Staying, _view.movingStatus);
         }
     }
 }
