@@ -8,10 +8,12 @@ namespace Units.MVC.View
     [RequireComponent(typeof(NavMeshAgent))]
     public class UnitView : MonoBehaviour
     {
+        public Action<Vector3> onPositionChanged;
         public Action onReachDestination;
         public MovingStatus movingStatus { get; private set; }
         
         private NavMeshAgent _agent;
+        private Vector3 _savedPosition;
         
         private void Awake()
         {
@@ -28,6 +30,12 @@ namespace Units.MVC.View
                     movingStatus = MovingStatus.Staying;
                     onReachDestination?.Invoke();
                 }
+            }
+
+            if (_savedPosition != transform.position)
+            {
+                onPositionChanged?.Invoke(transform.position);
+                _savedPosition = transform.position;
             }
         }
 
@@ -59,6 +67,7 @@ namespace Units.MVC.View
         public void WarpTo(Vector3 position)
         {
             _agent.Warp(position);
+            onPositionChanged?.Invoke(transform.position);
         }
     }
 }

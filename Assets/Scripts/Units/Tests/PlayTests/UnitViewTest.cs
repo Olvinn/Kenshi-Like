@@ -12,14 +12,14 @@ namespace Units.Tests.PlayTests
 {
     public class UnitViewTest
     {
-        private UnitModel _model;
+        private UnitStats _stats;
         private UnitView _view;
         private NavMeshSurface _env;
 
         [SetUp]
         public void SetUp()
         {
-            _model = new UnitModel(TestUtils.GetTestStats(), TestUtils.GetTestAppearance());
+            _stats = TestUtils.GetTestStats();
 
             var env = GameObject.CreatePrimitive(PrimitiveType.Plane);
             env.transform.localScale = new Vector3(100, 0, 100);
@@ -28,6 +28,7 @@ namespace Units.Tests.PlayTests
             _env = temp.AddComponent<NavMeshSurface>();
             _env.collectObjects = CollectObjects.Children;
             _env.useGeometry = NavMeshCollectGeometry.RenderMeshes;
+            _env.BuildNavMesh();
         }
         
         [UnityTest]
@@ -36,15 +37,14 @@ namespace Units.Tests.PlayTests
             bool wasReachedDestination = false;
             Vector3 destination = new Vector3(0, 0, 5);
             Vector3 start = Vector3.zero;
-            _env.BuildNavMesh();
             var temp = new GameObject();
             _view = temp.AddComponent<UnitView>();
             Assert.NotNull(_view);
             var agent = _view.GetComponent<NavMeshAgent>();
             Assert.NotNull(agent);
             
-            _view.SetStats(_model.GetStats());
-            Assert.AreEqual(agent.speed, _model.GetStats().speed);
+            _view.SetStats(_stats);
+            Assert.AreEqual(agent.speed, _stats.speed);
             _view.onReachDestination = () => { wasReachedDestination = true; };
             _view.MoveTo(destination);
             yield return new WaitForSeconds(.1f);

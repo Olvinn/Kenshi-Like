@@ -1,0 +1,40 @@
+using UnityEngine;
+
+namespace Units.MVC.Controller
+{
+    public static class UnitControllerFactory
+    {
+        private const string ControllersName = "--- Controllers ---";
+        private const string ParentName = "-- Units --";
+        
+        private static int _index = 0;
+        private static Transform _controllers, _parent;
+        
+        public static UnitController Create()
+        {
+            if (_parent == null)
+                FindOrCreateParent();
+            var temp = new GameObject($"UnitController_{_index++}");
+            var result = temp.AddComponent<UnitController>();
+            result.transform.SetParent(_parent);
+            return result;
+        }
+
+        private static void FindOrCreateParent()
+        {
+            var temp = GameObject.Find(ControllersName);
+            if (temp)
+                _controllers = temp.transform;
+            else
+                _controllers = new GameObject(ControllersName).transform;
+            temp = GameObject.Find(ParentName);
+            if (temp)
+                _parent = temp.transform;
+            else
+            {
+                _parent = new GameObject(ParentName).transform;
+                _parent.SetParent(_controllers);
+            }
+        }
+    }
+}

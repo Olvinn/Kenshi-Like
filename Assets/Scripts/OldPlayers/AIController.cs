@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
 using OldUnits;
-using Units;
 using UnityEngine;
 
-namespace Players
+namespace OldPlayers
 {
     public class AIController : MonoBehaviour, IPlayer
     {

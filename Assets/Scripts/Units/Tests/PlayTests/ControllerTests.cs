@@ -11,7 +11,7 @@ using UnityEngine.TestTools;
 
 namespace Units.Tests.PlayTests
 {
-    public class SystemTests
+    public class ControllerTests
     {
         private UnitModel _model;
         private UnitView _view;
@@ -25,22 +25,20 @@ namespace Units.Tests.PlayTests
 
             var env = GameObject.CreatePrimitive(PrimitiveType.Plane);
             env.transform.localScale = new Vector3(100, 0, 100);
-            var temp = new GameObject();
+            var temp = new GameObject("Environment");
             env.transform.SetParent(temp.transform);
             _env = temp.AddComponent<NavMeshSurface>();
             _env.collectObjects = CollectObjects.Children;
             _env.useGeometry = NavMeshCollectGeometry.RenderMeshes;
-            temp = new GameObject();
-            _controller = temp.AddComponent<UnitController>();
+            _controller = UnitControllerFactory.Create();
+            _env.BuildNavMesh();
+            temp = new GameObject("View");
+            _view = temp.AddComponent<UnitView>();
         } 
         
         [UnityTest]
-        public IEnumerator UnitViewMovingTests()
+        public IEnumerator UnitMovingTests()
         {
-            _env.BuildNavMesh();
-            var temp = new GameObject();
-            _view = temp.AddComponent<UnitView>();
-            
             _controller.SetModel(_model);
             _controller.SetView(_view);
             
@@ -57,8 +55,21 @@ namespace Units.Tests.PlayTests
             Assert.LessOrEqual(Vector3.Distance(_model.GetPosition(), destination1), .5f);
             _model.SetPosition(destination2);
             Assert.AreEqual(MovingStatus.Staying, _view.movingStatus);
-            yield return new WaitForSeconds(.1f);
             Assert.LessOrEqual(Vector3.Distance(_model.GetPosition(), destination2), .5f);
+        }
+
+        [UnityTest]
+        public IEnumerator EventsTests()
+        {
+            _controller.SetModel(_model);
+            _controller.SetView(_view);
+            
+            _controller.SetModel(new UnitModel(TestUtils.GetTestStats(), TestUtils.GetTestAppearance()));
+            _view.WarpTo(new Vector3(0,0,5));
+
+            yield return null;
+            
+            Assert.AreEqual(Vector3.zero, _model.GetPosition());
         }
     }
 }

@@ -9,7 +9,7 @@ using OldUnits.Views;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Players
+namespace OldPlayers
 {
     public class PlayerController : MonoBehaviour, IPlayer
     {

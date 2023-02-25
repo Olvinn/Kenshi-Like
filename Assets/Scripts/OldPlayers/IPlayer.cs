@@ -1,7 +1,6 @@
 using OldUnits;
-using Units;
 
-namespace Players
+namespace OldPlayers
 {
     public interface IPlayer
     {

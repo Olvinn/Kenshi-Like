@@ -1,4 +1,3 @@
-using System;
 using Units.MVC.Model;
 using Units.MVC.View;
 using UnityEngine;
@@ -10,25 +9,22 @@ namespace Units.MVC.Controller
         private UnitModel _model;
         private UnitView _view;
 
-        private void Update()
-        {
-            if (_model == null || _view == null)
-                return;
-            _model.UpdatePosition(_view.transform.position);
-        }
-
         public void SetModel(UnitModel model)
         {
+            if (_model != null)
+                ClearModelSubscriptions();
             _model = model;
-            SubscribeOnModelEvents();
             UpdateView();
+            UpdateSubscriptions();
         }
 
         public void SetView(UnitView view)
         {
+            if (_view != null)
+                ClearViewSubscriptions();
             _view = view;
-            SubscribeOnModelEvents();
             UpdateView();
+            UpdateSubscriptions();
         }
 
         private void UpdateView()
@@ -38,12 +34,24 @@ namespace Units.MVC.Controller
             _view.SetStats(_model.GetStats());
         }
 
-        private void SubscribeOnModelEvents()
+        private void UpdateSubscriptions()
         {
             if (_model == null || _view == null)
                 return;
-            _model.onDestinationChanged = _view.MoveTo;
-            _model.onPositionChanged = _view.WarpTo;
+            _model.onSetDestination = _view.MoveTo;
+            _model.onPositionChange = _view.WarpTo;
+            _view.onPositionChanged = _model.UpdatePosition;
+        }
+
+        private void ClearModelSubscriptions()
+        {
+            _model.onSetDestination = null;
+            _model.onPositionChange = null;
+        }
+
+        private void ClearViewSubscriptions()
+        {
+            _view.onPositionChanged = null;
         }
     }
 }

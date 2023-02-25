@@ -7,8 +7,9 @@ namespace Units.MVC.Model
     [Serializable]
     public class UnitModel
     {
+        //events for view update
         public Action<int> onHPChanged;
-        public Action<Vector3> onDestinationChanged, onPositionChanged;
+        public Action<Vector3> onSetDestination, onPositionChange;
         public bool isDead => _cur.healthPoints <= 0;
         
         private UnitStats _cur, _def; //current and default unit stats
@@ -77,12 +78,12 @@ namespace Units.MVC.Model
 
         public void SetPosition(Vector3 pos)
         {
-            onPositionChanged?.Invoke(pos);
+            onPositionChange?.Invoke(pos);
         }
         
         public void MoveTo(Vector3 destination)
         {
-            onDestinationChanged?.Invoke(destination);
+            onSetDestination?.Invoke(destination);
         }
 
         public Vector3 GetPosition()
