@@ -9,20 +9,14 @@ namespace Units.MVC.Controller
         private UnitModel _model;
         private UnitView _view;
 
-        public void SetModel(UnitModel model)
+        public void SetUp(UnitModel model, UnitView view)
         {
             if (_model != null)
                 ClearModelSubscriptions();
-            _model = model;
-            UpdateView();
-            UpdateSubscriptions();
-        }
-
-        public void SetView(UnitView view)
-        {
             if (_view != null)
                 ClearViewSubscriptions();
             _view = view;
+            _model = model;
             UpdateView();
             UpdateSubscriptions();
         }

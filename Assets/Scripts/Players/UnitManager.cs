@@ -21,8 +21,7 @@ namespace Players
         {
             var controller = UnitControllerFactory.Create();
             var view = UnitViewFactory.Create();
-            controller.SetModel(model);
-            controller.SetView(view);
+            controller.SetUp(model, view);
             _units.Add(model);
         }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -14,6 +15,16 @@ namespace AssetsManagement
         public static async Task<GameObject> LoadAsset(string key, Transform parent)
         {
             return Addressables.InstantiateAsync(key, parent).Result;
+        }
+        
+        public static async Task<GameObject> LoadAsset<T>(string key, Transform parent, Action<T> onLoaded)
+        {
+            var handle = Addressables.InstantiateAsync(key, parent);
+            handle.Completed += (x) =>
+            {
+                onLoaded?.Invoke(x.Result.GetComponent<T>());
+            };
+            return handle.Result;
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
-using System.Threading.Tasks;
 using AssetsManagement;
+using Units.Appearance;
 using Units.Structures;
 using UnityEngine;
 using UnityEngine.AI;
@@ -14,9 +14,11 @@ namespace Units.MVC.View
         public Action<Vector3> onPositionChanged;
         public Action onReachDestination;
         public MovingStatus movingStatus { get; private set; }
-        
+
+        private UnitAppearanceController _appearance;
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
+        private UnitAppearance _appearanceData;
         
         private void Awake()
         {
@@ -49,7 +51,8 @@ namespace Units.MVC.View
 
         public void SetAppearance(UnitAppearance appearance)
         {
-            AssetsManager.LoadAsset(appearance.prefab, transform);
+            _appearanceData = appearance;
+            AssetsManager.LoadAsset<UnitAppearanceController>(appearance.prefab, transform, OnAppearancePrefabLoaded);
         }
 
         public void MoveTo(Vector3 destination)
@@ -76,6 +79,12 @@ namespace Units.MVC.View
         {
             _agent.Warp(position);
             onPositionChanged?.Invoke(transform.position);
+        }
+
+        private void OnAppearancePrefabLoaded(UnitAppearanceController visuals)
+        {
+            _appearance = visuals;
+            _appearance.SetAppearance(_appearanceData);
         }
     }
 }

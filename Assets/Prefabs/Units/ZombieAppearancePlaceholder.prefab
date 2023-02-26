@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5030742754127194230}
   - component: {fileID: 8342923064131300856}
   - component: {fileID: 4191141404103950157}
+  - component: {fileID: 3158847592563497987}
   m_Layer: 0
   m_Name: ZombieAppearancePlaceholder
   m_TagString: Untagged
@@ -98,3 +99,16 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3158847592563497987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2314005078116172638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c454ccc2688670444a1ef93ecefa1b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderer: {fileID: 8342923064131300856}

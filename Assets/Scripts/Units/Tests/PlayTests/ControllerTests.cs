@@ -39,8 +39,7 @@ namespace Units.Tests.PlayTests
         [UnityTest]
         public IEnumerator UnitMovingTests()
         {
-            _controller.SetModel(_model);
-            _controller.SetView(_view);
+            _controller.SetUp(_model, _view);
             
             var agent = _view.GetComponent<NavMeshAgent>();
             Assert.NotNull(agent);
@@ -61,10 +60,9 @@ namespace Units.Tests.PlayTests
         [UnityTest]
         public IEnumerator EventsTests()
         {
-            _controller.SetModel(_model);
-            _controller.SetView(_view);
+            _controller.SetUp(_model, _view);
             
-            _controller.SetModel(new UnitModel(TestUtils.GetTestStats(), TestUtils.GetTestAppearance()));
+            _controller.SetUp(new UnitModel(TestUtils.GetTestStats(), TestUtils.GetTestAppearance()), _view);
             _view.WarpTo(new Vector3(0,0,5));
 
             yield return null;
@@ -78,8 +76,7 @@ namespace Units.Tests.PlayTests
             _model.SetPosition(new Vector3(5,0,5));
             Assert.AreEqual(new Vector3(5,0,5), _model.GetPosition());
             _emptyController = UnitControllerFactory.Create();
-            _controller.SetModel(_model);
-            _controller.SetView(_view);
+            _controller.SetUp(_model, _view);
             Assert.AreEqual(new Vector3(5,0,5), _model.GetPosition());
             Assert.AreEqual(new Vector3(5,0,5), _view.transform.position);
             

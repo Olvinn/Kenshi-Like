@@ -1,3 +1,4 @@
+using CustomDebug;
 using Players;
 using Units.MVC.Model;
 using UnityEngine;
@@ -17,11 +18,6 @@ namespace Scenes
             _manager = new UnitManager();
         }
 
-        void Start()
-        {
-            
-        }
-
         void Update()
         {
             if (_i >= _unitCount)
@@ -33,6 +29,8 @@ namespace Scenes
             _manager.AddUnit(model);
             _manager.Move(model,new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
             _i++;
+
+            FPSCounter.DebugDisplayData = $"Units: {_manager.unitsCount}";
         }
     }
 }
