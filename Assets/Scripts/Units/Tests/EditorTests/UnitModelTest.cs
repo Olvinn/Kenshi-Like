@@ -38,15 +38,18 @@ namespace Units.Tests.EditorTests
             copy.baseColor = Color.blue;
             copy.secondaryColor = Color.blue;
             copy.accentColor = Color.blue;
+            copy.prefab = "test";
             
-            Assert.AreEqual(Color.blue, copy.skinColor);
-            Assert.AreEqual(Color.blue, copy.baseColor);
-            Assert.AreEqual(Color.blue, copy.secondaryColor);
-            Assert.AreEqual(Color.blue, copy.accentColor);
             Assert.AreEqual(Color.white, appearance.skinColor);
             Assert.AreEqual(Color.red, appearance.baseColor);
             Assert.AreEqual(Color.black, appearance.secondaryColor);
             Assert.AreEqual(Color.cyan, appearance.accentColor);
+            Assert.AreEqual("Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab", appearance.prefab);
+            Assert.AreEqual(Color.blue, copy.skinColor);
+            Assert.AreEqual(Color.blue, copy.baseColor);
+            Assert.AreEqual(Color.blue, copy.secondaryColor);
+            Assert.AreEqual(Color.blue, copy.accentColor);
+            Assert.AreEqual("test", copy.prefab);
         }
         
         [Test]

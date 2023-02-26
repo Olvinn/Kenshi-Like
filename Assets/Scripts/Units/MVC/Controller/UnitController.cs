@@ -32,6 +32,7 @@ namespace Units.MVC.Controller
             if (_model == null || _view == null)
                 return;
             _view.SetStats(_model.GetStats());
+            _view.SetAppearance(_model.GetAppearance());
         }
 
         private void UpdateSubscriptions()

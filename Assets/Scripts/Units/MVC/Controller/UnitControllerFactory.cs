@@ -27,7 +27,7 @@ namespace Units.MVC.Controller
                 _controllers = temp.transform;
             else
                 _controllers = new GameObject(ControllersName).transform;
-            temp = GameObject.Find(ParentName);
+            temp = GameObject.Find($"{ControllersName}/{ParentName}");
             if (temp)
                 _parent = temp.transform;
             else

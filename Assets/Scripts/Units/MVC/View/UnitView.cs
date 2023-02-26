@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Threading.Tasks;
+using AssetsManagement;
 using Units.Structures;
 using UnityEngine;
 using UnityEngine.AI;
@@ -42,6 +45,11 @@ namespace Units.MVC.View
         public void SetStats(UnitStats stats)
         {
             _agent.speed = stats.speed;
+        }
+
+        public void SetAppearance(UnitAppearance appearance)
+        {
+            AssetsManager.LoadAsset(appearance.prefab, transform);
         }
 
         public void MoveTo(Vector3 destination)

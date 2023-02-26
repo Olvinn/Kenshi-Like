@@ -23,7 +23,8 @@ namespace Units.Tests
                 skinColor = Color.white,
                 baseColor = Color.red,
                 secondaryColor = Color.black,
-                accentColor = Color.cyan
+                accentColor = Color.cyan,
+                prefab = "Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab"
             };
             return appearance;
         }

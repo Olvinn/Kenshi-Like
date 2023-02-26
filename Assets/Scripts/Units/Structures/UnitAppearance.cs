@@ -10,5 +10,6 @@ namespace Units.Structures
         public Color baseColor;
         public Color secondaryColor;
         public Color accentColor;
+        public string prefab;
     }
 }

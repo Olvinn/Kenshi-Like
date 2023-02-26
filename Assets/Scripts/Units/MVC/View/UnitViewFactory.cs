@@ -8,17 +8,15 @@ namespace Units.MVC.View
         private const string ParentName = "-- Units --";
         
         private static int _index = 0;
-        private static Transform _controllers, _parent;
+        private static Transform _actors, _parent;
         
         public static UnitView Create()
         {
             if (_parent == null)
                 FindOrCreateParent();
-            var temp = new GameObject($"UnitController_{_index++}");
+            var temp = new GameObject($"UnitView_{_index++}");
             var result = temp.AddComponent<UnitView>();
             result.transform.SetParent(_parent);
-            temp = new GameObject("Appearance");
-            temp.transform.SetParent(result.transform);
             return result;
         }
 
@@ -26,16 +24,16 @@ namespace Units.MVC.View
         {
             var temp = GameObject.Find(ActorsName);
             if (temp)
-                _controllers = temp.transform;
+                _actors = temp.transform;
             else
-                _controllers = new GameObject(ActorsName).transform;
-            temp = GameObject.Find(ParentName);
+                _actors = new GameObject(ActorsName).transform;
+            temp = GameObject.Find($"{ActorsName}/{ParentName}");
             if (temp)
                 _parent = temp.transform;
             else
             {
                 _parent = new GameObject(ParentName).transform;
-                _parent.SetParent(_controllers);
+                _parent.SetParent(_actors);
             }
         }
     }
