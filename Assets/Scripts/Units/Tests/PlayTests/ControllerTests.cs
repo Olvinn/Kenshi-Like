@@ -15,7 +15,7 @@ namespace Units.Tests.PlayTests
     {
         private UnitModel _model;
         private UnitView _view;
-        private UnitController _controller;
+        private UnitController _controller, _emptyController;
         private NavMeshSurface _env;
 
         [SetUp]
@@ -70,6 +70,28 @@ namespace Units.Tests.PlayTests
             yield return null;
             
             Assert.AreEqual(Vector3.zero, _model.GetPosition());
+        }
+
+        [UnityTest]
+        public IEnumerator UnitModelSetUpTests()
+        {
+            _model.SetPosition(new Vector3(5,0,5));
+            Assert.AreEqual(new Vector3(5,0,5), _model.GetPosition());
+            _emptyController = UnitControllerFactory.Create();
+            _controller.SetModel(_model);
+            _controller.SetView(_view);
+            Assert.AreEqual(new Vector3(5,0,5), _model.GetPosition());
+            Assert.AreEqual(new Vector3(5,0,5), _view.transform.position);
+            
+            yield return null;
+        }
+
+        [TearDown]
+        public void CleanUp()
+        {
+            GameObject.Destroy(_view.gameObject);
+            GameObject.Destroy(_env.gameObject);
+            GameObject.Destroy(_controller.gameObject);
         }
     }
 }

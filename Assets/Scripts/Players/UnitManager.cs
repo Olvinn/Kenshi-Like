@@ -33,5 +33,12 @@ namespace Players
                 model.MoveTo(destination);
             }
         }
+
+        public void Move(UnitModel unit, Vector3 destination)
+        {
+            if (!_units.Contains(unit))
+                return;
+            unit.MoveTo(destination);
+        }
     }
 }

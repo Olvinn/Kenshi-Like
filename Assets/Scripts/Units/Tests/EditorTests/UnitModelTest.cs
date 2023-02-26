@@ -104,7 +104,7 @@ namespace Units.Tests.EditorTests
                 history.Add(x);
             };
 
-            model.UpdatePosition(Vector3.one);
+            model.SetPositionSilent(Vector3.one);
             model.GetDamage(200);
             model.GetDamage(-200);
             model.GetHealed(200);

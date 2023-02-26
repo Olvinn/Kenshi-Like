@@ -12,3 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1d794ee06c997e489b08187a5e15276, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
+  model:
+    _currentStats:
+      healthPoints: 100
+      speed: 5
+      attackPower: 10
+    _defaultStats:
+      healthPoints: 100
+      speed: 5
+      attackPower: 10
+    _appearance:
+      skinColor: {r: 0, g: 0, b: 0, a: 0}
+      baseColor: {r: 0, g: 0, b: 0, a: 0}
+      secondaryColor: {r: 0, g: 0, b: 0, a: 0}
+      accentColor: {r: 0, g: 0, b: 0, a: 0}
+      prefab: Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab
+    _position: {x: 0, y: 0, z: 0}

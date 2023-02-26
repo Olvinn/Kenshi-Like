@@ -1,13 +1,16 @@
 using Players;
 using Units.MVC.Model;
-using Units.Tests;
 using UnityEngine;
 
 namespace Scenes
 {
     public class UnitTestingSceneManager : MonoBehaviour
     {
+        [SerializeField] private UnitModelSO[] _models;
+        [SerializeField] private int _unitCount;
+    
         private UnitManager _manager;
+        private int _i;
 
         private void Awake()
         {
@@ -16,14 +19,20 @@ namespace Scenes
 
         void Start()
         {
-            var model = new UnitModel(TestUtils.GetTestStats(), TestUtils.GetTestAppearance());
-            _manager.AddUnit(model);
-            _manager.Move(Vector3.forward * 10);
+            
         }
 
         void Update()
         {
-        
+            if (_i >= _unitCount)
+                return;
+            
+            var temp = _models[Random.Range(0, _models.Length)].model;
+            var model = new UnitModel(temp.GetStats(), temp.GetAppearance());
+            model.SetPosition(new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
+            _manager.AddUnit(model);
+            _manager.Move(model,new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
+            _i++;
         }
     }
 }

@@ -33,6 +33,7 @@ namespace Units.MVC.Controller
                 return;
             _view.SetStats(_model.GetStats());
             _view.SetAppearance(_model.GetAppearance());
+            _view.WarpTo(_model.GetPosition());
         }
 
         private void UpdateSubscriptions()
@@ -41,7 +42,7 @@ namespace Units.MVC.Controller
                 return;
             _model.onSetDestination = _view.MoveTo;
             _model.onPositionChange = _view.WarpTo;
-            _view.onPositionChanged = _model.UpdatePosition;
+            _view.onPositionChanged = _model.SetPositionSilent;
         }
 
         private void ClearModelSubscriptions()

@@ -71,13 +71,14 @@ namespace Units.MVC.Model
         #endregion Health
         
         #region Position
-        public void UpdatePosition(Vector3 pos)
+        public void SetPositionSilent(Vector3 pos)
         {
             _position = pos;
         }
 
         public void SetPosition(Vector3 pos)
         {
+            _position = pos;
             onPositionChange?.Invoke(pos);
         }
         
