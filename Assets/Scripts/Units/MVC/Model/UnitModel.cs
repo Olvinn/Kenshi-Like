@@ -10,28 +10,28 @@ namespace Units.MVC.Model
         //events for view update
         public Action<int> onHPChanged;
         public Action<Vector3> onSetDestination, onPositionChange;
-        public bool isDead => _cur.healthPoints <= 0;
+        public bool isDead => _currentStats.healthPoints <= 0;
         
-        private UnitStats _cur, _def; //current and default unit stats
-        private UnitAppearance _app; //how this unit actually looks like
+        [SerializeField] private UnitStats _currentStats, _defaultStats; //current and default unit stats
+        [SerializeField] private UnitAppearance _appearance; //how this unit actually looks like
 
-        private Vector3 _pos;
+        [SerializeField] private Vector3 _position;
 
         #region SetUp
         public UnitModel(UnitStats stats, UnitAppearance appearance)
         {
-            _app = appearance;
-            _cur = _def = stats;
+            _appearance = appearance;
+            _currentStats = _defaultStats = stats;
         }
 
         public UnitStats GetStats()
         {
-            return _cur;
+            return _currentStats;
         }
 
         public UnitAppearance GetAppearance()
         {
-            return _app;
+            return _appearance;
         }
         #endregion SetUp
         
@@ -40,24 +40,24 @@ namespace Units.MVC.Model
         {
             if (isDead || value <= 0)
                 return;
-            int old = _cur.healthPoints;
-            if (_cur.healthPoints >= value)
-                _cur.healthPoints -= value;
+            int old = _currentStats.healthPoints;
+            if (_currentStats.healthPoints >= value)
+                _currentStats.healthPoints -= value;
             else
-                _cur.healthPoints = 0;
-            onHPChanged?.Invoke(_cur.healthPoints - old);
+                _currentStats.healthPoints = 0;
+            onHPChanged?.Invoke(_currentStats.healthPoints - old);
         }
 
         public void GetHealed(int value)
         {
             if (isDead || value <= 0)
                 return;
-            int old = _cur.healthPoints;
-            if (_def.healthPoints >= value + _cur.healthPoints)
-                _cur.healthPoints += value;
+            int old = _currentStats.healthPoints;
+            if (_defaultStats.healthPoints >= value + _currentStats.healthPoints)
+                _currentStats.healthPoints += value;
             else
-                _cur.healthPoints = _def.healthPoints;
-            onHPChanged?.Invoke(_cur.healthPoints - old);
+                _currentStats.healthPoints = _defaultStats.healthPoints;
+            onHPChanged?.Invoke(_currentStats.healthPoints - old);
         }
 
         public void GetRevived()
@@ -65,7 +65,7 @@ namespace Units.MVC.Model
             if (!isDead)
                 return;
             
-            _cur.healthPoints = 1;
+            _currentStats.healthPoints = 1;
             onHPChanged?.Invoke(1);
         }
         #endregion Health
@@ -73,7 +73,7 @@ namespace Units.MVC.Model
         #region Position
         public void UpdatePosition(Vector3 pos)
         {
-            _pos = pos;
+            _position = pos;
         }
 
         public void SetPosition(Vector3 pos)
@@ -88,7 +88,7 @@ namespace Units.MVC.Model
 
         public Vector3 GetPosition()
         {
-            return _pos;
+            return _position;
         }
         #endregion Position
     }
