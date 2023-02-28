@@ -6,7 +6,8 @@
         "UnityEditor.TestRunner",
         "Players",
         "Unity.AI.Navigation",
-        "Units.MVC.Model"
+        "Units.MVC.Model",
+        "Actors"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

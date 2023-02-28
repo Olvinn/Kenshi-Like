@@ -825,8 +825,9 @@ GameObject:
   - component: {fileID: 8817920395261371789}
   - component: {fileID: 1385737906680420376}
   - component: {fileID: 3272484143947897206}
+  - component: {fileID: 2344759482754166005}
   m_Layer: 3
-  m_Name: guy
+  m_Name: SanekAppearance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -840,7 +841,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1592449354278565449}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -202.47644, y: 57.857, z: -69.11894}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -860,7 +861,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 61e73b12a0a23c448b142c47d88ef49a, type: 3}
   m_Controller: {fileID: 9100000, guid: b8f4344b253a9e445b734e6a1b65f27d, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -912,7 +913,7 @@ MonoBehaviour:
   legsIKOn: 1
   animator: {fileID: 5454554281608705673}
   appearance: {fileID: 1462648697920959424}
-  pelvis: {fileID: 0}
+  pelvis: {fileID: 7775409147702612196}
 --- !u!114 &3272484143947897206
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -925,6 +926,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffc606232e961fa4ab6ebea9352f2ff8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2344759482754166005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592449354278565449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c454ccc2688670444a1ef93ecefa1b50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderer: {fileID: 5356653966132612440}
 --- !u!1 &1607007322247766571
 GameObject:
   m_ObjectHideFlags: 0

@@ -109,8 +109,6 @@ namespace OldUnits.Views.IK
 
         private float LegIK(AvatarIKGoal foot)
         {
-            var constants = GameContext.Instance.Constants;
-            
             float diff = 0;
             float weight = 0;
             RaycastHit hit;
@@ -125,8 +123,8 @@ namespace OldUnits.Views.IK
                     animPos = animator.GetBoneTransform(HumanBodyBones.RightFoot).position;
                     break;
             }
-            Ray ray = new Ray(animPos + Vector3.up * constants.LegsIKRayCastHeight, Vector3.down);
-            if (Physics.Raycast(ray, out hit, constants.LegsIKRayLength, 1))
+            Ray ray = new Ray(animPos + Vector3.up * 1, Vector3.down);
+            if (Physics.Raycast(ray, out hit, 2, 1))
             {
                 animPos -= transform.position;
                 weight = 1 - ((animPos.y - .1f) * 10f);

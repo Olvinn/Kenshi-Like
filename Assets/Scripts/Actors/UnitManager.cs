@@ -4,30 +4,32 @@ using Units.MVC.Model;
 using Units.MVC.View;
 using UnityEngine;
 
-namespace Players
+namespace Actors
 {
     public class UnitManager
     {
         public int unitsCount => _units.Count;
 
-        private List<UnitModel> _units;
+        private Dictionary<UnitModel, UnitController> _units;
 
         public UnitManager()
         {
-            _units = new List<UnitModel>();
+            _units = new Dictionary<UnitModel, UnitController>();
         }
 
         public void AddUnit(UnitModel model)
         {
+            if (_units.ContainsKey(model))
+                return;
             var controller = UnitControllerFactory.Create();
             var view = UnitViewFactory.Create();
             controller.SetUp(model, view);
-            _units.Add(model);
+            _units.Add(model, controller);
         }
 
         public void Move(Vector3 destination)
         {
-            foreach (var model in _units)
+            foreach (var model in _units.Keys)
             {
                 model.MoveTo(destination);
             }
@@ -35,7 +37,7 @@ namespace Players
 
         public void Move(UnitModel unit, Vector3 destination)
         {
-            if (!_units.Contains(unit))
+            if (!_units.ContainsKey(unit))
                 return;
             unit.MoveTo(destination);
         }

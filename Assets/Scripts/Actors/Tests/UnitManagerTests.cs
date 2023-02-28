@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.TestTools;
 
-namespace Players.Tests
+namespace Actors.Tests
 {
     public class UnitManagerTests
     {

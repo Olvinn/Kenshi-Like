@@ -26,5 +26,5 @@ MonoBehaviour:
       baseColor: {r: 0.27189392, g: 0.392417, b: 0.8867924, a: 1}
       secondaryColor: {r: 0, g: 0, b: 0, a: 0}
       accentColor: {r: 0, g: 0, b: 0, a: 0}
-      prefab: Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab
+      prefab: Assets/Prefabs/Units/SanekAppearance.prefab
     _position: {x: 0, y: 0, z: 0}

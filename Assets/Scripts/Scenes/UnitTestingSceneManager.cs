@@ -1,5 +1,5 @@
+using Actors;
 using CustomDebug;
-using Players;
 using Units.MVC.Model;
 using UnityEngine;
 
@@ -11,7 +11,6 @@ namespace Scenes
         [SerializeField] private int _unitCount;
     
         private UnitManager _manager;
-        private int _i;
 
         private void Awake()
         {
@@ -20,7 +19,7 @@ namespace Scenes
 
         void Update()
         {
-            if (_i >= _unitCount)
+            if (_manager.unitsCount >= _unitCount)
                 return;
             
             var temp = _models[Random.Range(0, _models.Length)].model;
@@ -28,7 +27,6 @@ namespace Scenes
             model.SetPosition(new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
             _manager.AddUnit(model);
             _manager.Move(model,new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
-            _i++;
 
             FPSCounter.DebugDisplayData = $"Units: {_manager.unitsCount}";
         }

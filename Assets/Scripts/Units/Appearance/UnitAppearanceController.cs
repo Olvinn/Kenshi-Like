@@ -6,13 +6,13 @@ namespace Units.Appearance
 {
     public class UnitAppearanceController : MonoBehaviour
     {
-        [SerializeField] private MeshRenderer _renderer;
+        [SerializeField] private Renderer _renderer;
         private int _frames, _savedSec;
 
         private void Awake()
         {
             if (_renderer == null)
-                _renderer = GetComponent<MeshRenderer>();
+                _renderer = GetComponentInChildren<Renderer>();
         }
 
         public void SetAppearance(UnitAppearance appearance)
@@ -24,7 +24,7 @@ namespace Units.Appearance
         private void OnValidate()
         {
             if (_renderer == null)
-                _renderer = GetComponent<MeshRenderer>();
+                _renderer = GetComponentInChildren<Renderer>();
         }
 #endif
     }
