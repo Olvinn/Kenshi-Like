@@ -7,6 +7,7 @@ namespace CustomDebug
     public class FPSCounter : MonoBehaviour
     {
         public static string DebugDisplayData;
+        public static int FPS { get; private set; }
         
         [SerializeField] private TextMeshProUGUI _label;
         private int _frames, _savedSec;
@@ -24,6 +25,7 @@ namespace CustomDebug
                 _savedSec = (int)Time.time;
                 _label.text = $"FPS: {_frames}\n{DebugDisplayData}";;
                 _frames = 0;
+                FPS = _frames;
             }
 
             _frames++;

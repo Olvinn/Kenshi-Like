@@ -826,6 +826,7 @@ GameObject:
   - component: {fileID: 1385737906680420376}
   - component: {fileID: 3272484143947897206}
   - component: {fileID: 2344759482754166005}
+  - component: {fileID: -2699934679957760800}
   m_Layer: 3
   m_Name: SanekAppearance
   m_TagString: Untagged
@@ -862,7 +863,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 61e73b12a0a23c448b142c47d88ef49a, type: 3}
   m_Controller: {fileID: 9100000, guid: b8f4344b253a9e445b734e6a1b65f27d, type: 2}
   m_CullingMode: 2
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -939,6 +940,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 5356653966132612440}
+--- !u!114 &-2699934679957760800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592449354278565449}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583bf678e099b2843adca6460656139c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animatorUpdateFrequencyBias: 15
+  _animatorUpdateFrequencyMaximumDistance: 70
+  _animatorUpdateFrequencyMinimum: 60
+  _animator: {fileID: 5454554281608705673}
 --- !u!1 &1607007322247766571
 GameObject:
   m_ObjectHideFlags: 0
