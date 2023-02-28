@@ -1,4 +1,3 @@
-using System;
 using Units.Structures;
 using UnityEngine;
 
@@ -7,8 +6,7 @@ namespace Units.Appearance
     public class UnitAppearanceController : MonoBehaviour
     {
         [SerializeField] private Renderer _renderer;
-        private int _frames, _savedSec;
-
+        
         private void Awake()
         {
             if (_renderer == null)

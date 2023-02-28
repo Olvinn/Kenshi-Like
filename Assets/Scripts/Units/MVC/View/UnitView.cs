@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using AssetsManagement;
 using Units.Appearance;
 using Units.Structures;
@@ -16,9 +15,11 @@ namespace Units.MVC.View
         public MovingStatus movingStatus { get; private set; }
 
         private UnitAppearanceController _appearance;
+        private UnitAnimatorController _animator;
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
         private UnitAppearance _appearanceData;
+        private bool _isLoaded;
         
         private void Awake()
         {
@@ -42,6 +43,11 @@ namespace Units.MVC.View
                 onPositionChanged?.Invoke(transform.position);
                 _savedPosition = transform.position;
             }
+            
+            if (!_isLoaded)
+                return;
+            
+            _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
         }
 
         public void SetStats(UnitStats stats)
@@ -52,7 +58,7 @@ namespace Units.MVC.View
         public void SetAppearance(UnitAppearance appearance)
         {
             _appearanceData = appearance;
-            AssetsManager.LoadAsset<UnitAppearanceController>(appearance.prefab, transform, OnAppearancePrefabLoaded);
+            AssetsManager.LoadAsset(appearance.prefab, transform, OnAppearancePrefabLoaded);
         }
 
         public void MoveTo(Vector3 destination)
@@ -81,10 +87,14 @@ namespace Units.MVC.View
             onPositionChanged?.Invoke(transform.position);
         }
 
-        private void OnAppearancePrefabLoaded(UnitAppearanceController visuals)
+        private void OnAppearancePrefabLoaded(GameObject appearanceGO)
         {
-            _appearance = visuals;
+            _isLoaded = true;
+            
+            _appearance = appearanceGO.GetComponent<UnitAppearanceController>();;
             _appearance.SetAppearance(_appearanceData);
+
+            _animator = appearanceGO.GetComponent<UnitAnimatorController>();
         }
     }
 }

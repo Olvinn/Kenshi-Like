@@ -24,6 +24,18 @@ namespace AssetsManagement
             {
                 onLoaded?.Invoke(x.Result.GetComponent<T>());
             };
+            await handle.Task;
+            return handle.Result;
+        }
+        
+        public static async Task<GameObject> LoadAsset(string key, Transform parent, Action<GameObject> onLoaded)
+        {
+            var handle = Addressables.InstantiateAsync(key, parent);
+            handle.Completed += (x) =>
+            {
+                onLoaded?.Invoke(x.Result);
+            };
+            await handle.Task;
             return handle.Result;
         }
     }
