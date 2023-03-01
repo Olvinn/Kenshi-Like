@@ -8,7 +8,8 @@ namespace Units.Appearance
         [SerializeField] private float _animatorUpdateFrequencyBias = 10;
         [SerializeField] private float _animatorUpdateFrequencyMaximumDistance = 100;
         [SerializeField] private int _animatorUpdateFrequencyMinimum = 15;
-        [SerializeField] private Animator _animator;
+        [SerializeField] private Animator[] _animators;
+        private Animator _current;
         private int _speedHash, _strafeHash;
         private float _savedTime;
         private int _updateDelay;
@@ -16,33 +17,44 @@ namespace Units.Appearance
         
         private void Awake()
         {
-            if (_animator == null)
-                _animator = GetComponentInChildren<Animator>();
+            if (_animators == null)
+                _animators = GetComponentsInChildren<Animator>();
 
-            _animator.keepAnimatorControllerStateOnDisable = true;
+            foreach (var animator in _animators)
+                animator.keepAnimatorControllerStateOnDisable = true;
             _speedHash = Animator.StringToHash("Speed");
             _strafeHash = Animator.StringToHash("Strafe");
         }
 
         private IEnumerator Start()
         {
-            _animator.enabled = true;
+            LODGroup lod = GetComponent<LODGroup>();
+            lod.enabled = false;
+            foreach (var animator in _animators)
+                animator.enabled = true;
             yield return null; //it needs two frames to initialize
-            ApplyVelocity(Vector3.zero);
+            foreach (var animator in _animators) //it also need to do smth to start working as normal
+            {
+                animator.SetFloat(_speedHash, 0);
+                animator.SetFloat(_strafeHash, 0);
+            }
             yield return null;
-            _animator.enabled = false;
+            foreach (var animator in _animators)
+                animator.enabled = false;
+            lod.enabled = true;
+            FindActiveLOD();
         }
 
         private void Update()
         {
-            if (_animator.enabled)
-                return;
+            if (_current == null || !_current.gameObject.activeSelf)
+                FindActiveLOD();
             
             _updateDelay--;
             if (_updateDelay >= 0)
                 return;
             
-            _animator.Update(Time.time - _savedTime);
+            _current.Update(Time.time - _savedTime);
             _savedTime = Time.time;
             
             _updateDelay =  (int)Mathf.Lerp(0, _animatorUpdateFrequencyMinimum, 
@@ -51,20 +63,32 @@ namespace Units.Appearance
 
         public void ApplyVelocity(Vector3 velocity)
         {
-            _animator.SetFloat(_speedHash, velocity.z);
-            _animator.SetFloat(_strafeHash, velocity.x);
+            if (_current == null)
+                return;
+            
+            _current.SetFloat(_speedHash, velocity.z);
+            _current.SetFloat(_strafeHash, velocity.x);
         }
 
         public void UpdateDistanceToCamera(float distance)
         {
             _distanceToCamera = distance;
         }
+
+        private void FindActiveLOD()
+        {
+            foreach (var animator in _animators)
+                if (animator.gameObject.activeSelf)
+                    _current = animator;
+            ApplyVelocity(Vector3.zero);
+            _current.Update(Time.time);
+        }
         
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (_animator == null)
-                _animator = GetComponentInChildren<Animator>();
+            if (_animators == null)
+                _animators = GetComponentsInChildren<Animator>();
         }
 #endif
     }

@@ -5,24 +5,27 @@ namespace Units.Appearance
 {
     public class UnitAppearanceController : MonoBehaviour
     {
-        [SerializeField] private Renderer _renderer;
+        [SerializeField] private Renderer[] _renderers;
         
         private void Awake()
         {
-            if (_renderer == null)
-                _renderer = GetComponentInChildren<Renderer>();
+            if (_renderers == null)
+                _renderers = GetComponentsInChildren<Renderer>();
         }
 
         public void SetAppearance(UnitAppearance appearance)
         {
-            _renderer.material.color = appearance.baseColor;
+            foreach (var renderer in _renderers)
+            {
+                renderer.material.color = appearance.baseColor;
+            }
         }
         
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            if (_renderer == null)
-                _renderer = GetComponentInChildren<Renderer>();
+            if (_renderers == null)
+                _renderers = GetComponentsInChildren<Renderer>();
         }
 #endif
     }

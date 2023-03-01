@@ -14,16 +14,23 @@ namespace Units.MVC.View
         public Action onReachDestination;
         public MovingStatus movingStatus { get; private set; }
 
+        private LODGroup _lod;
         private UnitAppearanceController _appearance;
         private UnitAnimatorController _animator;
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
         private UnitAppearance _appearanceData;
         private bool _isLoaded;
+        private Camera _mainCamera;
         
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
+        }
+
+        private void Start()
+        {
+            _mainCamera = Camera.main;
         }
 
         private void Update()
@@ -48,7 +55,7 @@ namespace Units.MVC.View
                 return;
             
             _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
-            _animator.UpdateDistanceToCamera(Vector3.Distance(Camera.main.transform.position, transform.position));
+            _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
         }
 
         public void SetStats(UnitStats stats)

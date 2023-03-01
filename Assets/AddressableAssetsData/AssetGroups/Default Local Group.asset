@@ -21,8 +21,12 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 6079f31114b54f9479b44b47433856b1
-    m_Address: Assets/Prefabs/Units/SanekAppearance.prefab
+  - m_GUID: 01e10594d8946c9489dbf0f83c473916
+    m_Address: Assets/Prefabs/Units/Guy.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: dbdf5a5791bda7349b77970e95bf08a7
+    m_Address: Assets/Prefabs/Units/HumanMale.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
