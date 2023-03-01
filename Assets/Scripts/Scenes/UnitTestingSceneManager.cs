@@ -30,5 +30,15 @@ namespace Scenes
 
             FPSCounter.DebugDisplayData = $"Units: {_manager.unitsCount}";
         }
+
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(Camera.main.transform.position, 30);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(Camera.main.transform.position, 60);
+        }
+#endif
     }
 }

@@ -203,6 +203,7 @@ MonoBehaviour:
   _models:
   - {fileID: 11400000, guid: 5ae98833ed944544ebc5bca1ba088ec2, type: 2}
   - {fileID: 11400000, guid: 518bdf0801d193a47a64c7cbea53150d, type: 2}
+  - {fileID: 11400000, guid: d4afc518a3b072b45b0707aadebf5cdb, type: 2}
   _unitCount: 1000
 --- !u!1 &557343101
 GameObject:

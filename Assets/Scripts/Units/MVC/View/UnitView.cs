@@ -20,8 +20,8 @@ namespace Units.MVC.View
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
         private UnitAppearance _appearanceData;
-        private bool _isLoaded;
         private Camera _mainCamera;
+        private bool _initialized;
         
         private void Awake()
         {
@@ -51,7 +51,7 @@ namespace Units.MVC.View
                 _savedPosition = transform.position;
             }
             
-            if (!_isLoaded)
+            if (!_initialized)
                 return;
             
             _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
@@ -84,7 +84,7 @@ namespace Units.MVC.View
             }
 
             _agent.stoppingDistance = stoppingDistance;
-            _agent.destination = destination;
+            _agent.SetDestination(destination);
             movingStatus = MovingStatus.Moving;
             _agent.isStopped = false;
         }
@@ -97,12 +97,14 @@ namespace Units.MVC.View
 
         private void OnAppearancePrefabLoaded(GameObject appearanceGO)
         {
-            _isLoaded = true;
-            
             _appearance = appearanceGO.GetComponent<UnitAppearanceController>();;
             _appearance.SetAppearance(_appearanceData);
 
             _animator = appearanceGO.GetComponent<UnitAnimatorController>();
+            if (_animator != null)
+            {
+                _initialized = true;
+            }
         }
     }
 }
