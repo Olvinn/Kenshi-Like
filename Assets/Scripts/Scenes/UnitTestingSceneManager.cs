@@ -1,5 +1,8 @@
-using Actors;
+using System;
+using System.Linq;
 using CustomDebug;
+using Players;
+using Players.Variants;
 using Units.MVC.Model;
 using UnityEngine;
 
@@ -7,37 +10,36 @@ namespace Scenes
 {
     public class UnitTestingSceneManager : MonoBehaviour
     {
+        [SerializeField] private Camera _camera;
         [SerializeField] private UnitModelSO[] _models;
         [SerializeField] private int _unitCount;
     
-        private UnitManager _manager;
+        private TestCrowd _manager;
 
         private void Awake()
         {
-            _manager = new UnitManager();
+            _manager = new TestCrowd();
+        }
+
+        private void Start()
+        {
+            _manager.CreateCrowd(_unitCount, _models.Select(x => x.model).ToArray());
         }
 
         void Update()
         {
-            if (_manager.unitsCount >= _unitCount)
-                return;
-            
-            var temp = _models[Random.Range(0, _models.Length)].model;
-            var model = new UnitModel(temp.GetStats(), temp.GetAppearance());
-            model.SetPosition(new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
-            _manager.AddUnit(model);
-            _manager.Move(model,new Vector3(Random.Range(-50,50),0,Random.Range(-50,50)));
-
+            _manager.Update();
             FPSCounter.DebugDisplayData = $"Units: {_manager.unitsCount}";
+            _camera.transform.RotateAround(Vector3.up * _camera.transform.position.y, Vector3.up,  Time.deltaTime * 15f);
         }
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(Camera.main.transform.position, 30);
+            Gizmos.DrawWireSphere(_camera.transform.position, 30);
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(Camera.main.transform.position, 60);
+            Gizmos.DrawWireSphere(_camera.transform.position, 60);
         }
 #endif
     }

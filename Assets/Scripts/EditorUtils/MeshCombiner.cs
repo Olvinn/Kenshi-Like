@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace EditorUtils
 {
+    #if UNITY_EDITOR
     public class MeshCombiner : EditorWindow
     {
         public SkinnedMeshRenderer source;
@@ -54,4 +55,5 @@ namespace EditorUtils
             }
         }
     }
+    #endif
 }

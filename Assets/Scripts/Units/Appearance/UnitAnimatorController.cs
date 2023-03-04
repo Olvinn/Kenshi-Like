@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -6,14 +5,10 @@ namespace Units.Appearance
 {
     public class UnitAnimatorController : MonoBehaviour
     {
-        [SerializeField] private float _animatorUpdateFrequencyBias = 10;
-        [SerializeField] private float _animatorUpdateFrequencyMaximumDistance = 100;
-        [SerializeField] private int _animatorUpdateFrequencyMinimum = 15;
         [SerializeField] private Animator _animator;
         private int _speedHash, _strafeHash;
         private float _savedTime;
-        private int _updateDelay;
-        private float _distanceToCamera;
+        private int _framesCounter, _framesUpdateDelay;
         private int _lod;
         
         private void Awake()
@@ -29,23 +24,27 @@ namespace Units.Appearance
         private IEnumerator Start()
         {
             _animator.enabled = true;
-            yield return null; //it needs two frames to initialize
-            ApplyVelocity(Vector3.zero);
-            yield return null;
+            var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+            while (stateInfo.normalizedTime < 1.0f)
+            {
+                yield return null;
+                stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+            }
             _animator.enabled = false;
         }
 
         private void Update()
         {
-            _updateDelay--;
-            if (_updateDelay >= 0)
+            if (_animator.enabled)
+                return;
+            
+            _framesCounter--;
+            if (_framesCounter >= 0)
                 return;
             
             _animator.Update(Time.time - _savedTime);
             _savedTime = Time.time;
-            
-            _updateDelay =  (int)Mathf.Lerp(0, _animatorUpdateFrequencyMinimum, 
-                ((_distanceToCamera - _animatorUpdateFrequencyBias) / _animatorUpdateFrequencyMaximumDistance));
+            _framesCounter = _framesUpdateDelay;
         }
 
         public void ApplyVelocity(Vector3 velocity)
@@ -56,15 +55,14 @@ namespace Units.Appearance
 
         public void UpdateDistanceToCamera(float distance) // hardcoded with magic numbers for now
         {
-            _distanceToCamera = distance;
-            if (_distanceToCamera < 30 && _lod != 0)
+            if (distance < 30 && _lod != 0)
             {
                 _animator.SetLayerWeight(0, 1);
                 _animator.SetLayerWeight(1, 0);
                 _animator.SetLayerWeight(3, 0);
                 _lod = 0;
             }
-            else if (_distanceToCamera < 60 && _lod != 1)
+            else if (distance < 60 && _lod != 1)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 1);
@@ -78,6 +76,10 @@ namespace Units.Appearance
                 _animator.SetLayerWeight(3, 1);
                 _lod = 2;
             }
+
+            int newUpdateDelay = (int)(distance * 0.10f);
+            _framesCounter += newUpdateDelay - _framesUpdateDelay;
+            _framesUpdateDelay = newUpdateDelay;
         }
         
 #if UNITY_EDITOR

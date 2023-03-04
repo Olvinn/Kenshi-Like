@@ -30,6 +30,8 @@ namespace Units.MVC.View
 
         private void Start()
         {
+            _agent.autoBraking = false;
+            _agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
             _mainCamera = Camera.main;
         }
 

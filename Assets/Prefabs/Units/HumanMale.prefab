@@ -1167,7 +1167,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 61e73b12a0a23c448b142c47d88ef49a, type: 3}
   m_Controller: {fileID: 9100000, guid: b8f4344b253a9e445b734e6a1b65f27d, type: 2}
   m_CullingMode: 2
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -1187,9 +1187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 583bf678e099b2843adca6460656139c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animatorUpdateFrequencyBias: 10
-  _animatorUpdateFrequencyMaximumDistance: 100
-  _animatorUpdateFrequencyMinimum: 15
   _animator: {fileID: 8011607456919437897}
 --- !u!114 &6302508565385883452
 MonoBehaviour:
