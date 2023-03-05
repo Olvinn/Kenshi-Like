@@ -625,11 +625,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bf9118707d29b54e9885136db1ff10c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetOffset: {x: 1, y: 1, z: 0}
+  targetOffset: {x: 1, y: 1.8, z: 0}
   cameraOffset: {x: 1, y: 1, z: -5}
   horizontalSpeed: 10
   verticalSpeed: 5
   lerpSpeed: 5
+  scrollSpeed: 3
   minAngle: 5
   maxAngle: 60
 --- !u!1 &793825274

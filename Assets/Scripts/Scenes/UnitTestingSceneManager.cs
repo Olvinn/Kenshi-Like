@@ -57,6 +57,7 @@ namespace Scenes
             
             var rot = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             _camera.Rotate(rot);
+            _camera.Scroll(Input.GetAxis("Mouse ScrollWheel"));
         }
 
 #if UNITY_EDITOR
