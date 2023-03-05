@@ -25,8 +25,14 @@ namespace Players.Variants
                 var model = new UnitModel(temp.GetStats(), temp.GetAppearance());
                 model.SetPosition(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
                 _manager.AddUnit(model);
-                _manager.Move(model, new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
+                SetRandomDestination(model);
+                _manager.onUnitCompleteCommands += SetRandomDestination;
             }
+        }
+
+        private void SetRandomDestination(UnitModel unit)
+        {
+            _manager.Move(unit, new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
         }
     }
 }

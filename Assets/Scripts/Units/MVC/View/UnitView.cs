@@ -12,16 +12,15 @@ namespace Units.MVC.View
     {
         public Action<Vector3> onPositionChanged;
         public Action onReachDestination;
-        public MovingStatus movingStatus { get; private set; }
+        public MovingStatus movingState { get; private set; }
 
-        private LODGroup _lod;
         private UnitAppearanceController _appearance;
         private UnitAnimatorController _animator;
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
         private UnitAppearance _appearanceData;
         private Camera _mainCamera;
-        private bool _initialized;
+        private bool _isVisualsInitialized;
         
         private void Awake()
         {
@@ -35,29 +34,15 @@ namespace Units.MVC.View
             _mainCamera = Camera.main;
         }
 
+        // it maybe runs to frequently. maybe it should be called by the controller 
         private void Update()
         {
-            if (movingStatus == MovingStatus.Moving)
-            {
-                if (_agent.remainingDistance <= _agent.stoppingDistance)
-                {
-                    _agent.isStopped = true;
-                    movingStatus = MovingStatus.Staying;
-                    onReachDestination?.Invoke();
-                }
-            }
-
-            if (_savedPosition != transform.position)
-            {
-                onPositionChanged?.Invoke(transform.position);
-                _savedPosition = transform.position;
-            }
+            ProceedMovement();
             
-            if (!_initialized)
+            if (!_isVisualsInitialized)
                 return;
             
-            _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
-            _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
+            UpdateAnimator();
         }
 
         public void SetStats(UnitStats stats)
@@ -81,13 +66,13 @@ namespace Units.MVC.View
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
                 _agent.isStopped = true;
-                movingStatus = MovingStatus.Staying;
+                movingState = MovingStatus.Staying;
                 return;
             }
 
             _agent.stoppingDistance = stoppingDistance;
             _agent.SetDestination(destination);
-            movingStatus = MovingStatus.Moving;
+            movingState = MovingStatus.Moving;
             _agent.isStopped = false;
         }
 
@@ -97,15 +82,43 @@ namespace Units.MVC.View
             onPositionChanged?.Invoke(transform.position);
         }
 
+        private void ProceedMovement()
+        {
+            if (movingState == MovingStatus.Moving)
+            {
+                if (_agent.remainingDistance <= _agent.stoppingDistance)
+                {
+                    _agent.isStopped = true;
+                    movingState = MovingStatus.Staying;
+                    onReachDestination?.Invoke();
+                }
+            }
+
+            if (_savedPosition != transform.position)
+            {
+                onPositionChanged?.Invoke(transform.position);
+                _savedPosition = transform.position;
+            }
+        }
+
+        private void UpdateAnimator()
+        {
+            _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
+            _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
+        }
+
         private void OnAppearancePrefabLoaded(GameObject appearanceGO)
         {
+            if (!appearanceGO)
+                return;
+            
             _appearance = appearanceGO.GetComponent<UnitAppearanceController>();;
             _appearance.SetAppearance(_appearanceData);
 
             _animator = appearanceGO.GetComponent<UnitAnimatorController>();
             if (_animator != null)
             {
-                _initialized = true;
+                _isVisualsInitialized = true;
             }
         }
     }

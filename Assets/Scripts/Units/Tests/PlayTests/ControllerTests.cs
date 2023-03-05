@@ -1,5 +1,6 @@
 using System.Collections;
 using NUnit.Framework;
+using Units.Commands;
 using Units.MVC.Controller;
 using Units.MVC.Model;
 using Units.MVC.View;
@@ -15,7 +16,7 @@ namespace Units.Tests.PlayTests
     {
         private UnitModel _model;
         private UnitView _view;
-        private UnitController _controller, _emptyController;
+        private UnitController _controller;
         private NavMeshSurface _env;
 
         [SetUp]
@@ -46,14 +47,13 @@ namespace Units.Tests.PlayTests
             Assert.AreEqual(agent.speed, _model.GetStats().speed);
 
             Vector3 destination1 = new Vector3(0, 0, 5), destination2 = new Vector3(5, 0, 0);
-
-            _model.MoveTo(destination1);
-            Assert.AreEqual(MovingStatus.Moving, _view.movingStatus);
+            _view.MoveTo(destination1);
+            Assert.AreEqual(MovingStatus.Moving, _view.movingState);
             yield return new WaitForSeconds(3);
-            Assert.AreEqual(MovingStatus.Staying, _view.movingStatus);
+            Assert.AreEqual(MovingStatus.Staying, _view.movingState);
             Assert.LessOrEqual(Vector3.Distance(_model.GetPosition(), destination1), .5f);
             _model.SetPosition(destination2);
-            Assert.AreEqual(MovingStatus.Staying, _view.movingStatus);
+            Assert.AreEqual(MovingStatus.Staying, _view.movingState);
             Assert.LessOrEqual(Vector3.Distance(_model.GetPosition(), destination2), .5f);
         }
 
@@ -75,7 +75,6 @@ namespace Units.Tests.PlayTests
         {
             _model.SetPosition(new Vector3(5,0,5));
             Assert.AreEqual(new Vector3(5,0,5), _model.GetPosition());
-            _emptyController = UnitControllerFactory.Create();
             _controller.SetUp(_model, _view);
             Assert.AreEqual(new Vector3(5,0,5), _model.GetPosition());
             Assert.AreEqual(new Vector3(5,0,5), _view.transform.position);

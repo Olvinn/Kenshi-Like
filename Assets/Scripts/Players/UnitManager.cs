@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Units.Commands;
 using Units.MVC.Controller;
 using Units.MVC.Model;
 using Units.MVC.View;
@@ -8,6 +10,7 @@ namespace Players
 {
     public class UnitManager
     {
+        public Action<UnitModel> onUnitCompleteCommands;
         public int unitsCount => _units.Count;
 
         private Dictionary<UnitModel, UnitController> _units;
@@ -25,13 +28,14 @@ namespace Players
             var view = UnitViewFactory.Create();
             controller.SetUp(model, view);
             _units.Add(model, controller);
+            controller.onCommandsComplete = () => onUnitCompleteCommands(model);
         }
 
         public void Move(Vector3 destination)
         {
-            foreach (var model in _units.Keys)
+            foreach (var controller in _units.Values)
             {
-                model.MoveTo(destination);
+                controller.AddCommand(new UnitCommandMove(destination));
             }
         }
 
@@ -39,7 +43,7 @@ namespace Players
         {
             if (!_units.ContainsKey(unit))
                 return;
-            unit.MoveTo(destination);
+            _units[unit].AddCommand(new UnitCommandMove(destination));
         }
     }
 }

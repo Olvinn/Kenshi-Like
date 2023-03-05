@@ -7,12 +7,12 @@ namespace Units.MVC.Model
     [Serializable]
     public class UnitModel
     {
-        //events for view update
+        //events for controller notification
         public Action<int> onHPChanged;
-        public Action<Vector3> onSetDestination, onPositionChange;
+        public Action<Vector3> onPositionChanged;
         public bool isDead => _currentStats.healthPoints <= 0;
         
-        [SerializeField] private UnitStats _currentStats, _defaultStats; //current and default unit stats
+        [SerializeField] private UnitStats _currentStats, _defaultStats;
         [SerializeField] private UnitAppearance _appearance; //how this unit actually looks like
 
         [SerializeField] private Vector3 _position;
@@ -79,12 +79,7 @@ namespace Units.MVC.Model
         public void SetPosition(Vector3 pos)
         {
             _position = pos;
-            onPositionChange?.Invoke(pos);
-        }
-        
-        public void MoveTo(Vector3 destination)
-        {
-            onSetDestination?.Invoke(destination);
+            onPositionChanged?.Invoke(pos);
         }
 
         public Vector3 GetPosition()

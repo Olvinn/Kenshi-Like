@@ -59,21 +59,21 @@ namespace Units.Appearance
             {
                 _animator.SetLayerWeight(0, 1);
                 _animator.SetLayerWeight(1, 0);
-                _animator.SetLayerWeight(3, 0);
+                _animator.SetLayerWeight(2, 0);
                 _lod = 0;
             }
             else if (distance < 60 && _lod != 1)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 1);
-                _animator.SetLayerWeight(3, 0);
+                _animator.SetLayerWeight(2, 0);
                 _lod = 1;
             }
             else if (_lod != 2)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 0);
-                _animator.SetLayerWeight(3, 1);
+                _animator.SetLayerWeight(2, 1);
                 _lod = 2;
             }
 
