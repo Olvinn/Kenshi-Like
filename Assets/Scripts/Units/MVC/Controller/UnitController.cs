@@ -15,7 +15,7 @@ namespace Units.MVC.Controller
         public UnitState state { get; private set; }
         
         private UnitModel _model;
-        private UnitView _view;
+        private UnitRTSView _view;
         private LinkedList<UnitCommand> _commands;
         private UnitCommand _currentCommand;
 
@@ -33,7 +33,7 @@ namespace Units.MVC.Controller
             UpdateState();
         }
 
-        public void SetUp(UnitModel model, UnitView view)
+        public void SetUp(UnitModel model, UnitRTSView view)
         {
             Clear();
             _view = view;

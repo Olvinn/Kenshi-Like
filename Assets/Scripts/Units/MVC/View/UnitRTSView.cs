@@ -8,7 +8,7 @@ using UnityEngine.AI;
 namespace Units.MVC.View
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class UnitView : MonoBehaviour
+    public class UnitRTSView : MonoBehaviour
     {
         public Action<Vector3> onPositionChanged;
         public Action onReachDestination;

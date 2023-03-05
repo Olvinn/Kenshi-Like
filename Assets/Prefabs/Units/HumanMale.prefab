@@ -1188,6 +1188,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 8011607456919437897}
+  lod0Threshold: 20
+  lod1Threshold: 70
+  updateFrequencyMultiplier: 0.1
 --- !u!114 &6302508565385883452
 MonoBehaviour:
   m_ObjectHideFlags: 0

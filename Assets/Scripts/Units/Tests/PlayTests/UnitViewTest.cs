@@ -12,7 +12,7 @@ namespace Units.Tests.PlayTests
     public class UnitViewTest
     {
         private UnitStats _stats;
-        private UnitView _view;
+        private UnitRTSView _view;
         private NavMeshSurface _env;
 
         [SetUp]
@@ -37,7 +37,7 @@ namespace Units.Tests.PlayTests
             Vector3 destination = new Vector3(0, 0, 5);
             Vector3 start = Vector3.zero;
             var temp = new GameObject();
-            _view = temp.AddComponent<UnitView>();
+            _view = temp.AddComponent<UnitRTSView>();
             Assert.NotNull(_view);
             var agent = _view.GetComponent<NavMeshAgent>();
             Assert.NotNull(agent);

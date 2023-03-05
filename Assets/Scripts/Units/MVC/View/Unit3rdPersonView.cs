@@ -15,7 +15,7 @@ namespace Units.MVC.View
         private UnitAppearanceController _appearance;
         private UnitAnimatorController _animator;
         private CharacterController _characterController;
-        private Vector3 _savedPosition, _moveDirection, _velocity;
+        private Vector3 _savedPosition, _moveDirection, _localVelocity;
         private UnitAppearance _appearanceData;
         private Camera _mainCamera;
         private bool _isVisualsInitialized;
@@ -24,6 +24,7 @@ namespace Units.MVC.View
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
+            _characterController.center = Vector3.up;
         }
 
         private void Start()
@@ -34,6 +35,7 @@ namespace Units.MVC.View
         private void Update()
         {
             ProceedMovement();
+            ProceedRotation();
             
             if (!_isVisualsInitialized)
                 return;
@@ -69,12 +71,15 @@ namespace Units.MVC.View
         private void ProceedMovement()
         {
             movingState = _moveDirection != Vector3.zero ? MovingStatus.Moving : MovingStatus.Staying;
-
+            
             Vector3 camRot = _mainCamera.transform.forward;
             camRot.y = 0;
             Quaternion rot = Quaternion.FromToRotation(Vector3.forward, camRot);
-            _velocity = rot * _moveDirection * _speed;
-            _characterController.Move(_velocity * Time.deltaTime);
+            
+            Quaternion local = Quaternion.FromToRotation(transform.forward, camRot);
+            _localVelocity = local * _moveDirection * _speed;
+            
+            _characterController.Move(rot * _moveDirection * (_speed * Time.deltaTime) + Vector3.down);
 
             if (_savedPosition != transform.position)
             {
@@ -83,9 +88,21 @@ namespace Units.MVC.View
             }
         }
 
+        private void ProceedRotation()
+        {
+            if (movingState == MovingStatus.Staying)
+                return;
+            
+            Vector3 camRot = _mainCamera.transform.forward;
+            camRot.y = 0;
+            Quaternion rot = Quaternion.FromToRotation(Vector3.forward, camRot);
+            
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, Time.deltaTime * 60);
+        }
+
         private void UpdateAnimator()
         {
-            _animator.ApplyVelocity(_velocity);
+            _animator.ApplyVelocity(_localVelocity);
             _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
         }
 
@@ -96,11 +113,11 @@ namespace Units.MVC.View
             
             _appearance = appearanceGO.GetComponent<UnitAppearanceController>();;
             _appearance.SetAppearance(_appearanceData);
-            _appearance.transform.position = Vector3.down;
 
             _animator = appearanceGO.GetComponent<UnitAnimatorController>();
             if (_animator != null)
             {
+                _animator.SetAnimatorActive(true);
                 _isVisualsInitialized = true;
             }
         }

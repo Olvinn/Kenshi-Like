@@ -6,10 +6,13 @@ namespace Units.Appearance
     public class UnitAnimatorController : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
+        [SerializeField] private float lod0Threshold = 30, lod1Threshold = 60, updateFrequencyMultiplier = .1f;
+        
         private int _speedHash, _strafeHash;
         private float _savedTime;
         private int _framesCounter, _framesUpdateDelay;
         private int _lod;
+        private bool _forceAnimatorToBeActive;
         
         private void Awake()
         {
@@ -30,12 +33,13 @@ namespace Units.Appearance
                 yield return null;
                 stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
             }
-            _animator.enabled = false;
+            if (!_forceAnimatorToBeActive)
+                _animator.enabled = false;
         }
 
         private void Update()
         {
-            if (_animator.enabled)
+            if (_forceAnimatorToBeActive)
                 return;
             
             _framesCounter--;
@@ -53,23 +57,23 @@ namespace Units.Appearance
             _animator.SetFloat(_strafeHash, velocity.x);
         }
 
-        public void UpdateDistanceToCamera(float distance) // hardcoded with magic numbers for now
+        public void UpdateDistanceToCamera(float distance)
         {
-            if (distance < 20 && _lod > 0)
+            if (distance < lod0Threshold && _lod > 0)
             {
                 _animator.SetLayerWeight(0, 1);
                 _animator.SetLayerWeight(1, 0);
                 _animator.SetLayerWeight(2, 0);
                 _lod = 0;
             }
-            else if (distance >= 20 && distance < 50 && _lod != 1)
+            else if (distance >= lod0Threshold && distance < lod1Threshold && _lod != 1)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 1);
                 _animator.SetLayerWeight(2, 0);
                 _lod = 1;
             }
-            else if (distance >= 50 && _lod < 2)
+            else if (distance >= lod1Threshold && _lod < 2)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 0);
@@ -77,9 +81,15 @@ namespace Units.Appearance
                 _lod = 2;
             }
 
-            int newUpdateDelay = (int)(distance * 0.10f);
+            int newUpdateDelay = (int)(distance * updateFrequencyMultiplier);
             _framesCounter += newUpdateDelay - _framesUpdateDelay;
             _framesUpdateDelay = newUpdateDelay;
+        }
+
+        public void SetAnimatorActive(bool value)
+        {
+            _forceAnimatorToBeActive = value;
+            _animator.enabled = _forceAnimatorToBeActive;
         }
         
 #if UNITY_EDITOR
