@@ -55,21 +55,21 @@ namespace Units.Appearance
 
         public void UpdateDistanceToCamera(float distance) // hardcoded with magic numbers for now
         {
-            if (distance < 30 && _lod != 0)
+            if (distance < 20 && _lod > 0)
             {
                 _animator.SetLayerWeight(0, 1);
                 _animator.SetLayerWeight(1, 0);
                 _animator.SetLayerWeight(2, 0);
                 _lod = 0;
             }
-            else if (distance < 60 && _lod != 1)
+            else if (distance >= 20 && distance < 50 && _lod != 1)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 1);
                 _animator.SetLayerWeight(2, 0);
                 _lod = 1;
             }
-            else if (_lod != 2)
+            else if (distance >= 50 && _lod < 2)
             {
                 _animator.SetLayerWeight(0, 0);
                 _animator.SetLayerWeight(1, 0);

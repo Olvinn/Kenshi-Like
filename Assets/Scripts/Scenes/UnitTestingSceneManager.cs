@@ -1,7 +1,8 @@
-using System.Linq;
 using CustomDebug;
 using Players.Variants;
 using Units.MVC.Model;
+using Units.MVC.View;
+using Units.Structures.Factories;
 using UnityEngine;
 
 namespace Scenes
@@ -9,26 +10,44 @@ namespace Scenes
     public class UnitTestingSceneManager : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
-        [SerializeField] private UnitModelSO[] _models;
         [SerializeField] private int _unitCount;
     
-        private TestCrowd _manager;
+        private TestCrowd _crowd;
+        private Unit3rdPersonView _player;
 
         private void Awake()
         {
-            _manager = new TestCrowd();
+            _crowd = new TestCrowd();
         }
 
         private void Start()
         {
-            _manager.CreateCrowd(_unitCount, _models.Select(x => x.model).ToArray());
+            _crowd.CreateCrowd(_unitCount, new []
+            {
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+            });
+
+            _player = UnitViewFactory.Create3rdPerson();
+            var app = UnitAppearanceFactory.CreateRandomZombie();
+            app.skinColor = Color.red;
+            var sta = UnitStatsFactory.CreateRandomZombie();
+            sta.speed = 10;
+            _player.SetAppearance(app);
+            _player.SetStats(sta);
         }
 
         void Update()
         {
-            _manager.Update();
-            FPSCounter.DebugDisplayData = $"Units: {_manager.unitsCount}";
-            _camera.transform.RotateAround(Vector3.up * _camera.transform.position.y, Vector3.up,  Time.deltaTime * 15f);
+            _crowd.Update();
+            FPSCounter.DebugDisplayData = $"Units: {_crowd.unitsCount}";
+            _camera.transform.LookAt(_player.transform);
+
+            var mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            _player.Move(mov);
         }
 
 #if UNITY_EDITOR

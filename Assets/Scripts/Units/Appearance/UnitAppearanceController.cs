@@ -17,7 +17,7 @@ namespace Units.Appearance
         {
             foreach (var renderer in _renderers)
             {
-                renderer.material.color = appearance.baseColor;
+                renderer.material.color = appearance.skinColor;
             }
         }
         

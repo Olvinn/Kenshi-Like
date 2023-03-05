@@ -25,18 +25,10 @@ namespace Players
             if (_units.ContainsKey(model))
                 return;
             var controller = UnitControllerFactory.Create();
-            var view = UnitViewFactory.Create();
+            var view = UnitViewFactory.CreateRTS();
             controller.SetUp(model, view);
             _units.Add(model, controller);
             controller.onCommandsComplete = () => onUnitCompleteCommands(model);
-        }
-
-        public void Move(Vector3 destination)
-        {
-            foreach (var controller in _units.Values)
-            {
-                controller.AddCommand(new UnitCommandMove(destination));
-            }
         }
 
         public void Move(UnitModel unit, Vector3 destination)
