@@ -19,7 +19,7 @@ namespace Units.MVC.View
         private UnitAppearance _appearanceData;
         private Camera _mainCamera;
         private bool _isVisualsInitialized;
-        private float _speed;
+        private float _speed, _rotationSpeed = 120;
         
         private void Awake()
         {
@@ -97,7 +97,7 @@ namespace Units.MVC.View
             camRot.y = 0;
             Quaternion rot = Quaternion.FromToRotation(Vector3.forward, camRot);
             
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, Time.deltaTime * 60);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, Time.deltaTime * _rotationSpeed);
         }
 
         private void UpdateAnimator()

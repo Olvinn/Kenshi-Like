@@ -1,3 +1,4 @@
+using Cameras;
 using CustomDebug;
 using Players.Variants;
 using Units.MVC.Model;
@@ -9,7 +10,7 @@ namespace Scenes
 {
     public class UnitTestingSceneManager : MonoBehaviour
     {
-        [SerializeField] private Camera _camera;
+        [SerializeField] private Camera3rdPersonController _camera;
         [SerializeField] private int _unitCount;
     
         private TestCrowd _crowd;
@@ -35,19 +36,27 @@ namespace Scenes
             var app = UnitAppearanceFactory.CreateRandomZombie();
             app.skinColor = Color.red;
             var sta = UnitStatsFactory.CreateRandomZombie();
-            sta.speed = 10;
+            sta.speed = 2;
             _player.SetAppearance(app);
             _player.SetStats(sta);
+            
+            _camera.SetCamera(Camera.main);
+            _camera.SetTarget(_player.transform);
+
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         void Update()
         {
             _crowd.Update();
             FPSCounter.DebugDisplayData = $"Units: {_crowd.unitsCount}";
-            _camera.transform.LookAt(_player.transform);
 
             var mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             _player.Move(mov);
+            
+            var rot = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            _camera.Rotate(rot);
         }
 
 #if UNITY_EDITOR
