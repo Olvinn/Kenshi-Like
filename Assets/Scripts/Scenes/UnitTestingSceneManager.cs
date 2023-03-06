@@ -14,7 +14,7 @@ namespace Scenes
         [SerializeField] private int _unitCount;
     
         private TestCrowd _crowd;
-        private Unit3rdPersonView _player;
+        private CharacterControllerUnitView _player;
 
         private void Awake()
         {

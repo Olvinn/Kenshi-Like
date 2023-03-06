@@ -8,7 +8,7 @@ public class ObjectLoader : MonoBehaviour
     public static ObjectLoader Instance { get; private set; }
 
     [Header("UI"), SerializeField] private Portrait portraitPrefab;
-    [Header("Units"), SerializeField] private UnitView unitView;
+    [Header("Units"), SerializeField] private OldUnits.Views.UnitView unitView;
 
     private Dictionary<ObjectTypes, Pool> _pools;
 

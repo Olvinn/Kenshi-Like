@@ -61,7 +61,7 @@ namespace OldUnits
         Unit CreateUnit(Character data, Vector3 pos)
         {
             var unit = new Unit(data);
-            var view = ObjectLoader.Instance.GetObject(ObjectTypes.UnitView) as UnitView;
+            var view = ObjectLoader.Instance.GetObject(ObjectTypes.UnitView) as Views.UnitView;
         
             RaycastHit hit;
             Ray ray = new Ray(pos + Vector3.up * 1000, Vector3.down);

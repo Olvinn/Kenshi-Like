@@ -10,22 +10,22 @@ namespace Units.MVC.View
         private static int _index = 0;
         private static Transform _actors, _parent;
         
-        public static UnitRTSView CreateRTS()
+        public static NavMeshUnitView CreateRTS()
         {
             if (_parent == null)
                 FindOrCreateParent();
             var temp = new GameObject($"UnitView_{_index++}");
-            var result = temp.AddComponent<UnitRTSView>();
+            var result = temp.AddComponent<NavMeshUnitView>();
             result.transform.SetParent(_parent);
             return result;
         }
         
-        public static Unit3rdPersonView Create3rdPerson()
+        public static CharacterControllerUnitView Create3rdPerson()
         {
             if (_parent == null)
                 FindOrCreateParent();
             var temp = new GameObject($"Unit3rdPersonView_{_index++}");
-            var result = temp.AddComponent<Unit3rdPersonView>();
+            var result = temp.AddComponent<CharacterControllerUnitView>();
             result.transform.SetParent(_parent);
             return result;
         }

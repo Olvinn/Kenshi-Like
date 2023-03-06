@@ -8,18 +8,18 @@ namespace OldUnits.Weapons
 {
     public class TriggerDetector : MonoBehaviour
     {
-        public List<UnitView> Views => _views.ToList();
+        public List<Views.UnitView> Views => _views.ToList();
         [FormerlySerializedAs("collider")] [SerializeField] private Collider col;
-        private List<UnitView> _views;
+        private List<Views.UnitView> _views;
 
         private void Awake()
         {
-            _views = new List<UnitView>();
+            _views = new List<Views.UnitView>();
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            var unit = other.GetComponent<UnitView>();
+            var unit = other.GetComponent<Views.UnitView>();
             if (unit && unit.Model is { IsDead: false })
             {
                 _views.Add(unit);
@@ -29,7 +29,7 @@ namespace OldUnits.Weapons
 
         private void OnTriggerExit(Collider other)
         {
-            var unit = other.GetComponent<UnitView>();
+            var unit = other.GetComponent<Views.UnitView>();
             if (unit)
                 RemoveUnit(unit.Model);
         }

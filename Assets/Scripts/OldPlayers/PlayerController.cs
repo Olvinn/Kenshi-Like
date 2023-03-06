@@ -98,7 +98,7 @@ namespace OldPlayers
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit,1000f,  workWithMask.value))
             {
-                var view = hit.collider.GetComponent<UnitView>();
+                var view = hit.collider.GetComponent<OldUnits.Views.UnitView>();
                 if (view != null && !view.Model.IsDead)
                 {
                     if (view.Model.team == TeamEnum.Player)
@@ -137,7 +137,7 @@ namespace OldPlayers
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 1000f, workWithMask))
             {
-                var view = hit.collider.GetComponent<UnitView>();
+                var view = hit.collider.GetComponent<OldUnits.Views.UnitView>();
                 if (view != null && !view.Model.IsDead)
                 {
                     if (view.Model.team == TeamEnum.Player)
@@ -173,7 +173,7 @@ namespace OldPlayers
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 1000f, workWithMask.value))
             {
-                var view = hit.collider.GetComponent<UnitView>();
+                var view = hit.collider.GetComponent<OldUnits.Views.UnitView>();
                 if (view != null && units.Contains(view.Model))
                     SelectUnit(view.Model, InputController.Instance.isAdditiveModifierApplied);
                 else

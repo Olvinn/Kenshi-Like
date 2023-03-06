@@ -1,6 +1,4 @@
 using System;
-using AssetsManagement;
-using Units.Appearance;
 using Units.Structures;
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,19 +6,12 @@ using UnityEngine.AI;
 namespace Units.MVC.View
 {
     [RequireComponent(typeof(NavMeshAgent))]
-    public class UnitRTSView : MonoBehaviour
+    public class NavMeshUnitView : UnitView
     {
-        public Action<Vector3> onPositionChanged;
         public Action onReachDestination;
-        public MovingStatus movingState { get; private set; }
-
-        private UnitAppearanceController _appearance;
-        private UnitAnimatorController _animator;
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
-        private UnitAppearance _appearanceData;
         private Camera _mainCamera;
-        private bool _isVisualsInitialized;
         
         private void Awake()
         {
@@ -34,26 +25,9 @@ namespace Units.MVC.View
             _mainCamera = Camera.main;
         }
 
-        // it maybe runs to frequently. maybe it should be called by the controller 
-        private void Update()
-        {
-            ProceedMovement();
-            
-            if (!_isVisualsInitialized)
-                return;
-            
-            UpdateAnimator();
-        }
-
         public void SetStats(UnitStats stats)
         {
             _agent.speed = stats.speed;
-        }
-
-        public void SetAppearance(UnitAppearance appearance)
-        {
-            _appearanceData = appearance;
-            AssetsManager.LoadAsset(appearance.prefab, transform, OnAppearancePrefabLoaded);
         }
 
         public void MoveTo(Vector3 destination)
@@ -82,7 +56,7 @@ namespace Units.MVC.View
             onPositionChanged?.Invoke(transform.position);
         }
 
-        private void ProceedMovement()
+        protected override void ProceedMovement()
         {
             if (movingState == MovingStatus.Moving)
             {
@@ -101,25 +75,10 @@ namespace Units.MVC.View
             }
         }
 
-        private void UpdateAnimator()
+        protected override void UpdateAnimator()
         {
             _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
             _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
-        }
-
-        private void OnAppearancePrefabLoaded(GameObject appearanceGO)
-        {
-            if (!appearanceGO)
-                return;
-            
-            _appearance = appearanceGO.GetComponent<UnitAppearanceController>();;
-            _appearance.SetAppearance(_appearanceData);
-
-            _animator = appearanceGO.GetComponent<UnitAnimatorController>();
-            if (_animator != null)
-            {
-                _isVisualsInitialized = true;
-            }
         }
     }
 }

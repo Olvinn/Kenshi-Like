@@ -9,7 +9,7 @@ public class PortraitMaker : MonoBehaviour
 {
     [SerializeField] private Camera camera;
     [SerializeField] private Transform head;
-    [SerializeField] private UnitView unit;
+    [SerializeField] private OldUnits.Views.UnitView unit;
 
     private Queue<Tuple<Appearance, Action<Sprite>>> _queue;
     private Coroutine _coroutine;

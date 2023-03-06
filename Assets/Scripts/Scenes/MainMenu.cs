@@ -9,7 +9,7 @@ namespace Scenes
 {
     public class MainMenu : MonoBehaviour
     {
-        [SerializeField] private UnitView mainMenuUnit;
+        [SerializeField] private OldUnits.Views.UnitView mainMenuUnit;
         [SerializeField] private TextMeshProUGUI version;
 
         private void Start()

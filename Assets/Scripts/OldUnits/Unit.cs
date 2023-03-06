@@ -18,7 +18,7 @@ namespace OldUnits
         public bool IsDead => _currentHP <= 0;
         public Vector3 Position => view.position;
         public Transform transform => view.transform;
-        public UnitView view { get; private set; }
+        public Views.UnitView view { get; private set; }
         public TeamEnum team { get; private set; }
         public float HPPercentage => _currentHP / data.GetParameter(ParametersType.HealthPoints);
         public Character data;
@@ -73,7 +73,7 @@ namespace OldUnits
             _savedTime = Time.time;
         }
         
-        public void InjectView(UnitView view)
+        public void InjectView(Views.UnitView view)
         {
             this.view = view;
             view.SetMaxSpeed(data.GetParameter(ParametersType.Speed));
@@ -225,7 +225,7 @@ namespace OldUnits
             return _attackDelay <= 0 && view.CanAttack(unit.transform);
         }
         
-        private void OnCompleteAttack(List<UnitView> units)
+        private void OnCompleteAttack(List<Views.UnitView> units)
         {
             if (units != null)
             {

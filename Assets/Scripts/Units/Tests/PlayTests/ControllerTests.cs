@@ -15,7 +15,7 @@ namespace Units.Tests.PlayTests
     public class ControllerTests
     {
         private UnitModel _model;
-        private UnitRTSView _view;
+        private NavMeshUnitView _view;
         private UnitController _controller;
         private NavMeshSurface _env;
 
@@ -34,7 +34,7 @@ namespace Units.Tests.PlayTests
             _controller = UnitControllerFactory.Create();
             _env.BuildNavMesh();
             temp = new GameObject("View");
-            _view = temp.AddComponent<UnitRTSView>();
+            _view = temp.AddComponent<NavMeshUnitView>();
         } 
         
         [UnityTest]

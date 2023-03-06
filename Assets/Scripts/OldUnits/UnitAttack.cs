@@ -9,7 +9,7 @@ namespace OldUnits
     {
         [SerializeField] private TriggerDetector front;
         
-        public List<UnitView> GetUnitViewsFromBasicAttack()
+        public List<Views.UnitView> GetUnitViewsFromBasicAttack()
         {
             return front.Views;
         }

@@ -35,7 +35,7 @@ namespace Actors.Tests
             var model = new UnitModel(TestUtils.GetTestStats(), TestUtils.GetTestAppearance());
             manager.AddUnit(model);
             Assert.AreEqual(1, manager.unitsCount);
-            Assert.NotNull(GameObject.FindObjectOfType(typeof(UnitRTSView)));
+            Assert.NotNull(GameObject.FindObjectOfType(typeof(NavMeshUnitView)));
             yield return null;
         }
     }
