@@ -626,13 +626,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetOffset: {x: 1, y: 1.8, z: 0}
-  cameraOffset: {x: 1, y: 1, z: -5}
+  cameraOffset: {x: 1, y: 1.25, z: -5}
   horizontalSpeed: 10
   verticalSpeed: 5
   lerpSpeed: 5
   scrollSpeed: 3
   minAngle: 5
   maxAngle: 60
+  minZoom: -5
+  maxZoom: -1
 --- !u!1 &793825274
 GameObject:
   m_ObjectHideFlags: 0

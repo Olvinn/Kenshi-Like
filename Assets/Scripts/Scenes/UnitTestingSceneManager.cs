@@ -10,7 +10,7 @@ namespace Scenes
 {
     public class UnitTestingSceneManager : MonoBehaviour
     {
-        [SerializeField] private Camera3rdPersonController _camera;
+        [SerializeField] private CameraThirdPersonController _camera;
         [SerializeField] private int _unitCount;
     
         private TestCrowd _crowd;
