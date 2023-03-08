@@ -1,10 +1,10 @@
 namespace Players.Variants
 {
-    public class Player
+    public class RTSPlayer
     {
         protected UnitManager _manager;
 
-        public Player()
+        public RTSPlayer()
         {
             _manager = new UnitManager();
         }

@@ -14,12 +14,12 @@ namespace Scenes
         [SerializeField] private CameraThirdPersonController _camera;
         [SerializeField] private int _unitCount;
     
-        private TestCrowd _crowd;
+        private TestCrowdNPC _crowd;
         private PlayerUnitController _player;
 
         private void Awake()
         {
-            _crowd = new TestCrowd();
+            _crowd = new TestCrowdNPC();
         }
 
         private void Start()
@@ -34,9 +34,8 @@ namespace Scenes
             });
 
             _player = UnitControllerFactory.CreatePlayer();
-            var app = UnitAppearanceFactory.CreateRandomZombie();
-            app.skinColor = Color.red;
-            var sta = UnitStatsFactory.CreateRandomZombie();
+            var app = UnitAppearanceFactory.CreateRandomMen();
+            var sta = UnitStatsFactory.CreateRandomMen();
             sta.speed = 2;
             var model = new UnitModel(sta, app);
             var view = UnitViewFactory.CreateThirdPerson();

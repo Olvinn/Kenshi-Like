@@ -96,5 +96,14 @@ namespace Units.MVC.View
             _animator.ApplyVelocity(_localVelocity);
             _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
         }
+
+        protected override void OnAppearancePrefabLoaded(GameObject appearanceGO)
+        {
+            base.OnAppearancePrefabLoaded(appearanceGO);
+            if (_animator != null)
+            {
+                _animator.SetAnimatorActive(true);
+            }
+        }
     }
 }

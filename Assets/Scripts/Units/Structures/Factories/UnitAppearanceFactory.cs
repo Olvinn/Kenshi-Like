@@ -30,6 +30,18 @@ namespace Units.Structures.Factories
                 skinColor = HumanSkinColors[Random.Range(0, HumanSkinColors.Length)],
                 accentColor = Color.green,
                 baseColor = Color.green,
+                prefab = "Assets/Prefabs/Units/HumanZombie.prefab"
+            };
+            return result;
+        }
+        
+        public static UnitAppearance CreateRandomMen()
+        {
+            var result = new UnitAppearance()
+            {
+                skinColor = HumanSkinColors[Random.Range(0, HumanSkinColors.Length)],
+                accentColor = Color.blue,
+                baseColor = Color.blue,
                 prefab = "Assets/Prefabs/Units/HumanMale.prefab"
             };
             return result;

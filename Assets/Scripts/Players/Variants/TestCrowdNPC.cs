@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Players.Variants
 {
-    public class TestCrowd : Player
+    public class TestCrowdNPC : RTSPlayer
     {
         public int unitsCount => _manager.unitsCount;
         

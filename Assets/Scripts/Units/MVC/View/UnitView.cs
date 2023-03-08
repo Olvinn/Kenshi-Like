@@ -40,7 +40,7 @@ namespace Units.MVC.View
         protected virtual void Rotate() { }
         protected virtual void UpdateAnimator() { }
 
-        private void OnAppearancePrefabLoaded(GameObject appearanceGO)
+        protected virtual void OnAppearancePrefabLoaded(GameObject appearanceGO)
         {
             if (!appearanceGO)
                 return;
@@ -51,7 +51,6 @@ namespace Units.MVC.View
             _animator = appearanceGO.GetComponent<UnitAnimatorController>();
             if (_animator != null)
             {
-                _animator.SetAnimatorActive(true);
                 _isVisualsInitialized = true;
             }
         }
