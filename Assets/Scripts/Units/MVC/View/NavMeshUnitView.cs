@@ -25,11 +25,12 @@ namespace Units.MVC.View
             _mainCamera = Camera.main;
         }
 
-        public void SetStats(UnitStats stats)
+        public override void SetStats(UnitStats stats)
         {
             _agent.speed = stats.speed;
         }
 
+        // --- Non-Liskov methods ---
         public void MoveTo(Vector3 destination)
         {
             MoveTo(destination, .5f);
@@ -49,8 +50,9 @@ namespace Units.MVC.View
             movingState = MovingStatus.Moving;
             _agent.isStopped = false;
         }
+        // --------------------------
 
-        public void WarpTo(Vector3 position)
+        public override void WarpTo(Vector3 position)
         {
             _agent.Warp(position);
             onPositionChanged?.Invoke(transform.position);

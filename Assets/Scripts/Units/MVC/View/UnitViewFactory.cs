@@ -20,7 +20,7 @@ namespace Units.MVC.View
             return result;
         }
         
-        public static CharacterControllerUnitView Create3rdPerson()
+        public static CharacterControllerUnitView CreateThirdPerson()
         {
             if (_parent == null)
                 FindOrCreateParent();

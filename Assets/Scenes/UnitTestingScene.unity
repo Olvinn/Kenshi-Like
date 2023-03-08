@@ -627,9 +627,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetOffset: {x: 1, y: 1.8, z: 0}
   cameraOffset: {x: 1, y: 1.25, z: -5}
-  horizontalSpeed: 10
-  verticalSpeed: 5
-  lerpSpeed: 5
+  horizontalSpeed: 50
+  verticalSpeed: 20
+  lerpSpeed: 20
   scrollSpeed: 3
   minAngle: 5
   maxAngle: 60

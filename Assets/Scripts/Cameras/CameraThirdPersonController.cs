@@ -53,7 +53,7 @@ namespace Cameras
 
         protected void CalculateCameraPosAndRot()
         {
-            _currentRotation = Quaternion.Lerp(_currentRotation, _targetRotation, Time.deltaTime * lerpSpeed); //Rotate camera smoothly
+            _currentRotation = Quaternion.Slerp(_currentRotation, _targetRotation, Time.deltaTime * lerpSpeed); //Rotate camera smoothly
             float zoomMultiplier = (Mathf.Abs(cameraOffset.z) + maxZoom) / (maxZoom - minZoom); //Calculate modifier to apply zoom
             Vector3 zoomedTargetOffset = targetOffset * zoomMultiplier; //Recalculate target offset
             zoomedTargetOffset.y = targetOffset.y;

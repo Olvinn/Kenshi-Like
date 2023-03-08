@@ -18,7 +18,7 @@ namespace Units.MVC.View
             _characterController.center = Vector3.up;
         }
 
-        public void SetStats(UnitStats stats)
+        public override void SetStats(UnitStats stats)
         {
             _speed = stats.speed;
         }
@@ -28,6 +28,7 @@ namespace Units.MVC.View
             _mainCamera = Camera.main;
         }
 
+        // --- Non-Liskov methods ---
         public void Move(Vector3 direction)
         {
             direction.y = 0;
@@ -35,8 +36,9 @@ namespace Units.MVC.View
                 direction.Normalize();
             _moveDirection = direction;
         }
+        // --------------------------
 
-        public void WarpTo(Vector3 position)
+        public override void WarpTo(Vector3 position)
         {
             transform.position = position;
             onPositionChanged?.Invoke(transform.position);

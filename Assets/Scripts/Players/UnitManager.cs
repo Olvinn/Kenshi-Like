@@ -13,18 +13,18 @@ namespace Players
         public Action<UnitModel> onUnitCompleteCommands;
         public int unitsCount => _units.Count;
 
-        private Dictionary<UnitModel, UnitController> _units;
+        private Dictionary<UnitModel, NPCUnitController> _units;
 
         public UnitManager()
         {
-            _units = new Dictionary<UnitModel, UnitController>();
+            _units = new Dictionary<UnitModel, NPCUnitController>();
         }
 
         public void AddUnit(UnitModel model)
         {
             if (_units.ContainsKey(model))
                 return;
-            var controller = UnitControllerFactory.Create();
+            var controller = UnitControllerFactory.CreateNPC();
             var view = UnitViewFactory.CreateRTS();
             controller.SetUp(model, view);
             _units.Add(model, controller);

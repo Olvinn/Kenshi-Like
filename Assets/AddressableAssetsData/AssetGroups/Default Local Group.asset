@@ -21,6 +21,10 @@ MonoBehaviour:
     m_Address: Assets/Prefabs/Units/HumanMale.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 5adc3341984e53c4591cabe9355688c9
+    m_Address: Assets/Prefabs/Units/CharacterPlaceholder (FOR TESTS!).prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 47b0b3e8b7986a14d8deaf3e1f4b8655, type: 2}
   m_SchemaSet:

@@ -24,7 +24,7 @@ namespace Units.Tests
                 baseColor = Color.red,
                 secondaryColor = Color.black,
                 accentColor = Color.cyan,
-                prefab = "Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab"
+                prefab = "Assets/Prefabs/Units/CharacterPlaceholder (FOR TESTS!).prefab"
             };
             return appearance;
         }

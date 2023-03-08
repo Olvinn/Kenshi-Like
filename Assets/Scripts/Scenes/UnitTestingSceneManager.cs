@@ -1,6 +1,7 @@
 using Cameras;
 using CustomDebug;
 using Players.Variants;
+using Units.MVC.Controller;
 using Units.MVC.Model;
 using Units.MVC.View;
 using Units.Structures.Factories;
@@ -14,7 +15,7 @@ namespace Scenes
         [SerializeField] private int _unitCount;
     
         private TestCrowd _crowd;
-        private CharacterControllerUnitView _player;
+        private PlayerUnitController _player;
 
         private void Awake()
         {
@@ -32,16 +33,17 @@ namespace Scenes
                 new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
             });
 
-            _player = UnitViewFactory.Create3rdPerson();
+            _player = UnitControllerFactory.CreatePlayer();
             var app = UnitAppearanceFactory.CreateRandomZombie();
             app.skinColor = Color.red;
             var sta = UnitStatsFactory.CreateRandomZombie();
             sta.speed = 2;
-            _player.SetAppearance(app);
-            _player.SetStats(sta);
+            var model = new UnitModel(sta, app);
+            var view = UnitViewFactory.CreateThirdPerson();
+            _player.SetUp(model, view);
             
             _camera.SetCamera(Camera.main);
-            _camera.SetTarget(_player.transform);
+            _camera.SetTarget(view.transform);
 
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -51,9 +53,6 @@ namespace Scenes
         {
             _crowd.Update();
             FPSCounter.DebugDisplayData = $"Units: {_crowd.unitsCount}";
-
-            var mov = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            _player.Move(mov);
             
             var rot = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             _camera.Rotate(rot);

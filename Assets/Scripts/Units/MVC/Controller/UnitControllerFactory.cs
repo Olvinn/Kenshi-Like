@@ -10,12 +10,22 @@ namespace Units.MVC.Controller
         private static int _index = 0;
         private static Transform _controllers, _parent;
         
-        public static UnitController Create()
+        public static NPCUnitController CreateNPC()
         {
             if (_parent == null)
                 FindOrCreateParent();
-            var temp = new GameObject($"UnitController_{_index++}");
-            var result = temp.AddComponent<UnitController>();
+            var temp = new GameObject($"NPCUnitController{_index++}");
+            var result = temp.AddComponent<NPCUnitController>();
+            result.transform.SetParent(_parent);
+            return result;
+        }
+        
+        public static PlayerUnitController CreatePlayer()
+        {
+            if (_parent == null)
+                FindOrCreateParent();
+            var temp = new GameObject($"PlayerUnitController{_index++}");
+            var result = temp.AddComponent<PlayerUnitController>();
             result.transform.SetParent(_parent);
             return result;
         }

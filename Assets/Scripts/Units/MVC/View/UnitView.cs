@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Units.MVC.View
 {
-    public class UnitView : MonoBehaviour
+    public abstract class UnitView : MonoBehaviour
     {
         public Action<Vector3> onPositionChanged;
         public MovingStatus movingState { get; protected set; }
@@ -21,6 +21,9 @@ namespace Units.MVC.View
             _appearanceData = appearance;
             AssetsManager.LoadAsset(appearance.prefab, transform, OnAppearancePrefabLoaded);
         }
+        
+        public virtual void SetStats(UnitStats stats) { }
+        public virtual void WarpTo(Vector3 position) { }
         
         private void Update()
         {

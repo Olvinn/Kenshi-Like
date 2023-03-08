@@ -15,7 +15,7 @@ namespace Units.Tests.PlayTests
     {
         private UnitModel _model;
         private NavMeshUnitView _view;
-        private UnitController _controller;
+        private NPCUnitController _controller;
         private NavMeshSurface _env;
 
         [SetUp]
@@ -30,7 +30,7 @@ namespace Units.Tests.PlayTests
             _env = temp.AddComponent<NavMeshSurface>();
             _env.collectObjects = CollectObjects.Children;
             _env.useGeometry = NavMeshCollectGeometry.RenderMeshes;
-            _controller = UnitControllerFactory.Create();
+            _controller = UnitControllerFactory.CreateNPC();
             _env.BuildNavMesh();
             temp = new GameObject("View");
             _view = temp.AddComponent<NavMeshUnitView>();
