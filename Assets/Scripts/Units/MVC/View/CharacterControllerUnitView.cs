@@ -36,6 +36,11 @@ namespace Units.MVC.View
                 direction.Normalize();
             _moveDirection = direction;
         }
+
+        public void Attack()
+        {
+            _animator.PlayAttack();
+        }
         // --------------------------
 
         public override void WarpTo(Vector3 position)

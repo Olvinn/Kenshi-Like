@@ -11,6 +11,8 @@ namespace Units.MVC.Controller
         private void Update()
         {
             _characterControllerView.Move(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+            if (Input.GetMouseButtonDown(0))
+                _characterControllerView.Attack();
         }
 
         public void SetUp(UnitModel model, CharacterControllerUnitView view)

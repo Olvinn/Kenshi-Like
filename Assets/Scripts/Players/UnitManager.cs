@@ -31,11 +31,12 @@ namespace Players
             controller.onCommandsComplete = () => onUnitCompleteCommands(model);
         }
 
-        public void Move(UnitModel unit, Vector3 destination)
+        public void AddCommand(UnitModel unit, UnitCommand command)
         {
             if (!_units.ContainsKey(unit))
                 return;
-            _units[unit].AddCommand(new UnitCommandMove(destination));
+            
+            _units[unit].AddCommand(command);
         }
     }
 }

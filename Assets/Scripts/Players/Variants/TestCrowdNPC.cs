@@ -1,3 +1,4 @@
+using Units.Commands;
 using Units.MVC.Model;
 using UnityEngine;
 
@@ -32,7 +33,10 @@ namespace Players.Variants
 
         private void SetRandomDestination(UnitModel unit)
         {
-            _manager.Move(unit, new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
+            if (Random.Range(0f, 1f) > .5f)
+                _manager.AddCommand(unit, new UnitCommandMove(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50))));
+            else
+                _manager.AddCommand(unit, new UnitCommandStay(Random.Range(10, 30)));
         }
     }
 }

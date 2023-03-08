@@ -8,7 +8,7 @@ namespace Units.Appearance
         [SerializeField] private Animator _animator;
         [SerializeField] private float lod0Threshold = 30, lod1Threshold = 60, updateFrequencyMultiplier = .1f;
         
-        private int _speedHash, _strafeHash;
+        private int _speedHash, _strafeHash, _attackHash;
         private float _savedTime;
         private int _framesCounter, _framesUpdateDelay;
         private int _lod;
@@ -22,6 +22,7 @@ namespace Units.Appearance
             _animator.keepAnimatorControllerStateOnDisable = true;
             _speedHash = Animator.StringToHash("Speed");
             _strafeHash = Animator.StringToHash("Strafe");
+            _attackHash = Animator.StringToHash("Attack 1");
         }
 
         private IEnumerator Start()
@@ -55,6 +56,11 @@ namespace Units.Appearance
         {
             _animator.SetFloat(_speedHash, velocity.z);
             _animator.SetFloat(_strafeHash, velocity.x);
+        }
+
+        public void PlayAttack()
+        {
+            _animator.SetTrigger(_attackHash);
         }
 
         public void UpdateDistanceToCamera(float distance)
