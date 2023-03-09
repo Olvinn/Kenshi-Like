@@ -48,12 +48,12 @@ namespace Units.Tests.PlayTests
 
             Vector3 destination1 = new Vector3(0, 0, 5), destination2 = new Vector3(5, 0, 0);
             _view.MoveToPosition(destination1);
-            Assert.AreEqual(MovingStatus.Moving, _view.movingState);
+            Assert.AreEqual(ViewState.Moving, _view.movingState);
             yield return new WaitForSeconds(3);
-            Assert.AreEqual(MovingStatus.Staying, _view.movingState);
+            Assert.AreEqual(ViewState.Idle, _view.movingState);
             Assert.LessOrEqual(Vector3.Distance(_model.GetPosition(), destination1), .5f);
             _model.SetPosition(destination2);
-            Assert.AreEqual(MovingStatus.Staying, _view.movingState);
+            Assert.AreEqual(ViewState.Idle, _view.movingState);
             Assert.LessOrEqual(Vector3.Distance(_model.GetPosition(), destination2), .5f);
         }
 

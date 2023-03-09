@@ -36,14 +36,29 @@ namespace Units.MVC.View
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
                 _agent.isStopped = true;
-                movingState = MovingStatus.Staying;
+                movingState = ViewState.Idle;
                 return;
             }
 
             _agent.stoppingDistance = stoppingDistance;
             _agent.SetDestination(destination);
-            movingState = MovingStatus.Moving;
+            movingState = ViewState.Moving;
             _agent.isStopped = false;
+        }
+
+        public override void MoveToDirection(Vector3 direction)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Attack()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetFightReady(bool value)
+        {
+            throw new NotImplementedException();
         }
 
         public override void WarpTo(Vector3 position)
@@ -54,12 +69,12 @@ namespace Units.MVC.View
 
         protected override void ProceedMovement()
         {
-            if (movingState == MovingStatus.Moving)
+            if (movingState == ViewState.Moving)
             {
                 if (_agent.remainingDistance <= _agent.stoppingDistance)
                 {
                     _agent.isStopped = true;
-                    movingState = MovingStatus.Staying;
+                    movingState = ViewState.Idle;
                     onReachDestination?.Invoke();
                 }
             }
@@ -69,6 +84,11 @@ namespace Units.MVC.View
                 onPositionChanged?.Invoke(transform.position);
                 _savedPosition = transform.position;
             }
+        }
+
+        protected override void Rotate()
+        {
+            
         }
 
         protected override void UpdateAnimator()

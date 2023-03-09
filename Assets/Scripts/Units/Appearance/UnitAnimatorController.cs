@@ -13,6 +13,8 @@ namespace Units.Appearance
         private int _framesCounter, _framesUpdateDelay;
         private int _lod;
         private bool _forceAnimatorToBeActive;
+
+        private Coroutine _greatSwordLayerTransition;
         
         private void Awake()
         {
@@ -64,28 +66,6 @@ namespace Units.Appearance
 
         public void UpdateDistanceToCamera(float distance)
         {
-            if (distance < lod0Threshold && _lod > 0)
-            {
-                _animator.SetLayerWeight(0, 1);
-                _animator.SetLayerWeight(1, 0);
-                _animator.SetLayerWeight(2, 0);
-                _lod = 0;
-            }
-            else if (distance >= lod0Threshold && distance < lod1Threshold && _lod != 1)
-            {
-                _animator.SetLayerWeight(0, 0);
-                _animator.SetLayerWeight(1, 1);
-                _animator.SetLayerWeight(2, 0);
-                _lod = 1;
-            }
-            else if (distance >= lod1Threshold && _lod < 2)
-            {
-                _animator.SetLayerWeight(0, 0);
-                _animator.SetLayerWeight(1, 0);
-                _animator.SetLayerWeight(2, 1);
-                _lod = 2;
-            }
-
             int newUpdateDelay = (int)(distance * updateFrequencyMultiplier);
             _framesCounter += newUpdateDelay - _framesUpdateDelay;
             _framesUpdateDelay = newUpdateDelay;
@@ -95,6 +75,26 @@ namespace Units.Appearance
         {
             _forceAnimatorToBeActive = value;
             _animator.enabled = _forceAnimatorToBeActive;
+        }
+
+        public void ActivateGreatSwordLayer(bool value)
+        {
+            if (_greatSwordLayerTransition != null)
+                StopCoroutine(_greatSwordLayerTransition);
+            _greatSwordLayerTransition = StartCoroutine(GreatSwordLayerTransition(value));
+        }
+
+        private IEnumerator GreatSwordLayerTransition(bool isActive, float transitionTime = .5f)
+        {
+            float currentState = _animator.GetLayerWeight(1);
+            float goal = isActive ? 1 : 0;
+            while (Mathf.Abs(currentState - goal) > .01f)
+            {
+                currentState = Mathf.MoveTowards(currentState, goal, Time.deltaTime / transitionTime);
+                _animator.SetLayerWeight(1, currentState);
+                yield return null;
+            }
+            _animator.SetLayerWeight(1, goal);
         }
         
 #if UNITY_EDITOR

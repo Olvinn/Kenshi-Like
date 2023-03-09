@@ -71,10 +71,10 @@ namespace Units.MVC.Controller
         {
             switch (_baseController.view.movingState)
             {
-                case MovingStatus.Moving:
+                case ViewState.Moving:
                     state = UnitState.Moving;
                     break;
-                case MovingStatus.Staying:
+                case ViewState.Idle:
                     state = UnitState.Idle;
                     break;
             }

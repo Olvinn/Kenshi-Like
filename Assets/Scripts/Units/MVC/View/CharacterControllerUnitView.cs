@@ -28,6 +28,11 @@ namespace Units.MVC.View
             _mainCamera = Camera.main;
         }
 
+        public override void MoveToPosition(Vector3 position)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void MoveToDirection(Vector3 direction)
         {
             direction.y = 0;
@@ -41,6 +46,12 @@ namespace Units.MVC.View
             _animator.PlayAttack();
         }
 
+        public override void SetFightReady(bool value)
+        {
+            _rotateOnMoveDirection = !value;
+            _animator.ActivateGreatSwordLayer(value);
+        }
+
         public override void WarpTo(Vector3 position)
         {
             transform.position = position;
@@ -49,7 +60,7 @@ namespace Units.MVC.View
 
         protected override void ProceedMovement()
         {
-            movingState = _moveDirection != Vector3.zero ? MovingStatus.Moving : MovingStatus.Staying;
+            movingState = _moveDirection != Vector3.zero ? ViewState.Moving : ViewState.Idle;
             
             Vector3 camRot = _mainCamera.transform.forward;
             camRot.y = 0;
@@ -73,7 +84,7 @@ namespace Units.MVC.View
 
         protected override void Rotate()
         {
-            if (movingState == MovingStatus.Staying)
+            if (movingState == ViewState.Idle && _rotateOnMoveDirection)
                 return;
 
             float rot;

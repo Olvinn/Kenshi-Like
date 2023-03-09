@@ -9,24 +9,12 @@ namespace Units.MVC.View
     public abstract class UnitView : MonoBehaviour
     {
         public Action<Vector3> onPositionChanged;
-        public MovingStatus movingState { get; protected set; }
+        public ViewState movingState { get; protected set; }
         
         protected UnitAppearanceController _appearance;
         protected UnitAnimatorController _animator;
         protected UnitAppearance _appearanceData;
         private bool _isVisualsInitialized;
-
-        public virtual void SetAppearance(UnitAppearance appearance)
-        {
-            _appearanceData = appearance;
-            AssetsManager.LoadAsset(appearance.prefab, transform, OnAppearancePrefabLoaded);
-        }
-        
-        public virtual void SetStats(UnitStats stats) { }
-        public virtual void WarpTo(Vector3 position) { }
-        public virtual void MoveToPosition(Vector3 position) { }
-        public virtual void MoveToDirection(Vector3 direction) { }
-        public virtual void Attack() { }
         
         private void Update()
         {
@@ -39,9 +27,11 @@ namespace Units.MVC.View
             UpdateAnimator();
         }
         
-        protected virtual void ProceedMovement() { }
-        protected virtual void Rotate() { }
-        protected virtual void UpdateAnimator() { }
+        public virtual void SetAppearance(UnitAppearance appearance)
+        {
+            _appearanceData = appearance;
+            AssetsManager.LoadAsset(appearance.prefab, transform, OnAppearancePrefabLoaded);
+        }
 
         protected virtual void OnAppearancePrefabLoaded(GameObject appearanceGO)
         {
@@ -57,5 +47,16 @@ namespace Units.MVC.View
                 _isVisualsInitialized = true;
             }
         }
+
+        public abstract void SetStats(UnitStats stats);
+        public abstract void WarpTo(Vector3 position);
+        public abstract void MoveToPosition(Vector3 position);
+        public abstract void MoveToDirection(Vector3 direction);
+        public abstract void Attack();
+        public abstract void SetFightReady(bool value);
+
+        protected abstract void ProceedMovement();
+        protected abstract void Rotate();
+        protected abstract void UpdateAnimator();
     }
 }
