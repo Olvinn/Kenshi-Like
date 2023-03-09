@@ -15,7 +15,7 @@ namespace Scenes
         [SerializeField] private int _unitCount;
     
         private TestCrowdNPC _crowd;
-        private PlayerUnitController _player;
+        private DirectUnitController _direct;
 
         private void Awake()
         {
@@ -33,13 +33,13 @@ namespace Scenes
                 new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
             });
 
-            _player = UnitControllerFactory.CreatePlayer();
+            _direct = UnitControllerFactory.CreatePlayer();
             var app = UnitAppearanceFactory.CreateRandomMen();
             var sta = UnitStatsFactory.CreateRandomMen();
             sta.speed = 2;
             var model = new UnitModel(sta, app);
             var view = UnitViewFactory.CreateThirdPerson();
-            _player.SetUp(model, view);
+            _direct.SetUp(model, view);
             
             _camera.SetCamera(Camera.main);
             _camera.SetTarget(view.transform);

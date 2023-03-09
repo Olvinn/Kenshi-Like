@@ -13,7 +13,7 @@ namespace Units.Commands
             _time = time;
         }
 
-        public override void Execute(NPCUnitController executor)
+        public override void Execute(CommandsUnitController executor)
         {
             base.Execute(executor);
             _startTime = Time.time;

@@ -28,8 +28,7 @@ namespace Units.MVC.View
             _mainCamera = Camera.main;
         }
 
-        // --- Non-Liskov methods ---
-        public void Move(Vector3 direction)
+        public override void MoveToDirection(Vector3 direction)
         {
             direction.y = 0;
             if (direction.magnitude > 1f)
@@ -37,11 +36,10 @@ namespace Units.MVC.View
             _moveDirection = direction;
         }
 
-        public void Attack()
+        public override void Attack()
         {
             _animator.PlayAttack();
         }
-        // --------------------------
 
         public override void WarpTo(Vector3 position)
         {

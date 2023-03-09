@@ -15,7 +15,7 @@ namespace Units.Commands
             _threshold = threshold;
         }
 
-        public override void Execute(NPCUnitController executor)
+        public override void Execute(CommandsUnitController executor)
         {
             base.Execute(executor);
             

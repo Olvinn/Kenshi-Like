@@ -6,9 +6,9 @@ namespace Units.Commands
     public class UnitCommand : IDisposable
     {
         public Action onComplete;
-        protected NPCUnitController _executor;
+        protected CommandsUnitController _executor;
 
-        public virtual void Execute(NPCUnitController executor)
+        public virtual void Execute(CommandsUnitController executor)
         {
             _executor = executor;
         }

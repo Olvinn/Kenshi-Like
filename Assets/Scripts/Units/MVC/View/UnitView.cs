@@ -24,6 +24,9 @@ namespace Units.MVC.View
         
         public virtual void SetStats(UnitStats stats) { }
         public virtual void WarpTo(Vector3 position) { }
+        public virtual void MoveToPosition(Vector3 position) { }
+        public virtual void MoveToDirection(Vector3 direction) { }
+        public virtual void Attack() { }
         
         private void Update()
         {

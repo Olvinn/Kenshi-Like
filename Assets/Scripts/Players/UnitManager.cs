@@ -13,11 +13,11 @@ namespace Players
         public Action<UnitModel> onUnitCompleteCommands;
         public int unitsCount => _units.Count;
 
-        private Dictionary<UnitModel, NPCUnitController> _units;
+        private Dictionary<UnitModel, CommandsUnitController> _units;
 
         public UnitManager()
         {
-            _units = new Dictionary<UnitModel, NPCUnitController>();
+            _units = new Dictionary<UnitModel, CommandsUnitController>();
         }
 
         public void AddUnit(UnitModel model)

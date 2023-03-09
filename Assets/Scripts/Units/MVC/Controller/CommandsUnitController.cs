@@ -8,25 +8,27 @@ using UnityEngine;
 
 namespace Units.MVC.Controller
 {
-    public class NPCUnitController : UnitController
+    public sealed class CommandsUnitController : MonoBehaviour
     {
         public Action onCommandsComplete;
         public bool isBusy => _currentCommand != null || _commands.Count > 0;
         public UnitState state { get; private set; }
         
-        private UnitModel _model;
-        private NavMeshUnitView _navMeshView;
         private LinkedList<UnitCommand> _commands;
         private UnitCommand _currentCommand;
+        
+        //Composition over inheritance. There is no way to keep inheritance clean and following Liskov principle
+        private UnitController<NavMeshUnitView> _baseController;
 
         private void Awake()
         {
             _commands = new LinkedList<UnitCommand>();
+            _baseController = new UnitController<NavMeshUnitView>();
         }
 
         private void Update()
         {
-            if (!_navMeshView)
+            if (!_baseController.view)
                 return;
 
             ProceedCommands();
@@ -35,15 +37,12 @@ namespace Units.MVC.Controller
 
         public void SetUp(UnitModel model, NavMeshUnitView view)
         {
-            base.SetUp(model, view);
-            _navMeshView = view;
+            _baseController.SetUp(model, view);
         }
 
-        public override void Clear()
+        public void Clear()
         {
-            base.Clear();
-            
-            _navMeshView = null;
+            _baseController.Clear();
             
             _commands.Clear();
             
@@ -52,7 +51,6 @@ namespace Units.MVC.Controller
             _currentCommand = null;
         }
 
-        // --- Non-Liskov methods ---
         public void AddCommand(UnitCommand command)
         {
             _commands.AddLast(command);
@@ -61,13 +59,17 @@ namespace Units.MVC.Controller
         public void MoveTo(Vector3 destination)
         {
             state = UnitState.Moving;
-            _navMeshView.MoveTo(destination);
+            _baseController.view.MoveToPosition(destination);
         }
-        // --------------------------
+
+        public Vector3 GetViewPosition()
+        {
+            return _baseController.GetViewPosition();
+        }
 
         private void UpdateState()
         {
-            switch (_navMeshView.movingState)
+            switch (_baseController.view.movingState)
             {
                 case MovingStatus.Moving:
                     state = UnitState.Moving;

@@ -16,7 +16,7 @@ namespace Units.Tests.PlayTests
     {
         private UnitModel _model;
         private NavMeshUnitView _view;
-        private NPCUnitController _controller;
+        private CommandsUnitController _controller;
         private NavMeshSurface _env;
 
         [SetUp]
@@ -47,7 +47,7 @@ namespace Units.Tests.PlayTests
             Assert.AreEqual(agent.speed, _model.GetStats().speed);
 
             Vector3 destination1 = new Vector3(0, 0, 5), destination2 = new Vector3(5, 0, 0);
-            _view.MoveTo(destination1);
+            _view.MoveToPosition(destination1);
             Assert.AreEqual(MovingStatus.Moving, _view.movingState);
             yield return new WaitForSeconds(3);
             Assert.AreEqual(MovingStatus.Staying, _view.movingState);

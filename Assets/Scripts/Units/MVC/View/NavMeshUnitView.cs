@@ -30,14 +30,9 @@ namespace Units.MVC.View
             _agent.speed = stats.speed;
         }
 
-        // --- Non-Liskov methods ---
-        public void MoveTo(Vector3 destination)
+        public override void MoveToPosition(Vector3 destination)
         {
-            MoveTo(destination, .5f);
-        }
-
-        public void MoveTo(Vector3 destination, float stoppingDistance)
-        {
+            float stoppingDistance = .5f;
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
                 _agent.isStopped = true;
@@ -50,7 +45,6 @@ namespace Units.MVC.View
             movingState = MovingStatus.Moving;
             _agent.isStopped = false;
         }
-        // --------------------------
 
         public override void WarpTo(Vector3 position)
         {

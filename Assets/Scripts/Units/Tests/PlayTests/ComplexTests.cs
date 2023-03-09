@@ -15,7 +15,7 @@ namespace Units.Tests.PlayTests
     {
         private UnitModel _model;
         private NavMeshUnitView _view;
-        private NPCUnitController _controller;
+        private CommandsUnitController _controller;
         private NavMeshSurface _env;
 
         [SetUp]
