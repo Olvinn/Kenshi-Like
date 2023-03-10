@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using AssetsManagement;
 using Units.Appearance;
 using Units.Structures;
@@ -9,14 +10,18 @@ namespace Units.MVC.View
     public abstract class UnitView : MonoBehaviour
     {
         public Action<Vector3> onPositionChanged;
-        public ViewState movingState { get; protected set; }
+        public Action onAttackHit;
+        public UnitViewState state { get; protected set; }
         
         protected UnitAppearanceController _appearance;
         protected UnitAnimatorController _animator;
         protected UnitAppearance _appearanceData;
         private bool _isVisualsInitialized;
-        
-        private void Update()
+
+        [SerializeField] private Vector3 _attackHitPoint = new Vector3(0, 1.25f, 1.25f);
+        [SerializeField] private float _attackHitRadius = .5f;
+
+        protected virtual void Update()
         {
             ProceedMovement();
             Rotate();
@@ -48,15 +53,57 @@ namespace Units.MVC.View
             }
         }
 
+        public void Attack(float animationLength, float hitOffset)
+        {
+            if (state == UnitViewState.Attacking)
+                return;
+            
+            state = UnitViewState.Attacking;
+            _animator.PlayAttack();
+            StartCoroutine(WaitingForAttackEnds(animationLength, hitOffset));
+        }
+
         public abstract void SetStats(UnitStats stats);
         public abstract void WarpTo(Vector3 position);
         public abstract void MoveToPosition(Vector3 position);
         public abstract void MoveToDirection(Vector3 direction);
-        public abstract void Attack();
         public abstract void SetFightReady(bool value);
 
         protected abstract void ProceedMovement();
         protected abstract void Rotate();
         protected abstract void UpdateAnimator();
+
+        protected void GetDamage()
+        {
+            onAttackHit?.Invoke();
+            _animator.PlayDead();
+            state = UnitViewState.Dead;
+        }
+
+        protected bool IsBusy()
+        {
+            return state == UnitViewState.Attacking || state == UnitViewState.Dead;
+        }
+
+        IEnumerator WaitingForAttackEnds(float timer, float hitOffset)
+        {
+            yield return new WaitForSeconds(hitOffset);
+            var cols = Physics.OverlapSphere(transform.TransformPoint(_attackHitPoint), _attackHitRadius);
+            foreach (var col in cols)
+            {
+                var temp = col.GetComponent<UnitView>();
+                if (temp)
+                    temp.GetDamage();
+            }
+            yield return new WaitForSeconds(timer - hitOffset);
+            state = UnitViewState.Idle;
+        }
+        
+#if UNITY_EDITOR
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireSphere(transform.position + _attackHitPoint, _attackHitRadius);
+        }
+#endif
     }
 }

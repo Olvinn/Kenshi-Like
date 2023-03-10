@@ -61,10 +61,7 @@ namespace Scenes
 #if UNITY_EDITOR
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(_camera.transform.position, 30);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(_camera.transform.position, 60);
+            
         }
 #endif
     }

@@ -1,9 +1,10 @@
 namespace Units.Structures
 {
-    public enum ViewState
+    public enum UnitViewState
     {
         Idle,
         Moving,
-        Attacking
+        Attacking,
+        Dead
     }
 }

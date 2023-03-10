@@ -20,18 +20,18 @@ namespace AssetsManagement
 
         public float GetAttack1HitOffset(int layer)
         {
-            if (layer < 0 || layer >= sets.Length - 1)
+            if (layer < 0 || layer > sets.Length - 1)
                 return 0;
             
-            return sets[0].hitOffset;
+            return sets[layer].hitOffset;
         }
 
         public float GetAttack1TimeDuration(int layer)
         {
-            if (layer < 0 || layer >= sets.Length - 1)
+            if (layer < 0 || layer > sets.Length - 1)
                 return 0;
             
-            return sets[0].attack1.length;
+            return sets[layer].attack1.length;
         }
     }
 }

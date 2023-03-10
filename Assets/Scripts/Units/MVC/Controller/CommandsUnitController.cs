@@ -18,12 +18,12 @@ namespace Units.MVC.Controller
         private UnitCommand _currentCommand;
         
         //Composition over inheritance. There is no way to keep inheritance clean and following Liskov principle
-        private UnitController<NavMeshUnitView> _baseController;
+        private UnitController _baseController;
 
         private void Awake()
         {
             _commands = new LinkedList<UnitCommand>();
-            _baseController = new UnitController<NavMeshUnitView>();
+            _baseController = new UnitController();
         }
 
         private void Update()
@@ -69,12 +69,12 @@ namespace Units.MVC.Controller
 
         private void UpdateState()
         {
-            switch (_baseController.view.movingState)
+            switch (_baseController.view.state)
             {
-                case ViewState.Moving:
+                case UnitViewState.Moving:
                     state = UnitState.Moving;
                     break;
-                case ViewState.Idle:
+                case UnitViewState.Idle:
                     state = UnitState.Idle;
                     break;
             }

@@ -50,4 +50,4 @@ MonoBehaviour:
     hitOffset: 0.1
   - name: Great Sword
     attack1: {fileID: -203655887218126122, guid: 970d9f9cfd78ee64e8589b56010a5e31, type: 3}
-    hitOffset: 0.15
+    hitOffset: 0.5

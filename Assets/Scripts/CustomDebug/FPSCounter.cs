@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CustomDebug
 {
@@ -10,6 +11,8 @@ namespace CustomDebug
         public static int FPS { get; private set; }
         
         [SerializeField] private TextMeshProUGUI _label;
+        [SerializeField] private Image _color;
+        [SerializeField] private Gradient _gradient;
         private int _frames, _savedSec;
 
         private void Awake()
@@ -24,8 +27,11 @@ namespace CustomDebug
             {
                 _savedSec = (int)Time.time;
                 _label.text = $"FPS: {_frames}\n{DebugDisplayData}";;
-                _frames = 0;
                 FPS = _frames;
+
+                _color.color = _gradient.Evaluate(Mathf.Min(_frames, 144f) / 144f);
+                
+                _frames = 0;
             }
 
             _frames++;

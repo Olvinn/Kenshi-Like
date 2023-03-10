@@ -160,6 +160,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Device.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Addressables.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
+--root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\AssetsManagement.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Threading.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
@@ -169,7 +170,6 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.ScriptableBuildPipeline.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Core.ShaderLibrary.dll
---root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\AssetsManagement.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Universal.Shaders.dll
 --assembly-folder=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\
 --pdb-search-paths=Temp/ManagedSymbols/
@@ -347,6 +347,7 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Device.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Addressables.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
+--root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\AssetsManagement.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Threading.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
@@ -356,7 +357,6 @@ Library: lib_burst_generated
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.ScriptableBuildPipeline.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Core.ShaderLibrary.dll
---root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\AssetsManagement.dll
 --root-assembly=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\Unity.RenderPipelines.Universal.Shaders.dll
 --assembly-folder=C:\Users\Admin\Desktop\Workspace\Kenshi-Like\Temp\StagingArea\Data\Managed\
 --pdb-search-paths=Temp/ManagedSymbols/

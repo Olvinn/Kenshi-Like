@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Units.MVC.Controller
 {
-    public class UnitController<T> where T : UnitView
+    public class UnitController
     {
         public UnitModel model;
-        public T view;
+        public UnitView view;
 
-        public void SetUp(UnitModel model, T view)
+        public void SetUp(UnitModel model, UnitView view)
         {
             Clear();
             this.view = view;
@@ -18,7 +18,7 @@ namespace Units.MVC.Controller
             UpdateSubscriptions();
         }
 
-        public virtual void Clear()
+        public void Clear()
         {
             if (model != null)
                 ClearModelSubscriptions();

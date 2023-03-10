@@ -1,3 +1,4 @@
+using System.Collections;
 using Units.Structures;
 using UnityEngine;
 
@@ -35,15 +36,13 @@ namespace Units.MVC.View
 
         public override void MoveToDirection(Vector3 direction)
         {
+            if (IsBusy())
+                return;
+            
             direction.y = 0;
             if (direction.magnitude > 1f)
                 direction.Normalize();
             _moveDirection = direction;
-        }
-
-        public override void Attack()
-        {
-            _animator.PlayAttack();
         }
 
         public override void SetFightReady(bool value)
@@ -60,7 +59,10 @@ namespace Units.MVC.View
 
         protected override void ProceedMovement()
         {
-            movingState = _moveDirection != Vector3.zero ? ViewState.Moving : ViewState.Idle;
+            if (IsBusy())
+                return;
+            
+            state = _moveDirection != Vector3.zero ? UnitViewState.Moving : UnitViewState.Idle;
             
             Vector3 camRot = _mainCamera.transform.forward;
             camRot.y = 0;
@@ -84,7 +86,7 @@ namespace Units.MVC.View
 
         protected override void Rotate()
         {
-            if (movingState == ViewState.Idle && _rotateOnMoveDirection)
+            if (state == UnitViewState.Idle && _rotateOnMoveDirection || state == UnitViewState.Attacking)
                 return;
 
             float rot;

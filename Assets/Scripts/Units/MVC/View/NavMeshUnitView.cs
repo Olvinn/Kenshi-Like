@@ -36,22 +36,21 @@ namespace Units.MVC.View
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
                 _agent.isStopped = true;
-                movingState = ViewState.Idle;
+                state = UnitViewState.Idle;
                 return;
             }
 
             _agent.stoppingDistance = stoppingDistance;
             _agent.SetDestination(destination);
-            movingState = ViewState.Moving;
-            _agent.isStopped = false;
+            
+            if (!IsBusy())
+            {
+                state = UnitViewState.Moving;
+                _agent.isStopped = false;
+            }
         }
 
         public override void MoveToDirection(Vector3 direction)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Attack()
         {
             throw new NotImplementedException();
         }
@@ -69,12 +68,17 @@ namespace Units.MVC.View
 
         protected override void ProceedMovement()
         {
-            if (movingState == ViewState.Moving)
+            if (IsBusy())
+                _agent.isStopped = true;
+            else
+                _agent.isStopped = false;
+            
+            if (state == UnitViewState.Moving)
             {
                 if (_agent.remainingDistance <= _agent.stoppingDistance)
                 {
                     _agent.isStopped = true;
-                    movingState = ViewState.Idle;
+                    state = UnitViewState.Idle;
                     onReachDestination?.Invoke();
                 }
             }

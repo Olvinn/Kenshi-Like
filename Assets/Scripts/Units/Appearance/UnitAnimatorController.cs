@@ -64,6 +64,11 @@ namespace Units.Appearance
             _animator.Play("Attack 1");
         }
 
+        public void PlayDead()
+        {
+            _animator.Play("Death");
+        }
+
         public void UpdateDistanceToCamera(float distance)
         {
             int newUpdateDelay = (int)(distance * updateFrequencyMultiplier);
