@@ -5,6 +5,7 @@ namespace Units.Structures
         Idle,
         Moving,
         Attacking,
-        Dead
+        Dead,
+        GettingDamage
     }
 }

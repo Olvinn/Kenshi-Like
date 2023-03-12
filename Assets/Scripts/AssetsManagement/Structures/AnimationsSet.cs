@@ -7,7 +7,10 @@ namespace AssetsManagement.Structures
     public class AnimationsSet
     {
         [SerializeField] public string name;
+        
         [SerializeField] public AnimationClip attack1;
-        [SerializeField] public float hitOffset;
+        [SerializeField] public float attack1HitOffset;
+
+        [SerializeField] public AnimationClip reaction1;
     }
 }

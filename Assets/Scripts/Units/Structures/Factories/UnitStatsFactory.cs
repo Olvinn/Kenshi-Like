@@ -20,7 +20,7 @@ namespace Units.Structures.Factories
             var result = new UnitStats()
             {
                 speed = Random.Range(2f, 5f),
-                attackPower = Random.Range(10f, 25f),
+                attackPower = Random.Range(50f, 100f),
                 healthPoints = Random.Range(100, 200)
             };
             return result;

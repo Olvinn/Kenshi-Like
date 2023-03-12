@@ -30,7 +30,8 @@ namespace Units.Structures.Factories
                 skinColor = HumanSkinColors[Random.Range(0, HumanSkinColors.Length)],
                 accentColor = Color.green,
                 baseColor = Color.green,
-                prefab = "Assets/Prefabs/Units/HumanZombie.prefab"
+                prefab = "Assets/Prefabs/Units/HumanZombie.prefab",
+                animationSet = AnimationSetType.Zombie
             };
             return result;
         }
@@ -42,7 +43,8 @@ namespace Units.Structures.Factories
                 skinColor = HumanSkinColors[Random.Range(0, HumanSkinColors.Length)],
                 accentColor = Color.blue,
                 baseColor = Color.blue,
-                prefab = "Assets/Prefabs/Units/HumanMale.prefab"
+                prefab = "Assets/Prefabs/Units/HumanMale.prefab",
+                animationSet = AnimationSetType.CommonMen
             };
             return result;
         }

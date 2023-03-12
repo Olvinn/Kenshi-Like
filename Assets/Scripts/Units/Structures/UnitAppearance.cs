@@ -11,5 +11,6 @@ namespace Units.Structures
         public Color secondaryColor;
         public Color accentColor;
         public string prefab;
+        public AnimationSetType animationSet;
     }
 }

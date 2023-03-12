@@ -1,4 +1,3 @@
-using System;
 using AssetsManagement;
 using Units.MVC.Model;
 using Units.MVC.View;
@@ -23,8 +22,10 @@ namespace Units.MVC.Controller
             _baseController.view.MoveToDirection(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
             
             if (Input.GetMouseButtonDown(0))
-                _baseController.view.Attack(AnimationsHelper.singleton.GetAttack1TimeDuration(_isFightReady ? 1 : 0), 
-                    AnimationsHelper.singleton.GetAttack1HitOffset(_isFightReady ? 1 : 0));
+                _baseController.view.Attack(
+                    AnimationsHelper.singleton.GetAttack1TimeDuration(_baseController.model.GetAppearance().animationSet, _isFightReady ? 1 : 0), 
+                    AnimationsHelper.singleton.GetAttack1HitOffset(_baseController.model.GetAppearance().animationSet, _isFightReady ? 1 : 0),
+                    (int)_baseController.model.GetStats().attackPower);
             
             if (Input.GetKeyDown(KeyCode.R))
                 SetFightReady(!_isFightReady);

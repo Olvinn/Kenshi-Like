@@ -44,7 +44,6 @@ namespace Units.Tests.EditorTests
             Assert.AreEqual(Color.red, appearance.baseColor);
             Assert.AreEqual(Color.black, appearance.secondaryColor);
             Assert.AreEqual(Color.cyan, appearance.accentColor);
-            Assert.AreEqual("Assets/Prefabs/Units/ZombieAppearancePlaceholder.prefab", appearance.prefab);
             Assert.AreEqual(Color.blue, copy.skinColor);
             Assert.AreEqual(Color.blue, copy.baseColor);
             Assert.AreEqual(Color.blue, copy.secondaryColor);

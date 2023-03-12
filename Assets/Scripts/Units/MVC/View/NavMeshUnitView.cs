@@ -32,6 +32,9 @@ namespace Units.MVC.View
 
         public override void MoveToPosition(Vector3 destination)
         {
+            if (!_agent.enabled)
+                return;
+            
             float stoppingDistance = .5f;
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
@@ -66,8 +69,17 @@ namespace Units.MVC.View
             onPositionChanged?.Invoke(transform.position);
         }
 
+        public override void Die()
+        {
+            base.Die();
+            _agent.enabled = false;
+        }
+
         protected override void ProceedMovement()
         {
+            if (!_agent.enabled)
+                return;
+            
             if (IsBusy())
                 _agent.isStopped = true;
             else

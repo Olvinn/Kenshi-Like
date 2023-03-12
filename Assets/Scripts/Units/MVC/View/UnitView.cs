@@ -10,7 +10,7 @@ namespace Units.MVC.View
     public abstract class UnitView : MonoBehaviour
     {
         public Action<Vector3> onPositionChanged;
-        public Action onAttackHit;
+        public Action<int> onGetDamage;
         public UnitViewState state { get; protected set; }
         
         protected UnitAppearanceController _appearance;
@@ -20,6 +20,8 @@ namespace Units.MVC.View
 
         [SerializeField] private Vector3 _attackHitPoint = new Vector3(0, 1.25f, 1.25f);
         [SerializeField] private float _attackHitRadius = .5f;
+
+        private Coroutine _attacking, _gettingDamage;
 
         protected virtual void Update()
         {
@@ -53,14 +55,39 @@ namespace Units.MVC.View
             }
         }
 
-        public void Attack(float animationLength, float hitOffset)
+        public void Attack(float animationLength, float hitOffset, int damage)
         {
-            if (state == UnitViewState.Attacking)
+            if (IsBusy())
                 return;
             
             state = UnitViewState.Attacking;
             _animator.PlayAttack();
-            StartCoroutine(WaitingForAttackEnds(animationLength, hitOffset));
+            _attacking = StartCoroutine(WaitingForAttackEnds(animationLength, hitOffset, damage));
+        }
+
+        public void GetDamage(float animationLength)
+        {
+            if (_attacking != null)
+                StopCoroutine(_attacking);
+            if (_gettingDamage != null)
+                StopCoroutine(_gettingDamage);
+            state = UnitViewState.GettingDamage;
+            _animator.PlayHitReaction();
+            _gettingDamage = StartCoroutine(WaitingForGettingDamageEnds(animationLength));
+        }
+
+        protected void OnGetDamage(int damage)
+        {
+            onGetDamage?.Invoke(damage);
+        }
+
+        public virtual void Die()
+        {
+            _animator.PlayDead();
+            state = UnitViewState.Dead;
+            var col = GetComponent<Collider>();
+            if (col)
+                col.enabled = false;
         }
 
         public abstract void SetStats(UnitStats stats);
@@ -73,29 +100,29 @@ namespace Units.MVC.View
         protected abstract void Rotate();
         protected abstract void UpdateAnimator();
 
-        protected void GetDamage()
-        {
-            onAttackHit?.Invoke();
-            _animator.PlayDead();
-            state = UnitViewState.Dead;
-        }
-
         protected bool IsBusy()
         {
-            return state == UnitViewState.Attacking || state == UnitViewState.Dead;
+            return state is UnitViewState.Attacking or UnitViewState.Dead or UnitViewState.GettingDamage;
         }
 
-        IEnumerator WaitingForAttackEnds(float timer, float hitOffset)
+        IEnumerator WaitingForAttackEnds(float length, float hitOffset, int damage)
         {
+            Debug.Log($"Attacking: {length} + {hitOffset}");
             yield return new WaitForSeconds(hitOffset);
             var cols = Physics.OverlapSphere(transform.TransformPoint(_attackHitPoint), _attackHitRadius);
             foreach (var col in cols)
             {
                 var temp = col.GetComponent<UnitView>();
                 if (temp)
-                    temp.GetDamage();
+                    temp.OnGetDamage(damage);
             }
-            yield return new WaitForSeconds(timer - hitOffset);
+            yield return new WaitForSeconds(length - hitOffset);
+            state = UnitViewState.Idle;
+        }
+
+        IEnumerator WaitingForGettingDamageEnds(float length)
+        {
+            yield return new WaitForSeconds(length);
             state = UnitViewState.Idle;
         }
         

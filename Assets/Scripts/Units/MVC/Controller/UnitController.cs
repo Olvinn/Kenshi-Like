@@ -1,3 +1,4 @@
+using AssetsManagement;
 using Units.MVC.Model;
 using Units.MVC.View;
 using UnityEngine;
@@ -49,17 +50,29 @@ namespace Units.MVC.Controller
                 return;
             
             model.onPositionChanged = view.WarpTo;
+            model.onHPChanged = OnModelHPChanged;
             view.onPositionChanged = model.SetPositionSilent;
+            view.onGetDamage = model.GetDamage;
         }
 
         private void ClearModelSubscriptions()
         {
             model.onPositionChanged = null;
+            model.onHPChanged = null;
         }
 
         private void ClearViewSubscriptions()
         {
             view.onPositionChanged = null;
+            view.onGetDamage = null;
+        }
+
+        public void OnModelHPChanged(int hp)
+        {
+            if (model.GetStats().healthPoints <= 0)
+                view.Die();
+            else
+                view.GetDamage(AnimationsHelper.singleton.GetReaction1Duration(model.GetAppearance().animationSet, 0));
         }
     }
 }

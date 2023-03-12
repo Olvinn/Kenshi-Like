@@ -1,5 +1,7 @@
 using AssetsManagement.Structures;
+using Units.Structures;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace AssetsManagement
 {
@@ -7,8 +9,11 @@ namespace AssetsManagement
     {
         public static AnimationsHelper singleton;
         
+        [FormerlySerializedAs("sets")]
         [Header("Note that indexes of array must be the same as in animator controller")]
-        [SerializeField] private AnimationsSet[] sets;
+        [SerializeField] private AnimationsSet[] basicCharacterSets;
+
+        [SerializeField] private AnimationsSet zombie;
 
         private void Awake()
         {
@@ -18,20 +23,53 @@ namespace AssetsManagement
                 singleton = this;
         }
 
-        public float GetAttack1HitOffset(int layer)
+        public float GetAttack1HitOffset(AnimationSetType set, int layer)
         {
-            if (layer < 0 || layer > sets.Length - 1)
-                return 0;
+            Debug.Log($"set: {set}, layer: {layer}");
+            switch (set)
+            {
+                case AnimationSetType.CommonMen:
+                    if (layer < 0 || layer > basicCharacterSets.Length - 1)
+                        return 0;
             
-            return sets[layer].hitOffset;
+                    return basicCharacterSets[layer].attack1HitOffset;
+                case AnimationSetType.Zombie:
+                    return zombie.attack1HitOffset;
+                default:
+                    return 0;
+            }
         }
 
-        public float GetAttack1TimeDuration(int layer)
+        public float GetAttack1TimeDuration(AnimationSetType set, int layer)
         {
-            if (layer < 0 || layer > sets.Length - 1)
-                return 0;
+            switch (set)
+            {
+                case AnimationSetType.CommonMen:
+                    if (layer < 0 || layer > basicCharacterSets.Length - 1)
+                        return 0;
             
-            return sets[layer].attack1.length;
+                    return basicCharacterSets[layer].attack1.length;
+                case AnimationSetType.Zombie:
+                    return zombie.attack1.length;
+                default:
+                    return 0;
+            }
+        }
+
+        public float GetReaction1Duration(AnimationSetType set, int layer)
+        {
+            switch (set)
+            {
+                case AnimationSetType.CommonMen:
+                    if (layer < 0 || layer > basicCharacterSets.Length - 1)
+                        return 0;
+            
+                    return basicCharacterSets[layer].reaction1.length;
+                case AnimationSetType.Zombie:
+                    return zombie.reaction1.length;
+                default:
+                    return 0;
+            }
         }
     }
 }
