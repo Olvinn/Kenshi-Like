@@ -48,13 +48,12 @@ MonoBehaviour:
   - name: Normal
     attack1: {fileID: -203655887218126122, guid: db0cddcfb3aa6f44ab90038fb735245b, type: 3}
     attack1HitOffset: 0.5
-    reaction1: {fileID: -203655887218126122, guid: a90f89be8d89d0544abd75400d065d71, type: 3}
+    reaction1: {fileID: -203655887218126122, guid: 7807823f07442d84985aaab8410dd1a3, type: 3}
   - name: Great Sword
     attack1: {fileID: -203655887218126122, guid: 970d9f9cfd78ee64e8589b56010a5e31, type: 3}
     attack1HitOffset: 0.6
-    reaction1: {fileID: -203655887218126122, guid: a90f89be8d89d0544abd75400d065d71, type: 3}
-  zombie:
-    name: Zombie
+    reaction1: {fileID: -203655887218126122, guid: 7807823f07442d84985aaab8410dd1a3, type: 3}
+  - name: Zombie
     attack1: {fileID: -203655887218126122, guid: d87d6b5b6bace1946a21c55d928b0a54, type: 3}
-    attack1HitOffset: 1
+    attack1HitOffset: 0.3
     reaction1: {fileID: -203655887218126122, guid: a90f89be8d89d0544abd75400d065d71, type: 3}

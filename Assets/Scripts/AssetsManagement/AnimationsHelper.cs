@@ -13,8 +13,6 @@ namespace AssetsManagement
         [Header("Note that indexes of array must be the same as in animator controller")]
         [SerializeField] private AnimationsSet[] basicCharacterSets;
 
-        [SerializeField] private AnimationsSet zombie;
-
         private void Awake()
         {
             if (singleton)
@@ -23,53 +21,27 @@ namespace AssetsManagement
                 singleton = this;
         }
 
-        public float GetAttack1HitOffset(AnimationSetType set, int layer)
+        public float GetAttack1HitOffset(int layer)
         {
-            Debug.Log($"set: {set}, layer: {layer}");
-            switch (set)
-            {
-                case AnimationSetType.CommonMen:
-                    if (layer < 0 || layer > basicCharacterSets.Length - 1)
-                        return 0;
-            
-                    return basicCharacterSets[layer].attack1HitOffset;
-                case AnimationSetType.Zombie:
-                    return zombie.attack1HitOffset;
-                default:
-                    return 0;
-            }
+            if (layer < 0 || layer > basicCharacterSets.Length - 1)
+                return 0;
+            return basicCharacterSets[layer].attack1HitOffset;
         }
 
-        public float GetAttack1TimeDuration(AnimationSetType set, int layer)
+        public float GetAttack1TimeDuration(int layer)
         {
-            switch (set)
-            {
-                case AnimationSetType.CommonMen:
-                    if (layer < 0 || layer > basicCharacterSets.Length - 1)
-                        return 0;
+            if (layer < 0 || layer > basicCharacterSets.Length - 1)
+                return 0;
             
-                    return basicCharacterSets[layer].attack1.length;
-                case AnimationSetType.Zombie:
-                    return zombie.attack1.length;
-                default:
-                    return 0;
-            }
+            return basicCharacterSets[layer].attack1.length;
         }
 
-        public float GetReaction1Duration(AnimationSetType set, int layer)
+        public float GetReaction1Duration(int layer)
         {
-            switch (set)
-            {
-                case AnimationSetType.CommonMen:
-                    if (layer < 0 || layer > basicCharacterSets.Length - 1)
-                        return 0;
+            if (layer < 0 || layer > basicCharacterSets.Length - 1)
+                return 0;
             
-                    return basicCharacterSets[layer].reaction1.length;
-                case AnimationSetType.Zombie:
-                    return zombie.reaction1.length;
-                default:
-                    return 0;
-            }
+            return basicCharacterSets[layer].reaction1.length;
         }
     }
 }

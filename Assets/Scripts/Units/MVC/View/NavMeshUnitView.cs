@@ -58,11 +58,6 @@ namespace Units.MVC.View
             throw new NotImplementedException();
         }
 
-        public override void SetFightReady(bool value)
-        {
-            throw new NotImplementedException();
-        }
-
         public override void WarpTo(Vector3 position)
         {
             _agent.Warp(position);

@@ -1,18 +1,21 @@
 using Units.Commands;
 using Units.MVC.Model;
+using Units.MVC.View;
 using UnityEngine;
 
 namespace Players.Variants
 {
-    public class TestCrowdNPC : RTSPlayer
+    public class ZombieHorde : RTSPlayer
     {
         public int unitsCount => _manager.unitsCount;
         
         private int _count;
         private UnitModel[] _models;
+        private UnitView _player;
         
-        public void CreateCrowd(int count, UnitModel[] models)
+        public void CreateHorde(int count, UnitModel[] models, UnitView player)
         {
+            _player = player;
             _count = count;
             _models = models;
         }
@@ -26,9 +29,15 @@ namespace Players.Variants
                 var model = new UnitModel(temp.GetStats(), temp.GetAppearance());
                 model.SetPosition(new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)));
                 _manager.AddUnit(model);
-                SetRandomDestination(model);
-                _manager.onUnitCompleteCommands += SetRandomDestination;
+                AttackPlayer(model);
+                // SetRandomDestination(model);
+                _manager.onUnitCompleteCommands += AttackPlayer;
             }
+        }
+
+        private void AttackPlayer(UnitModel unit)
+        {
+            _manager.AddCommand(unit, new UnitCommandAttack(_player));
         }
 
         private void SetRandomDestination(UnitModel unit)

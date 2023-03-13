@@ -13,7 +13,7 @@ namespace Units.MVC.View
         public Action<int> onGetDamage;
         public UnitViewState state { get; protected set; }
         
-        protected UnitAppearanceController _appearance;
+        protected UnitAppearanceController _visuals;
         protected UnitAnimatorController _animator;
         protected UnitAppearance _appearanceData;
         private bool _isVisualsInitialized;
@@ -45,12 +45,13 @@ namespace Units.MVC.View
             if (!appearanceGO)
                 return;
             
-            _appearance = appearanceGO.GetComponent<UnitAppearanceController>();;
-            _appearance.SetAppearance(_appearanceData);
-
+            _visuals = appearanceGO.GetComponent<UnitAppearanceController>();
             _animator = appearanceGO.GetComponent<UnitAnimatorController>();
-            if (_animator != null)
+            
+            if (_animator != null && _visuals != null)
             {
+                _visuals.SetAppearance(_appearanceData);
+                _animator.SetActiveLayer((int)_appearanceData.animationSet);
                 _isVisualsInitialized = true;
             }
         }
@@ -94,7 +95,6 @@ namespace Units.MVC.View
         public abstract void WarpTo(Vector3 position);
         public abstract void MoveToPosition(Vector3 position);
         public abstract void MoveToDirection(Vector3 direction);
-        public abstract void SetFightReady(bool value);
 
         protected abstract void ProceedMovement();
         protected abstract void Rotate();
@@ -107,7 +107,6 @@ namespace Units.MVC.View
 
         IEnumerator WaitingForAttackEnds(float length, float hitOffset, int damage)
         {
-            Debug.Log($"Attacking: {length} + {hitOffset}");
             yield return new WaitForSeconds(hitOffset);
             var cols = Physics.OverlapSphere(transform.TransformPoint(_attackHitPoint), _attackHitRadius);
             foreach (var col in cols)

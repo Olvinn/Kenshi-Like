@@ -44,7 +44,7 @@ namespace Units.Structures.Factories
                 accentColor = Color.blue,
                 baseColor = Color.blue,
                 prefab = "Assets/Prefabs/Units/HumanMale.prefab",
-                animationSet = AnimationSetType.CommonMen
+                animationSet = AnimationSetType.GreatSword
             };
             return result;
         }

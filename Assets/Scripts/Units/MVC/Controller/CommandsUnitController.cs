@@ -56,6 +56,11 @@ namespace Units.MVC.Controller
             _commands.AddLast(command);
         }
 
+        public void Attack()
+        {
+            _baseController.Attack();
+        }
+
         public void MoveTo(Vector3 destination)
         {
             state = UnitState.Moving;

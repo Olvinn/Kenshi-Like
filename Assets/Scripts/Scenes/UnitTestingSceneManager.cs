@@ -14,25 +14,16 @@ namespace Scenes
         [SerializeField] private CameraThirdPersonController _camera;
         [SerializeField] private int _unitCount;
     
-        private TestCrowdNPC _crowd;
+        private ZombieHorde _crowd;
         private DirectUnitController _direct;
 
         private void Awake()
         {
-            _crowd = new TestCrowdNPC();
+            _crowd = new ZombieHorde();
         }
 
         private void Start()
         {
-            _crowd.CreateCrowd(_unitCount, new []
-            {
-                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
-                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
-                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
-                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
-                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
-            });
-
             _direct = UnitControllerFactory.CreatePlayer();
             var app = UnitAppearanceFactory.CreateRandomMen();
             var sta = UnitStatsFactory.CreateRandomMen();
@@ -40,6 +31,15 @@ namespace Scenes
             var model = new UnitModel(sta, app);
             var view = UnitViewFactory.CreateThirdPerson();
             _direct.SetUp(model, view);
+            
+            _crowd.CreateHorde(_unitCount, new []
+            {
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+                new UnitModel(UnitStatsFactory.CreateRandomZombie(), UnitAppearanceFactory.CreateRandomZombie()),
+            }, view);
             
             _camera.SetCamera(Camera.main);
             _camera.SetTarget(view.transform);

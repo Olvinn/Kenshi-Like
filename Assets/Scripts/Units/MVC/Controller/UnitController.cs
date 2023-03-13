@@ -10,10 +10,13 @@ namespace Units.MVC.Controller
         public UnitModel model;
         public UnitView view;
 
+        private int _animationLayer;
+
         public void SetUp(UnitModel model, UnitView view)
         {
             Clear();
             this.view = view;
+            _animationLayer = (int)model.GetAppearance().animationSet;
             this.model = model;
             UpdateView();
             UpdateSubscriptions();
@@ -33,6 +36,12 @@ namespace Units.MVC.Controller
         public Vector3 GetViewPosition()
         {
             return view.transform.position;
+        }
+
+        public void Attack()
+        {
+            view.Attack(AnimationsHelper.singleton.GetAttack1TimeDuration(_animationLayer), 
+                AnimationsHelper.singleton.GetAttack1HitOffset(_animationLayer), (int)model.GetStats().attackPower);
         }
 
         private void UpdateView()
@@ -67,12 +76,12 @@ namespace Units.MVC.Controller
             view.onGetDamage = null;
         }
 
-        public void OnModelHPChanged(int hp)
+        private void OnModelHPChanged(int hp)
         {
             if (model.GetStats().healthPoints <= 0)
                 view.Die();
             else
-                view.GetDamage(AnimationsHelper.singleton.GetReaction1Duration(model.GetAppearance().animationSet, 0));
+                view.GetDamage(AnimationsHelper.singleton.GetReaction1Duration(_animationLayer));
         }
     }
 }

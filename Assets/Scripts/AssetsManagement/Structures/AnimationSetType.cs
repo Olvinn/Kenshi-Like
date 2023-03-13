@@ -2,7 +2,8 @@ namespace Units.Structures
 {
     public enum AnimationSetType
     {
-        CommonMen,
-        Zombie
+        CommonMen = 0,
+        GreatSword = 1,
+        Zombie = 2
     }
 }

@@ -14,7 +14,8 @@ namespace Units.Appearance
         private int _lod;
         private bool _forceAnimatorToBeActive;
 
-        private Coroutine _greatSwordLayerTransition;
+        private int _currentActiveLayer;
+        private Coroutine _layerTransition;
         
         private void Awake()
         {
@@ -74,6 +75,16 @@ namespace Units.Appearance
             _animator.Play("Hit reaction");
         }
 
+        public void SetActiveLayer(int layer)
+        {
+            if (_currentActiveLayer == layer)
+                return;
+            
+            if (_layerTransition != null)
+                StopCoroutine(_layerTransition);
+            _layerTransition = StartCoroutine(LayerTransition(layer));
+        }
+
         public void UpdateDistanceToCamera(float distance)
         {
             int newUpdateDelay = (int)(distance * updateFrequencyMultiplier);
@@ -87,24 +98,20 @@ namespace Units.Appearance
             _animator.enabled = _forceAnimatorToBeActive;
         }
 
-        public void ActivateGreatSwordLayer(bool value)
+        private IEnumerator LayerTransition(int layer)
         {
-            if (_greatSwordLayerTransition != null)
-                StopCoroutine(_greatSwordLayerTransition);
-            _greatSwordLayerTransition = StartCoroutine(GreatSwordLayerTransition(value));
-        }
-
-        private IEnumerator GreatSwordLayerTransition(bool isActive, float transitionTime = .5f)
-        {
-            float currentState = _animator.GetLayerWeight(1);
-            float goal = isActive ? 1 : 0;
-            while (Mathf.Abs(currentState - goal) > .01f)
+            float newLayerWeight = _animator.GetLayerWeight(layer);
+            float currentLayerWeight = _animator.GetLayerWeight(_currentActiveLayer);
+            while (Mathf.Abs(newLayerWeight - 1) > .01f)
             {
-                currentState = Mathf.MoveTowards(currentState, goal, Time.deltaTime / transitionTime);
-                _animator.SetLayerWeight(1, currentState);
+                if (_currentActiveLayer > 0)
+                    currentLayerWeight = Mathf.MoveTowards(currentLayerWeight, 0, Time.deltaTime *.5f);
+                newLayerWeight = Mathf.MoveTowards(newLayerWeight, 1, Time.deltaTime *.5f);
+                _animator.SetLayerWeight(layer, newLayerWeight);
                 yield return null;
             }
-            _animator.SetLayerWeight(1, goal);
+            _animator.SetLayerWeight(1, 1);
+            _currentActiveLayer = layer;
         }
         
 #if UNITY_EDITOR

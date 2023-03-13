@@ -1,4 +1,3 @@
-using System.Collections;
 using Units.Structures;
 using UnityEngine;
 
@@ -10,8 +9,7 @@ namespace Units.MVC.View
         private CharacterController _characterController;
         private Vector3 _savedPosition, _moveDirection, _localVelocity;
         private Camera _mainCamera;
-        private bool _rotateOnMoveDirection = true;
-        private float _speed, _rotationSpeed = 120;
+        private float _speed, _rotationSpeed = 180;
         
         private void Awake()
         {
@@ -43,12 +41,6 @@ namespace Units.MVC.View
             if (direction.magnitude > 1f)
                 direction.Normalize();
             _moveDirection = direction;
-        }
-
-        public override void SetFightReady(bool value)
-        {
-            _rotateOnMoveDirection = !value;
-            _animator.ActivateGreatSwordLayer(value);
         }
 
         public override void WarpTo(Vector3 position)
@@ -86,21 +78,21 @@ namespace Units.MVC.View
 
         protected override void Rotate()
         {
-            if (state == UnitViewState.Idle && _rotateOnMoveDirection || state == UnitViewState.Attacking)
+            if (IsBusy())
                 return;
 
             float rot;
-            if (!_rotateOnMoveDirection)
-            {
-                Vector3 camRot = _mainCamera.transform.forward;
-                camRot.y = 0;
-                rot = Vector3.SignedAngle(Vector3.forward, camRot, Vector3.up);
-            }
-            else
-            {
-                Vector3 v = _characterController.velocity;
-                rot = Vector3.SignedAngle(Vector3.forward, v, Vector3.up);
-            }
+            // if (!_rotateOnMoveDirection)
+            // {
+            Vector3 camRot = _mainCamera.transform.forward;
+            camRot.y = 0;
+            rot = Vector3.SignedAngle(Vector3.forward, camRot, Vector3.up);
+            // }
+            // else
+            // {
+                // Vector3 v = _characterController.velocity;
+                // rot = Vector3.SignedAngle(Vector3.forward, v, Vector3.up);
+            // }
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, 
                 Quaternion.AngleAxis(rot, Vector3.up),
