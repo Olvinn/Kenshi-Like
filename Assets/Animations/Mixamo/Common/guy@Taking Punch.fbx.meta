@@ -39,8 +39,8 @@ ModelImporter:
       name: Taking Punch
       takeName: mixamo.com
       internalID: 0
-      firstFrame: 0
-      lastFrame: 136
+      firstFrame: 7
+      lastFrame: 53
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
