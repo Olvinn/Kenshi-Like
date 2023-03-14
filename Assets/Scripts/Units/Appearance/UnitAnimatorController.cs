@@ -6,9 +6,9 @@ namespace Units.Appearance
     public class UnitAnimatorController : MonoBehaviour
     {
         [SerializeField] private Animator _animator;
-        [SerializeField] private float lod0Threshold = 30, lod1Threshold = 60, updateFrequencyMultiplier = .1f;
+        [SerializeField] private float updateFrequencyMultiplier = .1f;
         
-        private int _speedHash, _strafeHash;
+        private int _speedHash, _strafeHash, _attack1AnimationHash, _deathAnimationHash, _hitReactionAnimationHash;
         private float _savedTime;
         private int _framesCounter, _framesUpdateDelay;
         private int _lod;
@@ -25,6 +25,9 @@ namespace Units.Appearance
             _animator.keepAnimatorControllerStateOnDisable = true;
             _speedHash = Animator.StringToHash("Speed");
             _strafeHash = Animator.StringToHash("Strafe");
+            _attack1AnimationHash = Animator.StringToHash("Attack 1");
+            _deathAnimationHash = Animator.StringToHash("Death");
+            _hitReactionAnimationHash = Animator.StringToHash("Hit reaction");
         }
 
         private IEnumerator Start()
@@ -62,17 +65,17 @@ namespace Units.Appearance
 
         public void PlayAttack()
         {
-            _animator.Play("Attack 1");
+            _animator.Play(_attack1AnimationHash);
         }
 
         public void PlayDead()
         {
-            _animator.Play("Death");
+            _animator.Play(_deathAnimationHash);
         }
 
         public void PlayHitReaction()
         {
-            _animator.Play("Hit reaction");
+            _animator.Play(_hitReactionAnimationHash, -1, 0);
         }
 
         public void SetActiveLayer(int layer)
