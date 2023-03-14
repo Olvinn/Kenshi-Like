@@ -6,6 +6,7 @@ namespace Units.Structures
         Moving,
         Attacking,
         Dead,
-        GettingDamage
+        GettingDamage,
+        Shifting
     }
 }

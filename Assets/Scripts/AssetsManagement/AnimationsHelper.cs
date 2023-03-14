@@ -1,5 +1,4 @@
 using AssetsManagement.Structures;
-using Units.Structures;
 using UnityEngine;
 using UnityEngine.Serialization;
 

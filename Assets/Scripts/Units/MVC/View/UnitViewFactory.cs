@@ -1,3 +1,4 @@
+using Units.Appearance;
 using UnityEngine;
 
 namespace Units.MVC.View

@@ -20,6 +20,8 @@ namespace Units.MVC.Controller
             
             if (Input.GetMouseButtonDown(0))
                 _baseController.Attack();
+            if (Input.GetKey(KeyCode.LeftShift))
+                _baseController.view.Shift();
         }
 
         public void SetUp(UnitModel model, CharacterControllerUnitView view)

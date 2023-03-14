@@ -54,26 +54,28 @@ namespace Units.MVC.View
             if (IsBusy())
                 return;
             
-            state = _moveDirection != Vector3.zero ? UnitViewState.Moving : UnitViewState.Idle;
-            
             Vector3 camRot = _mainCamera.transform.forward;
             camRot.y = 0;
+            var speed = _speed + (state == UnitViewState.Shifting ? 3 : 0);
             if (Vector3.Dot(camRot.normalized, transform.forward) <= -0.99999f) //prevent jitter when character moving towards camera
-                _localVelocity = new Vector3(0,0, _speed) * _moveDirection.magnitude;
+                _localVelocity = new Vector3(0,0, speed) * _moveDirection.magnitude;
             else
             {
                 Quaternion local = Quaternion.FromToRotation(transform.forward, camRot);
-                _localVelocity = local * (_moveDirection * _speed);
+                _localVelocity = local * (_moveDirection * speed);
             }
 
             Quaternion rot = Quaternion.FromToRotation(Vector3.forward, camRot);
-            _characterController.Move(rot * _moveDirection * (_speed * Time.deltaTime) + Vector3.down);
+            _characterController.Move(rot * _moveDirection * (speed * Time.deltaTime) + Vector3.down);
 
             if (_savedPosition != transform.position)
             {
                 onPositionChanged?.Invoke(transform.position);
                 _savedPosition = transform.position;
             }
+            
+            if (state != UnitViewState.Shifting)
+                state = _moveDirection != Vector3.zero ? UnitViewState.Moving : UnitViewState.Idle;
         }
 
         protected override void Rotate()
@@ -81,18 +83,18 @@ namespace Units.MVC.View
             if (IsBusy())
                 return;
 
-            float rot;
-            // if (!_rotateOnMoveDirection)
-            // {
-            Vector3 camRot = _mainCamera.transform.forward;
-            camRot.y = 0;
-            rot = Vector3.SignedAngle(Vector3.forward, camRot, Vector3.up);
-            // }
-            // else
-            // {
-                // Vector3 v = _characterController.velocity;
-                // rot = Vector3.SignedAngle(Vector3.forward, v, Vector3.up);
-            // }
+            float rot = 0;
+            if (state is UnitViewState.Idle or UnitViewState.Moving)
+            {
+                Vector3 camRot = _mainCamera.transform.forward;
+                camRot.y = 0;
+                rot = Vector3.SignedAngle(Vector3.forward, camRot, Vector3.up);
+            }
+            else if (state is UnitViewState.Shifting)
+            {
+                Vector3 v = _characterController.velocity;
+                rot = Vector3.SignedAngle(Vector3.forward, v, Vector3.up);
+            }
 
             transform.rotation = Quaternion.RotateTowards(transform.rotation, 
                 Quaternion.AngleAxis(rot, Vector3.up),

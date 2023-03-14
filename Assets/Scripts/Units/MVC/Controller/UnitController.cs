@@ -81,7 +81,7 @@ namespace Units.MVC.Controller
             if (model.GetStats().healthPoints <= 0)
                 view.Die();
             else
-                view.GetDamage(AnimationsHelper.singleton.GetReaction1Duration(_animationLayer));
+                view.ReactOnDamage(AnimationsHelper.singleton.GetReaction1Duration(_animationLayer));
         }
     }
 }
