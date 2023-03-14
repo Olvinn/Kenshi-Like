@@ -7,9 +7,9 @@ namespace Units.MVC.View
     public sealed class CharacterControllerUnitView : UnitView
     {
         private CharacterController _characterController;
-        private Vector3 _savedPosition, _moveDirection, _localVelocity;
-        private Camera _mainCamera;
-        private float _speed, _rotationSpeed = 180;
+        private Vector3 _savedPosition, _moveDirection;
+        private float _speed, _rotationSpeed = 180, _currentSpeed;
+        private bool _lookingForwardVelocity;
         
         private void Awake()
         {
@@ -22,20 +22,28 @@ namespace Units.MVC.View
             _speed = stats.speed;
         }
 
-        private void Start()
-        {
-            _mainCamera = Camera.main;
-        }
-
-        public override void MoveToPosition(Vector3 position)
+        public override void MoveToPosition(Vector3 position, bool shift)
         {
             throw new System.NotImplementedException();
         }
 
-        public override void MoveToDirection(Vector3 direction)
+        public override void MoveToDirection(Vector3 direction, bool shift)
         {
-            if (IsBusy())
-                return;
+            if (direction == Vector3.zero)
+            {
+                if (!TryChangeState(UnitViewState.Staying))
+                    return;
+            }
+            else if (shift)
+            {
+                if (!TryChangeState(UnitViewState.Shifting))
+                    return;
+            }
+            else
+            {
+                if (!TryChangeState(UnitViewState.Moving))
+                    return;
+            }
             
             direction.y = 0;
             if (direction.magnitude > 1f)
@@ -51,40 +59,39 @@ namespace Units.MVC.View
 
         protected override void ProceedMovement()
         {
-            if (IsBusy())
+            _currentSpeed = Mathf.MoveTowards(_currentSpeed,_speed + (state == UnitViewState.Shifting && _lookingForwardVelocity ? 3 : 0), Time.deltaTime * 5);
+            _localVelocity = Vector3.zero;  
+            
+            if (state != UnitViewState.Moving && state != UnitViewState.Shifting)
                 return;
             
             Vector3 camRot = _mainCamera.transform.forward;
             camRot.y = 0;
-            var speed = _speed + (state == UnitViewState.Shifting ? 3 : 0);
             if (Vector3.Dot(camRot.normalized, transform.forward) <= -0.99999f) //prevent jitter when character moving towards camera
-                _localVelocity = new Vector3(0,0, speed) * _moveDirection.magnitude;
+                _localVelocity = new Vector3(0,0, _currentSpeed) * _moveDirection.magnitude;
             else
             {
                 Quaternion local = Quaternion.FromToRotation(transform.forward, camRot);
-                _localVelocity = local * (_moveDirection * speed);
+                _localVelocity = local * (_moveDirection * _currentSpeed);
             }
 
             Quaternion rot = Quaternion.FromToRotation(Vector3.forward, camRot);
-            _characterController.Move(rot * _moveDirection * (speed * Time.deltaTime) + Vector3.down);
+            _characterController.Move(rot * _moveDirection * (_currentSpeed * Time.deltaTime) + Vector3.down);
 
             if (_savedPosition != transform.position)
             {
                 onPositionChanged?.Invoke(transform.position);
                 _savedPosition = transform.position;
             }
-            
-            if (state != UnitViewState.Shifting)
-                state = _moveDirection != Vector3.zero ? UnitViewState.Moving : UnitViewState.Idle;
         }
 
         protected override void Rotate()
         {
-            if (IsBusy())
+            if (state is UnitViewState.GettingDamage or UnitViewState.Dead)
                 return;
-
+            
             float rot = 0;
-            if (state is UnitViewState.Idle or UnitViewState.Moving)
+            if (state is UnitViewState.Staying or UnitViewState.Moving or UnitViewState.Attacking)
             {
                 Vector3 camRot = _mainCamera.transform.forward;
                 camRot.y = 0;
@@ -99,12 +106,8 @@ namespace Units.MVC.View
             transform.rotation = Quaternion.RotateTowards(transform.rotation, 
                 Quaternion.AngleAxis(rot, Vector3.up),
                 Time.deltaTime * _rotationSpeed);
-        }
-
-        protected override void UpdateAnimator()
-        {
-            _animator.ApplyVelocity(_localVelocity);
-            _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
+            _lookingForwardVelocity =
+                Vector3.Angle(transform.forward, transform.localToWorldMatrix * _localVelocity) < 15;
         }
 
         protected override void OnAppearancePrefabLoaded(GameObject appearanceGO)

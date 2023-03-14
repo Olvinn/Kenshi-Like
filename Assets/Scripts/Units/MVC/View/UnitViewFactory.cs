@@ -55,7 +55,7 @@ namespace Units.MVC.View
             var col = obj.AddComponent<CapsuleCollider>();
             col.center = Vector3.up;
             col.height = 1.8f;
-            col.radius = .3f;
+            col.radius = .2f;
         }
     }
 }

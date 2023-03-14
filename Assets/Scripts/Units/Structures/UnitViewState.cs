@@ -2,11 +2,12 @@ namespace Units.Structures
 {
     public enum UnitViewState
     {
-        Idle,
+        Staying,
         Moving,
         Attacking,
         Dead,
         GettingDamage,
-        Shifting
+        Shifting,
+        Idle
     }
 }

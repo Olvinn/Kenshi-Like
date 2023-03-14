@@ -11,18 +11,17 @@ namespace Units.MVC.View
         public Action onReachDestination;
         private NavMeshAgent _agent;
         private Vector3 _savedPosition;
-        private Camera _mainCamera;
         
         private void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
         }
 
-        private void Start()
+        protected override void Start()
         {
+            base.Start();
             _agent.autoBraking = false;
-            _agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-            _mainCamera = Camera.main;
+            _agent.obstacleAvoidanceType = ObstacleAvoidanceType.MedQualityObstacleAvoidance;
         }
 
         public override void SetStats(UnitStats stats)
@@ -30,7 +29,7 @@ namespace Units.MVC.View
             _agent.speed = stats.speed;
         }
 
-        public override void MoveToPosition(Vector3 destination)
+        public override void MoveToPosition(Vector3 destination, bool shift)
         {
             if (!_agent.enabled)
                 return;
@@ -38,24 +37,49 @@ namespace Units.MVC.View
             float stoppingDistance = .5f;
             if (Vector3.Distance(transform.position, destination) <= stoppingDistance)
             {
+                if (!TryChangeState(UnitViewState.Staying))
+                    return;
+                
                 _agent.isStopped = true;
-                state = UnitViewState.Idle;
-                return;
             }
-
-            _agent.stoppingDistance = stoppingDistance;
-            _agent.SetDestination(destination);
-            
-            if (!IsBusy())
-            {
-                state = UnitViewState.Moving;
+            else
+            { 
+                if (shift)
+                {
+                    if (!TryChangeState(UnitViewState.Shifting))
+                        return;
+                }
+                else
+                {
+                    if (!TryChangeState(UnitViewState.Moving))
+                        return;
+                }
+                
                 _agent.isStopped = false;
+                _agent.stoppingDistance = stoppingDistance;
+                _agent.SetDestination(destination);
             }
         }
 
-        public override void MoveToDirection(Vector3 direction)
+        public override void MoveToDirection(Vector3 direction, bool shift)
         {
-            throw new NotImplementedException();
+            if (direction == Vector3.zero)
+            {
+                if (!TryChangeState(UnitViewState.Staying))
+                    return;
+            }
+            else if (shift)
+            {
+                if (!TryChangeState(UnitViewState.Shifting))
+                    return;
+            }
+            else
+            {
+                if (!TryChangeState(UnitViewState.Moving))
+                    return;
+            }
+            
+            _agent.velocity = direction * _agent.speed;
         }
 
         public override void WarpTo(Vector3 position)
@@ -75,7 +99,7 @@ namespace Units.MVC.View
             if (!_agent.enabled)
                 return;
             
-            if (IsBusy())
+            if (state is not UnitViewState.Moving or UnitViewState.Shifting)
                 _agent.isStopped = true;
             else
                 _agent.isStopped = false;
@@ -85,7 +109,7 @@ namespace Units.MVC.View
                 if (_agent.remainingDistance <= _agent.stoppingDistance)
                 {
                     _agent.isStopped = true;
-                    state = UnitViewState.Idle;
+                    TryChangeState(UnitViewState.Staying);
                     onReachDestination?.Invoke();
                 }
             }
@@ -95,17 +119,13 @@ namespace Units.MVC.View
                 onPositionChanged?.Invoke(transform.position);
                 _savedPosition = transform.position;
             }
+
+            _localVelocity = transform.worldToLocalMatrix * _agent.velocity;
         }
 
         protected override void Rotate()
         {
             
-        }
-
-        protected override void UpdateAnimator()
-        {
-            _animator.ApplyVelocity(transform.worldToLocalMatrix * _agent.velocity);
-            _animator.UpdateDistanceToCamera(Vector3.Distance(_mainCamera.transform.position, transform.position));
         }
     }
 }

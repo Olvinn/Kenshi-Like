@@ -64,7 +64,7 @@ namespace Units.MVC.Controller
         public void MoveTo(Vector3 destination)
         {
             state = UnitState.Moving;
-            _baseController.view.MoveToPosition(destination);
+            _baseController.view.MoveToPosition(destination, false);
         }
 
         public Vector3 GetViewPosition()
@@ -79,7 +79,7 @@ namespace Units.MVC.Controller
                 case UnitViewState.Moving:
                     state = UnitState.Moving;
                     break;
-                case UnitViewState.Idle:
+                case UnitViewState.Staying:
                     state = UnitState.Idle;
                     break;
             }

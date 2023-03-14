@@ -16,12 +16,10 @@ namespace Units.MVC.Controller
 
         private void Update()
         {
-            _baseController.view.MoveToDirection(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+            _baseController.view.MoveToDirection(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")), Input.GetKey(KeyCode.LeftShift));
             
             if (Input.GetMouseButtonDown(0))
                 _baseController.Attack();
-            if (Input.GetKey(KeyCode.LeftShift))
-                _baseController.view.Shift();
         }
 
         public void SetUp(UnitModel model, CharacterControllerUnitView view)

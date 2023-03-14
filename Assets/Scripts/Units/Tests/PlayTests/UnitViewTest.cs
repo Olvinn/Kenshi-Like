@@ -45,18 +45,18 @@ namespace Units.Tests.PlayTests
             _view.SetStats(_stats);
             Assert.AreEqual(agent.speed, _stats.speed);
             _view.onReachDestination = () => { wasReachedDestination = true; };
-            _view.MoveToPosition(destination);
+            _view.MoveToPosition(destination, false);
             yield return new WaitForSeconds(.1f);
             Assert.AreEqual(UnitViewState.Moving, _view.state);
             yield return new WaitForSeconds(5);
             Assert.AreEqual(true, wasReachedDestination);
             Assert.Less(Vector3.Distance(_view.transform.position, destination), Vector3.Distance(start, destination));
-            Assert.AreEqual(UnitViewState.Idle, _view.state);
-            _view.MoveToPosition(destination);
-            Assert.AreEqual(UnitViewState.Idle, _view.state);
-            _view.MoveToPosition(start);
-            _view.MoveToPosition(destination);
-            Assert.AreEqual(UnitViewState.Idle, _view.state);
+            Assert.AreEqual(UnitViewState.Staying, _view.state);
+            _view.MoveToPosition(destination, false);
+            Assert.AreEqual(UnitViewState.Staying, _view.state);
+            _view.MoveToPosition(start, false);
+            _view.MoveToPosition(destination, false);
+            Assert.AreEqual(UnitViewState.Staying, _view.state);
         }
     }
 }
